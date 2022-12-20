@@ -1,6 +1,5 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:barber/feature_appointment/firebase_methods/collections_methods.dart';
-import 'package:barber/feature_appointment/models/barbers.dart';
 import 'package:barber/feature_appointment/models/services.dart';
 import 'package:barber/feature_appointment/widgets/hours_buttoms_widget.dart';
 import 'package:barber/feature_home/widgets/bottom_navigation.dart';
@@ -44,13 +43,6 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
     KindOfServices(
         'Corte y Barba', 45, Image.asset('Assets/Images/logo1.png'), 5500),
     KindOfServices('Cejas', 15, Image.asset('Assets/Images/logo2.jpeg'), 5500)
-  ];
-
-  final List _barbers = [
-    Barbers('Barbero1', 'Especialidad en barbas', true,
-        Image.asset('Assets/Images/logo1.png')),
-    Barbers('Barbero2', 'Especialidad en cortes', true,
-        Image.asset('Assets/Images/logo1.png')),
   ];
 
   @override
@@ -278,53 +270,68 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                   color: Colors.white,
                 ),
                 const Padding(padding: EdgeInsets.all(5)),
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: _barbers.length,
-                  itemBuilder: (context, index) {
-                    final barber = _barbers.elementAt(index);
-                    return SizedBox(
-                      height: 67,
-                      child: FadeInLeft(
-                        delay: Duration(milliseconds: 100 * index),
-                        child: ListTile(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          leading: const Icon(
-                            Icons.person,
-                            color: Colors.white70,
-                            size: 50,
-                          ),
-                          title: Text(
-                            '${barber.nombre}',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Barlow',
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
+                StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('Barbero')
+                      .where('Disponible', isEqualTo: true)
+                      .snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        final DocumentSnapshot documentSnapshot =
+                            snapshot.data!.docs[index];
+                        return SizedBox(
+                          height: 67,
+                          child: ListTile(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
                             ),
-                          ),
-                          subtitle: Text(
-                            '${barber.descripcion}',
-                            style: const TextStyle(
+                            leading: const Icon(
+                              Icons.person,
+                              color: Colors.white70,
+                              size: 50,
+                            ),
+                            title: Text(
+                              documentSnapshot['Nombre'],
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'Barlow',
-                                fontSize: 20),
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            subtitle: Text(
+                              documentSnapshot['Descripcion'],
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Barlow',
+                                  fontSize: 20),
+                            ),
+                            isThreeLine: true,
+                            onTap: () {
+                              setState(() {
+                                barberoSeleccionado =
+                                    documentSnapshot['Nombre'].toString();
+                                getInfo(fecha, barberoSeleccionado);
+                              });
+                            },
                           ),
-                          isThreeLine: true,
-                          onTap: () {
-                            setState(() {
-                              barberoSeleccionado = barber.nombre;
-                              getInfo(fecha, barberoSeleccionado);
-                            });
-                          },
-                        ),
-                      ),
+                        );
+                      },
                     );
                   },
                 ),
                 const Padding(padding: EdgeInsets.all(8)),
+                // test stream Builder
+
                 // TIME SELECTION
                 const Divider(
                   thickness: 1,
