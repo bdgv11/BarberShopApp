@@ -89,80 +89,133 @@ class HourItem extends StatelessWidget {
     }
   }
 
-  Widget cupertinoDialog(BuildContext context) {
-    return CupertinoAlertDialog(
-      title: const Text(
-        'Resumen',
-        style: TextStyle(
-            fontFamily: 'Barlow', fontWeight: FontWeight.w900, fontSize: 20),
-      ),
-      content: Text(
-        'Fecha: $fecha\nServicio: $servicioDesdeSeleccionDeCita\nBarbero: $barbero\nHora: $_hora\n¿Desea agendar la cita?',
-        style: const TextStyle(
-            fontFamily: 'Barlow', fontWeight: FontWeight.w900, fontSize: 20),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Text(
-            'Cancelar',
-            style: TextStyle(color: Colors.red),
-          ),
+  Widget errorServicioVacio(BuildContext context) {
+    if (Platform.isIOS) {
+      return CupertinoAlertDialog(
+        title: const Text(
+          'Error',
+          style: TextStyle(
+              fontFamily: 'Barlow', fontWeight: FontWeight.w900, fontSize: 20),
         ),
-        TextButton(
-          onPressed: () {
-            _updateHour();
-            Navigator.of(context).pop();
-          },
-          child: const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(
-              'Agendar',
+        content: const Text(
+          'Asegurese de seleccionar el servicio y barbero.',
+          style: TextStyle(
+              fontFamily: 'Barlow', fontWeight: FontWeight.w900, fontSize: 20),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              'OK',
+              style: TextStyle(color: Colors.red),
             ),
           ),
+        ],
+      );
+    } else {
+      return const AlertDialog(
+        title: Text(
+          'Error',
+          style: TextStyle(
+              fontFamily: 'Barlow', fontWeight: FontWeight.w900, fontSize: 20),
         ),
-      ],
-    );
+        content: Text(
+          'Asegurese de seleccionar el servicio y barbero.',
+          style: TextStyle(
+              fontFamily: 'Barlow', fontWeight: FontWeight.w900, fontSize: 20),
+        ),
+      );
+    }
+  }
+
+  Widget cupertinoDialog(BuildContext context) {
+    return servicioDesdeSeleccionDeCita.isNotEmpty
+        ? CupertinoAlertDialog(
+            title: const Text(
+              'Resumen',
+              style: TextStyle(
+                  fontFamily: 'Barlow',
+                  fontWeight: FontWeight.w900,
+                  fontSize: 20),
+            ),
+            content: Text(
+              'Fecha: $fecha\nServicio: $servicioDesdeSeleccionDeCita\nBarbero: $barbero\nHora: $_hora\n¿Desea agendar la cita?',
+              style: const TextStyle(
+                  fontFamily: 'Barlow',
+                  fontWeight: FontWeight.w900,
+                  fontSize: 20),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'Cancelar',
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  _updateHour();
+                  Navigator.of(context).pop();
+                },
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    'Agendar',
+                  ),
+                ),
+              ),
+            ],
+          )
+        : errorServicioVacio(context);
   }
 
   Widget androidDialog(BuildContext context) {
-    return AlertDialog(
-      title: const Text(
-        'Resumen',
-        style: TextStyle(
-            fontFamily: 'Barlow', fontWeight: FontWeight.w900, fontSize: 20),
-      ),
-      content: Text(
-        'Fecha: $fecha\nServicio: $tipoServicio\nBarbero: $barbero\nHora: $_hora\n¿Desea agendar la cita?',
-        style: const TextStyle(
-            fontFamily: 'Barlow', fontWeight: FontWeight.w900, fontSize: 20),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Text(
-            'Cancelar',
-            style: TextStyle(color: Colors.red),
-          ),
-        ),
-        TextButton(
-          onPressed: () {
-            _updateHour();
-            Navigator.of(context).pop();
-          },
-          child: const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(
-              'Agendar',
+    return servicioDesdeSeleccionDeCita.isNotEmpty
+        ? AlertDialog(
+            title: const Text(
+              'Resumen',
+              style: TextStyle(
+                  fontFamily: 'Barlow',
+                  fontWeight: FontWeight.w900,
+                  fontSize: 20),
             ),
-          ),
-        ),
-      ],
-    );
+            content: Text(
+              'Fecha: $fecha\nServicio: $tipoServicio\nBarbero: $barbero\nHora: $_hora\n¿Desea agendar la cita?',
+              style: const TextStyle(
+                  fontFamily: 'Barlow',
+                  fontWeight: FontWeight.w900,
+                  fontSize: 20),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'Cancelar',
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  _updateHour();
+                  Navigator.of(context).pop();
+                },
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    'Agendar',
+                  ),
+                ),
+              ),
+            ],
+          )
+        : errorServicioVacio(context);
   }
 
   void _updateHour() {
