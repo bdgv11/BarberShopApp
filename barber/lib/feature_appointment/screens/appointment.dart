@@ -28,8 +28,8 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
   void _focusDaySelected(DateTime day, DateTime focusedDay) {
     setState(() {
       today = day;
-      barberoSeleccionado = '';
       servicioSeleccionado = '';
+      barberoSeleccionado = '';
     });
   }
 
