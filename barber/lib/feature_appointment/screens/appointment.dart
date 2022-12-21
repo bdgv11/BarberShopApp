@@ -29,12 +29,14 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
       today = day;
       servicioSeleccionado = '';
       barberoSeleccionado = '';
+      indexServicio = 100;
     });
   }
 
   bool existInfo = false;
   String servicioSeleccionado = '';
   String barberoSeleccionado = '';
+  int indexServicio = 100;
 
   //
   final List _services = [
@@ -153,7 +155,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                     selectedTextStyle: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold),
                     selectedDecoration: BoxDecoration(
-                        color: Colors.amber, shape: BoxShape.rectangle),
+                        color: Colors.teal, shape: BoxShape.rectangle),
                     todayTextStyle: TextStyle(color: Colors.black),
                     todayDecoration: BoxDecoration(
                         shape: BoxShape.rectangle, color: Colors.white70),
@@ -200,7 +202,9 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                       return FadeInLeft(
                         delay: Duration(milliseconds: 100 * index),
                         child: Card(
-                          color: Colors.transparent,
+                          color: indexServicio == index
+                              ? Colors.teal
+                              : Colors.transparent,
                           elevation: 1,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -208,6 +212,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                           child: GestureDetector(
                             onTap: () {
                               setState(() {
+                                indexServicio = index;
                                 servicioSeleccionado = item.nombre;
                               });
                             },

@@ -25,9 +25,10 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      //backgroundColor: Color.fromARGB(139, 10, 170, 148),
-      backgroundColor: Colors.black87,
-      selectedFontSize: 0,
+      unselectedItemColor: Colors.white,
+      selectedItemColor: Colors.white,
+      backgroundColor: Colors.black,
+      selectedFontSize: 10,
       currentIndex: _currentIndex,
       iconSize: 30,
       onTap: (value) {
@@ -53,18 +54,18 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
       },
       items: const [
         BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined, color: Colors.white), label: ''),
+            icon: Icon(Icons.home_outlined, color: Colors.white),
+            label: 'Inicio'),
         BottomNavigationBarItem(
             icon: Icon(
               Icons.add_box_outlined,
               color: Colors.white,
-              size: 40,
             ),
-            label: ''),
+            label: 'Agendar'),
         BottomNavigationBarItem(
             icon:
                 Icon(Icons.notifications_active_outlined, color: Colors.white),
-            label: ''),
+            label: 'Notificaciones'),
       ],
     );
   }
