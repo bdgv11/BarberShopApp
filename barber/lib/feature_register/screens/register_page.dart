@@ -78,7 +78,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               size: 25,
                               color: Colors.white,
                             ),
-                            hintText: 'Nombre',
+                            hintText: 'Nombre completo',
                             errorStyle: TextStyle(
                               color: Colors.teal,
                               fontWeight: FontWeight.bold,

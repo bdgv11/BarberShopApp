@@ -2,6 +2,7 @@ import 'package:barber/feature_login/screens/login_barber_shop.dart';
 import 'package:barber/utils/validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -112,7 +113,36 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             ),
                           )
                         ],
-                      )
+                      ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      '¿La recordaste? ',
+                      style:
+                          TextStyle(color: Colors.white, fontFamily: 'Barlow'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const LoginBarberShop(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'Inicia Sesion',
+                        style: GoogleFonts.barlow(
+                          textStyle: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Barlow',
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ],
             ),
           ),

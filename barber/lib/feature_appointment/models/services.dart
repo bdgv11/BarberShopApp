@@ -5,6 +5,5 @@ class KindOfServices {
   int tiempoDuracion;
   Image image;
   int precio;
-
   KindOfServices(this.nombre, this.tiempoDuracion, this.image, this.precio);
 }

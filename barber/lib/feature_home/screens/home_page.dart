@@ -1,6 +1,8 @@
-import 'package:barber/feature_appointment/models/services.dart';
+import 'package:animate_do/animate_do.dart';
+import 'package:barber/feature_home/models/color_filter.dart';
 import 'package:barber/feature_home/widgets/bottom_navigation.dart';
 import 'package:barber/feature_home/widgets/drawer_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -13,14 +15,6 @@ class HomePageScreen extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<HomePageScreen> {
-  //
-  final List _services = [
-    KindOfServices('Corte', 30, Image.asset('Assets/Images/haircut.png'), 5500),
-    KindOfServices(
-        'Corte y Barba', 30, Image.asset('Assets/Images/logo2.jpeg'), 5500),
-    KindOfServices(
-        'Cambio de color', 45, Image.asset('Assets/Images/logo1.png'), 5500),
-  ];
   late User _user;
 
   /// > The initState() function is called when the widget is first created
@@ -56,21 +50,20 @@ class _MyWidgetState extends State<HomePageScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  'Hola,\n${_user.displayName}',
+                  'Hola, ${_user.displayName}',
                   textAlign: TextAlign.left,
                   style: const TextStyle(
                       fontFamily: 'Barlow',
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold),
                 ),
               ],
             ),
             const Divider(
-              thickness: 1,
+              thickness: 0.2,
               color: Colors.white,
             ),
-            const Padding(padding: EdgeInsets.all(8)),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const [
@@ -80,7 +73,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                   style: TextStyle(
                       fontFamily: 'Barlow',
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize: 15,
                       fontWeight: FontWeight.bold),
                 ),
                 Icon(
@@ -90,69 +83,73 @@ class _MyWidgetState extends State<HomePageScreen> {
                 )
               ],
             ),
-            const Padding(padding: EdgeInsets.all(8)),
             SizedBox(
-              height: 200,
+              height: 170,
               width: width * 0.9,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                itemCount: _services.length,
-                itemBuilder: (context, index) {
-                  final item = _services.elementAt(index);
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Center(
-                        child: Card(
-                          color: Colors.amber[100],
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          child: SizedBox(
-                            height: 150,
-                            width: 200,
-                            child: Center(
-                              child: Column(
-                                children: [
-                                  /*SizedBox(
-                                    height: 150.0,
-                                    child: Ink.image(
-                                      image: const AssetImage(
-                                          'Assets/Images/logo2.jpeg'),
+              child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('Servicio')
+                    .where('Disponible', isEqualTo: true)
+                    .snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      final DocumentSnapshot documentSnapshot =
+                          snapshot.data!.docs[index];
+                      String nombreImagen = documentSnapshot['Imagen'];
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Center(
+                            child: FadeInLeft(
+                              delay: Duration(milliseconds: 100 * index),
+                              child: Card(
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(14)),
+                                child: Stack(
+                                  alignment: Alignment.bottomCenter,
+                                  children: [
+                                    Ink.image(
+                                      //image: AssetImage('\'${item.image.name}\''),
+                                      image: AssetImage(
+                                          'Assets/Images/$nombreImagen'),
+                                      colorFilter: ColorFilters.greyScale,
+                                      height: 130,
+                                      width: 180,
                                       fit: BoxFit.fill,
                                     ),
-                                  ),*/
-                                  Container(
-                                    //padding: const EdgeInsets.all(8),
-                                    height: 100,
-                                    decoration: const BoxDecoration(
-                                        image: DecorationImage(
-                                            image: AssetImage(
-                                                'Assets/Images/logo1.png'),
-                                            fit: BoxFit.fill),
-                                        shape: BoxShape.circle),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      '${item.nombre}',
-                                      style: const TextStyle(
-                                          color: Colors.black,
-                                          fontFamily: 'Barlow',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20),
-                                      textAlign: TextAlign.start,
-                                    ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                    ],
+                          Center(
+                            child: Text(
+                              documentSnapshot['Nombre'],
+                              style: const TextStyle(
+                                  fontFamily: 'Barlow',
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )
+                        ],
+                      );
+                    },
                   );
                 },
               ),
-            )
+            ),
           ],
         ),
       ),
