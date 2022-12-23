@@ -16,7 +16,7 @@ List<String> horas = [
 
 class CollectionMethods {
   void addHours(
-      String barbero, String cliente, String fecha, String tipoServicio) {
+      String barbero, String cliente, Timestamp fecha, String tipoServicio) {
     for (var i = 0; i < horas.length; i++) {
       FirebaseFirestore.instance.collection('Cita').add({
         'Barbero': barbero,
