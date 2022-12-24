@@ -29,9 +29,6 @@ class _MyWidgetState extends State<HomePageScreen> {
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
-    print('DateTime.Now == ${DateTime.now()}');
-    print('TimeStamp.Now == ${Timestamp.now()}');
-    print('DateTime.Now,milisse == ${DateTime.now().millisecondsSinceEpoch}');
 
     String getFormattedDate(String year, String month, String day) {
       String fecha;
@@ -56,9 +53,6 @@ class _MyWidgetState extends State<HomePageScreen> {
 
     DateTime dateTimeFecha = DateTime.parse(fecha);
     dateTimeFecha.millisecondsSinceEpoch;
-    print(Timestamp.fromDate(dateTimeFecha));
-
-    print('Este es === $dateTimeFecha');
 
     return Scaffold(
       appBar: AppBar(backgroundColor: Colors.black87),
@@ -110,15 +104,14 @@ class _MyWidgetState extends State<HomePageScreen> {
               ],
             ),
             SizedBox(
-              height: 180,
+              height: 120,
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('Cita')
                     .where('Cliente', isEqualTo: _user.displayName.toString())
                     .where('Fecha',
                         isGreaterThanOrEqualTo:
-                            DateTime.now().millisecondsSinceEpoch)
-                    .limit(1)
+                            Timestamp.fromDate(dateTimeFecha))
                     .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -127,6 +120,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                       child: CircularProgressIndicator(),
                     );
                   }
+
                   if (snapshot.hasData) {
                     return ListView.builder(
                       shrinkWrap: true,
@@ -139,25 +133,22 @@ class _MyWidgetState extends State<HomePageScreen> {
                             DateTime.fromMillisecondsSinceEpoch(
                                 documentSnapshot['Fecha']
                                     .millisecondsSinceEpoch);
-                        print('Fecha desde DB $fechaDesdeBD');
-                        print(documentSnapshot['Fecha']);
 
                         String fechaFormateada =
                             '${fechaDesdeBD.day.toString()}/${fechaDesdeBD.month.toString()}/${fechaDesdeBD.year.toString()}';
 
-                        return FadeIn(
+                        return FadeInLeft(
                           delay: Duration(milliseconds: 200 * index),
                           child: ListTile(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            leading: const Icon(
-                              Icons.apple_outlined,
-                              color: Colors.white70,
-                              //size: 50,
+                            leading: const CircleAvatar(
+                              backgroundImage:
+                                  AssetImage("Assets/Images/cortebarba.png"),
                             ),
                             title: Text(
-                              fechaFormateada,
+                              'Fecha: $fechaFormateada\nBarbero: ${documentSnapshot['Barbero']}',
                               style: const TextStyle(
                                   color: Colors.white,
                                   fontFamily: 'Barlow',
@@ -165,13 +156,15 @@ class _MyWidgetState extends State<HomePageScreen> {
                                   fontSize: 20),
                             ),
                             subtitle: Text(
-                              documentSnapshot['TipoServicio'],
+                              'Servicio: ${documentSnapshot['TipoServicio']}',
                               style: const TextStyle(
                                   color: Colors.white,
                                   fontFamily: 'Barlow',
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20),
                             ),
+                            isThreeLine: true,
+                            dense: true,
                             trailing: Text(
                               documentSnapshot['Hora'],
                               style: const TextStyle(
@@ -180,9 +173,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                                   fontWeight: FontWeight.bold,
                                   fontSize: 25),
                             ),
-                            onTap: () {
-                              setState(() {});
-                            },
+                            onTap: () {},
                           ),
                         );
                       },
