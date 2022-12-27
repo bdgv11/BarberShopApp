@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:animate_do/animate_do.dart';
 import 'package:barber/feature_appointment/firebase_methods/collections_methods.dart';
 import 'package:barber/feature_home/models/color_filter.dart';
 import 'package:barber/feature_home/widgets/bottom_navigation.dart';
@@ -110,7 +109,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                       style: const TextStyle(
                           fontFamily: 'Barlow',
                           color: Colors.white,
-                          fontSize: 25,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -151,7 +150,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                     titleTextStyle: TextStyle(
                       color: Colors.white,
                       fontFamily: 'Barlow',
-                      fontSize: 25,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -187,7 +186,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                       style: const TextStyle(
                           fontFamily: 'Barlow',
                           color: Colors.white,
-                          fontSize: 25,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold),
                     ),
                     const Icon(
@@ -228,34 +227,31 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Center(
-                                child: FadeInLeft(
-                                  delay: Duration(milliseconds: 100 * index),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        indexServicio = index;
-                                        servicioSeleccionado =
-                                            documentSnapshot['Nombre'];
-                                      });
-                                    },
-                                    child: Card(
-                                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(14)),
-                                      child: Stack(
-                                        alignment: Alignment.bottomCenter,
-                                        children: [
-                                          Ink.image(
-                                            image: AssetImage(
-                                                'Assets/Images/$nombreImagen'),
-                                            colorFilter: ColorFilters.greyScale,
-                                            height: 130,
-                                            width: 180,
-                                            fit: BoxFit.fill,
-                                          ),
-                                        ],
-                                      ),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      indexServicio = index;
+                                      servicioSeleccionado =
+                                          documentSnapshot['Nombre'];
+                                    });
+                                  },
+                                  child: Card(
+                                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(14)),
+                                    child: Stack(
+                                      alignment: Alignment.bottomCenter,
+                                      children: [
+                                        Ink.image(
+                                          image: AssetImage(
+                                              'Assets/Images/$nombreImagen'),
+                                          colorFilter: ColorFilters.greyScale,
+                                          height: 130,
+                                          width: 180,
+                                          fit: BoxFit.fill,
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -266,8 +262,8 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                                     documentSnapshot['Nombre'],
                                     style: const TextStyle(
                                         fontFamily: 'Barlow',
-                                        color: Colors.white,
-                                        fontSize: 15,
+                                        color: Colors.white54,
+                                        fontSize: 20,
                                         fontWeight: FontWeight.bold),
                                   ),
                                   Icon(Icons.check_circle,
@@ -298,7 +294,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                       style: const TextStyle(
                           fontFamily: 'Barlow',
                           color: Colors.white,
-                          fontSize: 25,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -332,10 +328,10 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            leading: const Icon(
-                              Icons.person,
-                              color: Colors.white70,
-                              size: 50,
+                            leading: const CircleAvatar(
+                              radius: 30,
+                              backgroundImage:
+                                  AssetImage("Assets/Images/corteybarba.png"),
                             ),
                             title: Row(
                               children: <Widget>[
@@ -344,7 +340,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontFamily: 'Barlow',
-                                    fontSize: 25,
+                                    fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -354,15 +350,6 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                                         : Colors.grey),
                               ],
                             ),
-                            /*Text(
-                              documentSnapshot['Nombre'],
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Barlow',
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),*/
                             subtitle: Text(
                               documentSnapshot['Descripcion'],
                               style: const TextStyle(
@@ -402,7 +389,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                       style: TextStyle(
                           fontFamily: 'Barlow',
                           color: Colors.white,
-                          fontSize: 25,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold),
                     ),
                   ],

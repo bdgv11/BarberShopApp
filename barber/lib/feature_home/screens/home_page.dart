@@ -70,210 +70,221 @@ class _MyWidgetState extends State<HomePageScreen> {
             ],
           ),
         ),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  'Hola, ${_user.displayName}',
-                  textAlign: TextAlign.left,
-                  style: const TextStyle(
-                      fontFamily: 'Barlow',
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-            const Divider(
-              thickness: 0.2,
-              color: Colors.white,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: const [
-                Text(
-                  'Mi proxima cita:',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Barlow'),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 120,
-              child: StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection('Cita')
-                    .where('Cliente', isEqualTo: _user.displayName.toString())
-                    .where('Fecha',
-                        isGreaterThanOrEqualTo:
-                            Timestamp.fromDate(dateTimeFecha))
-                    .snapshots(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    'Hola, ${_user.displayName}',
+                    textAlign: TextAlign.left,
+                    style: const TextStyle(
+                        fontFamily: 'Barlow',
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              const Divider(
+                thickness: 0.2,
+                color: Colors.white,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: const [
+                  Text(
+                    'Mi proxima cita:',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Barlow'),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 120,
+                child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('Cita')
+                      .where('Cliente', isEqualTo: _user.displayName.toString())
+                      .where('Fecha',
+                          isGreaterThanOrEqualTo:
+                              Timestamp.fromDate(dateTimeFecha))
+                      .snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
 
-                  if (snapshot.hasData) {
-                    return ListView.builder(
-                      shrinkWrap: true,
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          final DocumentSnapshot documentSnapshot =
+                              snapshot.data!.docs[index];
+
+                          String imagen = documentSnapshot['TipoServicio'];
+                          imagen =
+                              '${imagen.replaceAll(" ", "").toLowerCase()}.png';
+
+                          DateTime fechaDesdeBD =
+                              DateTime.fromMillisecondsSinceEpoch(
+                                  documentSnapshot['Fecha']
+                                      .millisecondsSinceEpoch);
+
+                          String fechaFormateada =
+                              '${fechaDesdeBD.day.toString()}/${fechaDesdeBD.month.toString()}/${fechaDesdeBD.year.toString()}';
+
+                          return FadeIn(
+                            delay: Duration(milliseconds: 200 * index),
+                            child: ListTile(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              leading: CircleAvatar(
+                                backgroundImage:
+                                    AssetImage("Assets/Images/$imagen"),
+                              ),
+                              title: Text(
+                                'Fecha: $fechaFormateada\nBarbero: ${documentSnapshot['Barbero']}',
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'Barlow',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15),
+                              ),
+                              subtitle: Text(
+                                'Servicio: ${documentSnapshot['TipoServicio']}',
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'Barlow',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15),
+                              ),
+                              isThreeLine: true,
+                              dense: true,
+                              trailing: Text(
+                                documentSnapshot['Hora'],
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'Barlow',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
+                              ),
+                              onTap: () {},
+                            ),
+                          );
+                        },
+                      );
+                    }
+                    return const CircularProgressIndicator();
+                  },
+                ),
+              ),
+              const Divider(
+                thickness: 0.2,
+                color: Colors.white,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Text(
+                    'Servicios ofrecidos',
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                        fontFamily: 'Barlow',
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Icon(
+                    Icons.navigate_next_sharp,
+                    color: Colors.white,
+                    size: 40,
+                  )
+                ],
+              ),
+
+              //GRIDVIEW PARA PONER TODOS LOS SERVICIOS
+
+              SizedBox(
+                height: 500,
+                child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('Servicio')
+                      .where('Disponible', isEqualTo: true)
+                      .snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+
+                    return GridView.builder(
                       itemCount: snapshot.data!.docs.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2),
                       itemBuilder: (context, index) {
                         final DocumentSnapshot documentSnapshot =
                             snapshot.data!.docs[index];
+                        String nombreImagen = documentSnapshot['Imagen'];
 
-                        DateTime fechaDesdeBD =
-                            DateTime.fromMillisecondsSinceEpoch(
-                                documentSnapshot['Fecha']
-                                    .millisecondsSinceEpoch);
-
-                        String fechaFormateada =
-                            '${fechaDesdeBD.day.toString()}/${fechaDesdeBD.month.toString()}/${fechaDesdeBD.year.toString()}';
-
-                        return FadeInLeft(
-                          delay: Duration(milliseconds: 200 * index),
-                          child: ListTile(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            leading: const CircleAvatar(
-                              backgroundImage:
-                                  AssetImage("Assets/Images/cortebarba.png"),
-                            ),
-                            title: Text(
-                              'Fecha: $fechaFormateada\nBarbero: ${documentSnapshot['Barbero']}',
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'Barlow',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20),
-                            ),
-                            subtitle: Text(
-                              'Servicio: ${documentSnapshot['TipoServicio']}',
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'Barlow',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20),
-                            ),
-                            isThreeLine: true,
-                            dense: true,
-                            trailing: Text(
-                              documentSnapshot['Hora'],
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'Barlow',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 25),
-                            ),
-                            onTap: () {},
-                          ),
-                        );
-                      },
-                    );
-                  }
-                  return const CircularProgressIndicator();
-                },
-              ),
-            ),
-            const Divider(
-              thickness: 0.2,
-              color: Colors.white,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text(
-                  'Servicios mas solicitados',
-                  textAlign: TextAlign.right,
-                  style: TextStyle(
-                      fontFamily: 'Barlow',
-                      color: Colors.white,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold),
-                ),
-                Icon(
-                  Icons.navigate_next_sharp,
-                  color: Colors.white,
-                  size: 40,
-                )
-              ],
-            ),
-            SizedBox(
-              height: 170,
-              width: width * 0.9,
-              child: StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection('Servicio')
-                    .where('Disponible', isEqualTo: true)
-                    .snapshots(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  return ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (context, index) {
-                      final DocumentSnapshot documentSnapshot =
-                          snapshot.data!.docs[index];
-                      String nombreImagen = documentSnapshot['Imagen'];
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Center(
-                            child: FadeInLeft(
-                              delay: Duration(milliseconds: 100 * index),
-                              child: Card(
-                                clipBehavior: Clip.antiAliasWithSaveLayer,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(14)),
-                                child: Stack(
-                                  alignment: Alignment.bottomCenter,
-                                  children: [
-                                    Ink.image(
-                                      //image: AssetImage('\'${item.image.name}\''),
-                                      image: AssetImage(
-                                          'Assets/Images/$nombreImagen'),
-                                      colorFilter: ColorFilters.greyScale,
-                                      height: 130,
-                                      width: 180,
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ],
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Center(
+                              child: FadeIn(
+                                delay: Duration(milliseconds: 100 * index),
+                                child: Card(
+                                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(14)),
+                                  child: Stack(
+                                    alignment: Alignment.bottomCenter,
+                                    children: [
+                                      Ink.image(
+                                        //image: AssetImage('\'${item.image.name}\''),
+                                        image: AssetImage(
+                                            'Assets/Images/$nombreImagen'),
+                                        colorFilter: ColorFilters.greyScale,
+                                        height: 130,
+                                        width: 180,
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          Center(
-                            child: Text(
-                              documentSnapshot['Nombre'],
-                              style: const TextStyle(
-                                  fontFamily: 'Barlow',
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          )
-                        ],
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-          ],
+                            Center(
+                              child: Text(
+                                documentSnapshot['Nombre'],
+                                style: const TextStyle(
+                                    fontFamily: 'Barlow',
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            )
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
+              )
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: BottomNavigationWidget(
