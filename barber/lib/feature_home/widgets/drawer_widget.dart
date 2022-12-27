@@ -25,8 +25,8 @@ class _DrawerUserWidgetState extends State<DrawerUserWidget> {
     return Drawer(
       child: ListView(
         children: [
-          const DrawerHeader(
-            decoration: BoxDecoration(
+          DrawerHeader(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topRight,
                 end: Alignment.bottomLeft,
@@ -39,10 +39,33 @@ class _DrawerUserWidgetState extends State<DrawerUserWidget> {
               color: Colors.white,
             ),
             child: Center(
-              child: CircleAvatar(
-                backgroundImage: AssetImage("Assets/Images/avatar1.jpeg"),
-                radius: 50,
-              ),
+              child: Column(children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    CircleAvatar(
+                      backgroundImage: AssetImage("Assets/Images/avatar1.jpeg"),
+                      radius: 40,
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: const [
+                        IconButton(
+                          onPressed: null,
+                          icon: Icon(
+                            Icons.edit,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ]),
             ),
           ),
           ListTile(

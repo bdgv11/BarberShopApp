@@ -201,7 +201,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                   color: Colors.white,
                 ),
                 SizedBox(
-                  height: 180,
+                  height: 200,
                   child: StreamBuilder(
                     stream: FirebaseFirestore.instance
                         .collection('Servicio')
@@ -259,19 +259,33 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                               Row(
                                 children: <Widget>[
                                   Text(
-                                    documentSnapshot['Nombre'],
+                                    '${documentSnapshot['Nombre']}',
                                     style: const TextStyle(
                                         fontFamily: 'Barlow',
                                         color: Colors.white54,
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  Icon(Icons.check_circle,
-                                      color: indexServicio == index
-                                          ? Colors.teal
-                                          : Colors.grey),
+                                  Icon(
+                                    Icons.check_circle,
+                                    color: indexServicio == index
+                                        ? Colors.teal
+                                        : Colors.grey,
+                                  ),
                                 ],
                               ),
+                              Row(
+                                children: [
+                                  Text(
+                                    '₡ ${documentSnapshot['Precio']}',
+                                    style: const TextStyle(
+                                        fontFamily: 'Barlow',
+                                        color: Colors.white54,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              )
                             ],
                           );
                         },

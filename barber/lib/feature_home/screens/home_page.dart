@@ -28,8 +28,6 @@ class _MyWidgetState extends State<HomePageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width;
-
     String getFormattedDate(String year, String month, String day) {
       String fecha;
       String m = '';
@@ -196,7 +194,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: const [
                   Text(
-                    'Servicios ofrecidos',
+                    'Servicios y productos:',
                     textAlign: TextAlign.right,
                     style: TextStyle(
                         fontFamily: 'Barlow',
@@ -253,7 +251,6 @@ class _MyWidgetState extends State<HomePageScreen> {
                                     alignment: Alignment.bottomCenter,
                                     children: [
                                       Ink.image(
-                                        //image: AssetImage('\'${item.image.name}\''),
                                         image: AssetImage(
                                             'Assets/Images/$nombreImagen'),
                                         colorFilter: ColorFilters.greyScale,
@@ -266,16 +263,19 @@ class _MyWidgetState extends State<HomePageScreen> {
                                 ),
                               ),
                             ),
-                            Center(
-                              child: Text(
-                                documentSnapshot['Nombre'],
-                                style: const TextStyle(
-                                    fontFamily: 'Barlow',
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            )
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  '${documentSnapshot['Nombre']} / ₡ ${documentSnapshot['Precio']}',
+                                  style: const TextStyle(
+                                      fontFamily: 'Barlow',
+                                      color: Colors.white54,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
                           ],
                         );
                       },

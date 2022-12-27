@@ -47,6 +47,7 @@ dependencies:
   google_fonts: ^3.0.1
   font_awesome_flutter: ^10.2.1
   animate_do:
+  firebase_storage: ^11.0.9
 
 
 dev_dependencies:
