@@ -25,6 +25,10 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
   void _focusDaySelected(DateTime day, DateTime focusedDay) {
     setState(() {
       today = day;
+      barberoSeleccionado = '';
+      servicioSeleccionado = '';
+      indexServicio = 100;
+      indexBarber = 10;
     });
   }
 
@@ -342,11 +346,13 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            leading: const CircleAvatar(
-                              radius: 30,
-                              backgroundImage:
-                                  AssetImage("Assets/Images/corteybarba.png"),
-                            ),
+                            leading: CircleAvatar(
+                                radius: 30,
+                                backgroundImage: NetworkImage(
+                                  documentSnapshot['ImagenURL'],
+                                )
+                                //AssetImage("Assets/Images/corteybarba.png"),
+                                ),
                             title: Row(
                               children: <Widget>[
                                 Text(

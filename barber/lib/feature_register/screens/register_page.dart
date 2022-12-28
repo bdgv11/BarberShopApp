@@ -211,7 +211,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   'Registrarse',
                                   style: TextStyle(
                                       color: Color.fromARGB(255, 104, 34, 4),
-                                      fontFamily: 'Barlow'),
+                                      fontFamily: 'Barlow',
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ),

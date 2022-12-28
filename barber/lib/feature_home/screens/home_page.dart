@@ -5,6 +5,7 @@ import 'package:barber/feature_home/widgets/drawer_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class HomePageScreen extends StatefulWidget {
@@ -16,6 +17,23 @@ class HomePageScreen extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<HomePageScreen> {
+  static final FirebaseStorage storage = FirebaseStorage.instance;
+  String imageFromStorage = '';
+  Future<String?> getImageUrl(String? imgName) async {
+    if (imgName == null) {
+      return null;
+    }
+    try {
+      var ref = storage.ref('Servicio').child(imgName);
+      var imgURL = await ref.getDownloadURL();
+
+      return imgURL;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  //
   late User _user;
 
   /// > The initState() function is called when the widget is first created
@@ -236,6 +254,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                         final DocumentSnapshot documentSnapshot =
                             snapshot.data!.docs[index];
                         String nombreImagen = documentSnapshot['Imagen'];
+                        imageFromStorage = getImageUrl(nombreImagen).toString();
 
                         return Column(
                           mainAxisSize: MainAxisSize.min,
@@ -251,8 +270,9 @@ class _MyWidgetState extends State<HomePageScreen> {
                                     alignment: Alignment.bottomCenter,
                                     children: [
                                       Ink.image(
-                                        image: AssetImage(
-                                            'Assets/Images/$nombreImagen'),
+                                        image: //NetworkImage(imageFromStorage),
+                                            AssetImage(
+                                                'Assets/Images/$nombreImagen'),
                                         colorFilter: ColorFilters.greyScale,
                                         height: 130,
                                         width: 180,

@@ -1,3 +1,4 @@
+import 'package:barber/feature_cruds/screens/cruds.dart';
 import 'package:barber/feature_login/screens/login_barber_shop.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ class DrawerUserWidget extends StatefulWidget {
 
 class _DrawerUserWidgetState extends State<DrawerUserWidget> {
   //
+
   late User _user;
   //
   @override
@@ -131,6 +133,30 @@ class _DrawerUserWidgetState extends State<DrawerUserWidget> {
             },
           ),
           const Divider(),
+          if (_user.email == 'bdgv11@gmail.com')
+            ListTile(
+              leading: const Icon(
+                Icons.settings,
+                size: 40,
+                color: Colors.teal,
+              ),
+              title: const Text(
+                'Configuraciones',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Barlow',
+                ),
+              ),
+              onTap: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => CrudPage(
+                      user: _user,
+                    ),
+                  ),
+                );
+              },
+            )
         ],
       ),
     );
