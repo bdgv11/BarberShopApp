@@ -60,7 +60,7 @@ class _CrudPageState extends State<CrudPage> {
                 tabs: [
                   Tab(text: 'Barberos', icon: Icon(Icons.person_pin_outlined)),
                   Tab(
-                    text: 'Servicios',
+                    text: 'Productos y Servicios',
                     icon: Icon(Icons.cut_outlined),
                   ),
                 ],
