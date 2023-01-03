@@ -44,6 +44,8 @@ class _BarberCrudState extends State<BarberCrud> {
     super.initState();
   }
 
+  // CRUD --- Add
+
   // Image picker
   Future imagePickerMethod() async {
     final pick = await imagePicker.pickImage(source: ImageSource.gallery);
@@ -99,20 +101,23 @@ class _BarberCrudState extends State<BarberCrud> {
     });
   }
 
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _descController = TextEditingController();
-  final TextEditingController _urlImageController = TextEditingController();
+  // CRUD -- UPDATE
 
   final CollectionReference _barberCollection =
       FirebaseFirestore.instance.collection('Barbero');
 
+  // Controller - Edit view
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _descController = TextEditingController();
+  final TextEditingController _urlImageController = TextEditingController();
   bool _opcion = false;
+  String? urlEdited;
 
   Future<void> _updateBarber([DocumentSnapshot? documentSnapshot]) async {
     if (documentSnapshot != null) {
       _nameController.text = documentSnapshot['Nombre'];
       _descController.text = documentSnapshot['Descripcion'];
-      _urlImageController = documentSnapshot['ImagenURL'];
+      _urlImageController.text = documentSnapshot['ImagenURL'];
       _opcion = documentSnapshot['Disponible'];
     }
 
@@ -140,12 +145,6 @@ class _BarberCrudState extends State<BarberCrud> {
                     labelText: 'Descripcion',
                   ),
                 ),
-                TextField(
-                  controller: _urlImageController,
-                  decoration: const InputDecoration(
-                    labelText: 'Imagen',
-                  ),
-                ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -154,7 +153,7 @@ class _BarberCrudState extends State<BarberCrud> {
                     Text(_opcion ? 'Disponible' : 'No disponible'),
                     CupertinoSwitch(
                       value: _opcion,
-                      activeColor: Colors.blue,
+                      activeColor: Colors.green,
                       trackColor: Colors.grey,
                       thumbColor: Colors.white,
                       onChanged: (value) {
@@ -166,23 +165,97 @@ class _BarberCrudState extends State<BarberCrud> {
                   ],
                 ),
                 ElevatedButton(
-                  child: const Text('Update'),
+                  onPressed: () {
+                    imagePickerMethod();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    elevation: 10,
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  child: const Text(
+                    'Seleccionar imagen',
+                    style: TextStyle(
+                        color: Color.fromARGB(255, 104, 34, 4),
+                        fontFamily: 'Barlow',
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Text(
+                  imageName,
+                  style: const TextStyle(
+                    overflow: TextOverflow.ellipsis,
+                    color: Colors.black,
+                  ),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 10,
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  child: const Text(
+                    'Editar',
+                    style: TextStyle(
+                        color: Color.fromARGB(255, 104, 34, 4),
+                        fontFamily: 'Barlow',
+                        fontWeight: FontWeight.bold),
+                  ),
                   onPressed: () async {
                     final String nombre = _nameController.text;
                     final String desc = _descController.text;
-                    final String image = _urlImageController.text;
                     final bool disponible = _opcion;
-                    if (desc.isNotEmpty &&
-                        image.isNotEmpty &&
-                        nombre.isNotEmpty) {
-                      await _barberCollection.doc(documentSnapshot!.id).update({
-                        "Nombre": nombre,
-                        "Descripcion": desc,
-                        'Disponible': disponible,
-                        'ImagenURL': image
+                    if (desc.isNotEmpty && nombre.isNotEmpty) {
+                      if (_image == null) {
+                        await _barberCollection
+                            .doc(documentSnapshot!.id)
+                            .update({
+                          "Nombre": nombre,
+                          "Descripcion": desc,
+                          'Disponible': disponible,
+                        });
+
+                        if (!mounted) return;
+                        Navigator.of(context).pop();
+                      } else {
+                        FirebaseStorage.instance
+                            .ref('Barbero')
+                            .child(documentSnapshot?['Nombre'])
+                            .delete();
+                        Reference ref = FirebaseStorage.instance
+                            .ref('Barbero')
+                            // ignore: unnecessary_string_interpolations
+                            .child('${_nameController.text}');
+                        await ref.putFile(_image!);
+                        downloadURL = await ref.getDownloadURL();
+
+                        _urlImageController.text = downloadURL.toString();
+
+                        imageName = '';
+
+                        if (downloadURL != null) {
+                          await _barberCollection
+                              .doc(documentSnapshot!.id)
+                              .update({
+                            "Nombre": nombre,
+                            "Descripcion": desc,
+                            'Disponible': disponible,
+                            'ImagenURL': _urlImageController.text
+                          });
+                          if (!mounted) return;
+
+                          Navigator.of(context).pop();
+                        }
+                      }
+                      setState(() {
+                        _nameFieldController.clear();
+                        _descFieldController.clear();
+                        imageName = '';
                       });
-                      _nameController.text = '';
-                      Navigator.of(context).pop();
                     }
                   },
                 ),
@@ -190,6 +263,92 @@ class _BarberCrudState extends State<BarberCrud> {
             ),
           );
         });
+  }
+
+  // CRUD -- DELETE
+
+  Widget _deleteBarber(String id, String nombre, BuildContext context) {
+    return CupertinoAlertDialog(
+      title: const Text(
+        '¿Desea eliminar el barbero?',
+        style: TextStyle(
+            fontFamily: 'Barlow', fontWeight: FontWeight.w900, fontSize: 20),
+      ),
+      // ignore: prefer_const_constructors
+      content: Text(
+        'Podria perderse informacion de citas...',
+        style: const TextStyle(
+            fontFamily: 'Barlow', fontWeight: FontWeight.w900, fontSize: 20),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text(
+            'Cancelar',
+            style: TextStyle(color: Colors.red),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            // This method will delete the barber
+            FirebaseFirestore.instance.collection('Barbero').doc(id).delete();
+
+            FirebaseStorage.instance.ref('Barbero').child(nombre).delete();
+            Navigator.of(context).pop();
+          },
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'Eliminar',
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _deleteBarberAndroid(String id, String nombre, BuildContext context) {
+    return CupertinoAlertDialog(
+      title: const Text(
+        '¿Desea eliminar el barbero?',
+        style: TextStyle(
+            fontFamily: 'Barlow', fontWeight: FontWeight.w900, fontSize: 20),
+      ),
+      // ignore: prefer_const_constructors
+      content: Text(
+        'Podria perderse informacion de citas...',
+        style: const TextStyle(
+            fontFamily: 'Barlow', fontWeight: FontWeight.w900, fontSize: 20),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text(
+            'Cancelar',
+            style: TextStyle(color: Colors.red),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            // This method will delete the barber
+            FirebaseFirestore.instance.collection('Barbero').doc(id).delete();
+
+            FirebaseStorage.instance.ref('Barbero').child(nombre).delete();
+            Navigator.of(context).pop();
+          },
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'Eliminar',
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   @override
@@ -392,21 +551,23 @@ class _BarberCrudState extends State<BarberCrud> {
                               final DocumentSnapshot documentSnapshot =
                                   snapshot.data!.docs[index];
 
-                              return /*Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      CircleAvatar(
+                              return SizedBox(
+                                height: 80,
+                                child: Card(
+                                  elevation: 20,
+                                  color: Colors.black54,
+                                  child: FadeInLeft(
+                                    delay: Duration(milliseconds: 100 * index),
+                                    child: ListTile(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      leading: CircleAvatar(
                                         backgroundImage: NetworkImage(
                                           documentSnapshot['ImagenURL'],
                                         ),
-                                        radius: 25,
                                       ),
-                                      const Padding(
-                                          padding: EdgeInsets.only(right: 8)),
-                                      Text(
+                                      title: Text(
                                         documentSnapshot['Nombre'],
                                         style: const TextStyle(
                                             color: Colors.white,
@@ -414,136 +575,61 @@ class _BarberCrudState extends State<BarberCrud> {
                                             fontWeight: FontWeight.bold,
                                             fontSize: 20),
                                       ),
-                                      const Padding(
-                                          padding: EdgeInsets.only(right: 8)),
-                                      Expanded(
-                                        child: Text(
-                                          documentSnapshot['Descripcion'],
-                                          style: const TextStyle(
+                                      subtitle: Text(
+                                        documentSnapshot['Descripcion'],
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: 'Barlow',
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                            overflow: TextOverflow.ellipsis),
+                                      ),
+                                      isThreeLine: true,
+                                      dense: true,
+                                      trailing: SizedBox(
+                                        width: 110,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            IconButton(
+                                              icon: const Icon(
+                                                Icons.edit_outlined,
+                                              ),
                                               color: Colors.white,
-                                              fontFamily: 'Barlow',
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                              overflow: TextOverflow.ellipsis),
-                                        ),
-                                      ),
-                                      IconButton(
-                                        icon: const Icon(
-                                          Icons.edit_outlined,
-                                          size: 30,
-                                        ),
-                                        color: Colors.white,
-                                        onPressed: () {},
-                                      ),
-                                      IconButton(
-                                        icon: const Icon(
-                                          Icons.delete_outline_outlined,
-                                          size: 30,
-                                        ),
-                                        color: Colors.white,
-                                        onPressed: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return Platform.isIOS
-                                                  ? _deleteBarber(
-                                                      documentSnapshot.id,
-                                                      documentSnapshot[
-                                                          'Nombre'],
-                                                      context) //cupertinoDialog(context)
-                                                  : _deleteBarberAndroid(
-                                                      documentSnapshot.id,
-                                                      documentSnapshot[
-                                                          'Nombre'],
-                                                      context); //androidDialog(context);
-                                            },
-                                          );
-
-                                          _deleteBarber(
-                                              documentSnapshot.id,
-                                              documentSnapshot['Nombre'],
-                                              context);
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                );*/
-
-                                  Card(
-                                color: Colors.transparent,
-                                child: FadeInLeft(
-                                  delay: Duration(milliseconds: 100 * index),
-                                  child: ListTile(
-                                    /*shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(20),
-                                                                          ),*/
-                                    leading: CircleAvatar(
-                                      backgroundImage: NetworkImage(
-                                        documentSnapshot['ImagenURL'],
-                                      ),
-                                    ),
-                                    title: Text(
-                                      documentSnapshot['Nombre'],
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: 'Barlow',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20),
-                                    ),
-                                    subtitle: Text(
-                                      documentSnapshot['Descripcion'],
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: 'Barlow',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                          overflow: TextOverflow.ellipsis),
-                                    ),
-                                    isThreeLine: true,
-                                    dense: true,
-                                    trailing: SizedBox(
-                                      width: 110,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          IconButton(
-                                            icon: const Icon(
-                                              Icons.edit_outlined,
+                                              iconSize: 30,
+                                              onPressed: () {
+                                                _updateBarber(documentSnapshot);
+                                              },
                                             ),
-                                            color: Colors.white,
-                                            iconSize: 30,
-                                            onPressed: () {
-                                              _updateBarber(documentSnapshot);
-                                            },
-                                          ),
-                                          IconButton(
-                                            icon: const Icon(
-                                              Icons.delete_outline_outlined,
+                                            IconButton(
+                                              icon: const Icon(
+                                                Icons.delete_outline_outlined,
+                                              ),
+                                              color: Colors.white,
+                                              iconSize: 30,
+                                              onPressed: () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return Platform.isIOS
+                                                        ? _deleteBarber(
+                                                            documentSnapshot.id,
+                                                            documentSnapshot[
+                                                                'Nombre'],
+                                                            context) //cupertinoDialog(context)
+                                                        : _deleteBarberAndroid(
+                                                            documentSnapshot.id,
+                                                            documentSnapshot[
+                                                                'Nombre'],
+                                                            context); //androidDialog(context);
+                                                  },
+                                                );
+                                              },
                                             ),
-                                            color: Colors.white,
-                                            iconSize: 30,
-                                            onPressed: () {
-                                              showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return Platform.isIOS
-                                                      ? _deleteBarber(
-                                                          documentSnapshot.id,
-                                                          documentSnapshot[
-                                                              'Nombre'],
-                                                          context) //cupertinoDialog(context)
-                                                      : _deleteBarberAndroid(
-                                                          documentSnapshot.id,
-                                                          documentSnapshot[
-                                                              'Nombre'],
-                                                          context); //androidDialog(context);
-                                                },
-                                              );
-                                            },
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -565,88 +651,4 @@ class _BarberCrudState extends State<BarberCrud> {
       ),
     );
   }
-}
-
-Widget _deleteBarber(String id, String nombre, BuildContext context) {
-  return CupertinoAlertDialog(
-    title: const Text(
-      '¿Desea eliminar el barbero?',
-      style: TextStyle(
-          fontFamily: 'Barlow', fontWeight: FontWeight.w900, fontSize: 20),
-    ),
-    // ignore: prefer_const_constructors
-    content: Text(
-      'Podria perderse informacion de citas...',
-      style: const TextStyle(
-          fontFamily: 'Barlow', fontWeight: FontWeight.w900, fontSize: 20),
-    ),
-    actions: [
-      TextButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        child: const Text(
-          'Cancelar',
-          style: TextStyle(color: Colors.red),
-        ),
-      ),
-      TextButton(
-        onPressed: () {
-          // This method will delete the barber
-          FirebaseFirestore.instance.collection('Barbero').doc(id).delete();
-
-          FirebaseStorage.instance.ref('Barbero').child(nombre).delete();
-          Navigator.of(context).pop();
-        },
-        child: const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Text(
-            'Eliminar',
-          ),
-        ),
-      ),
-    ],
-  );
-}
-
-Widget _deleteBarberAndroid(String id, String nombre, BuildContext context) {
-  return CupertinoAlertDialog(
-    title: const Text(
-      '¿Desea eliminar el barbero?',
-      style: TextStyle(
-          fontFamily: 'Barlow', fontWeight: FontWeight.w900, fontSize: 20),
-    ),
-    // ignore: prefer_const_constructors
-    content: Text(
-      'Podria perderse informacion de citas...',
-      style: const TextStyle(
-          fontFamily: 'Barlow', fontWeight: FontWeight.w900, fontSize: 20),
-    ),
-    actions: [
-      TextButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        child: const Text(
-          'Cancelar',
-          style: TextStyle(color: Colors.red),
-        ),
-      ),
-      TextButton(
-        onPressed: () {
-          // This method will delete the barber
-          FirebaseFirestore.instance.collection('Barbero').doc(id).delete();
-
-          FirebaseStorage.instance.ref('Barbero').child(nombre).delete();
-          Navigator.of(context).pop();
-        },
-        child: const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Text(
-            'Eliminar',
-          ),
-        ),
-      ),
-    ],
-  );
 }
