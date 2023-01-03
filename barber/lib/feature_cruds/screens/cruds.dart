@@ -29,7 +29,7 @@ class _CrudPageState extends State<CrudPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: Colors.black87),
+      //appBar: AppBar(backgroundColor: Colors.black87),
       bottomNavigationBar: BottomNavigationWidget(user: _user),
       drawer: DrawerUserWidget(
         user: _user,
@@ -71,7 +71,7 @@ class _CrudPageState extends State<CrudPage> {
                 //Barber Crud Page
                 BarberCrud(user: _user),
                 // Service Crud Page
-                ServiceCrud(user: _user)
+                ProductServiceCrud(user: _user)
               ],
             ),
           ),

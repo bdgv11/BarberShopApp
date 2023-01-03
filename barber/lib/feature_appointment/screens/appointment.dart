@@ -208,8 +208,9 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                   height: 200,
                   child: StreamBuilder(
                     stream: FirebaseFirestore.instance
-                        .collection('Servicio')
-                        .where('Disponible', isEqualTo: true)
+                        .collection('ProductoServicio')
+                        .where('disponible', isEqualTo: true)
+                        .where('tipo', isEqualTo: 'Servicio')
                         .snapshots(),
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -225,7 +226,6 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                         itemBuilder: (context, index) {
                           final DocumentSnapshot documentSnapshot =
                               snapshot.data!.docs[index];
-                          String nombreImagen = documentSnapshot['Imagen'];
 
                           return Column(
                             mainAxisSize: MainAxisSize.min,
@@ -236,7 +236,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                                     setState(() {
                                       indexServicio = index;
                                       servicioSeleccionado =
-                                          documentSnapshot['Nombre'];
+                                          documentSnapshot['nombre'];
                                     });
                                   },
                                   child: Card(
@@ -248,8 +248,9 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                                       alignment: Alignment.bottomCenter,
                                       children: [
                                         Ink.image(
-                                          image: AssetImage(
-                                              'Assets/Images/$nombreImagen'),
+                                          image: NetworkImage(
+                                            documentSnapshot['imageURL'],
+                                          ),
                                           colorFilter: ColorFilters.greyScale,
                                           height: 130,
                                           width: 180,
@@ -263,7 +264,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                               Row(
                                 children: <Widget>[
                                   Text(
-                                    '${documentSnapshot['Nombre']}',
+                                    '${documentSnapshot['nombre']}',
                                     style: const TextStyle(
                                         fontFamily: 'Barlow',
                                         color: Colors.white54,
@@ -281,7 +282,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                               Row(
                                 children: [
                                   Text(
-                                    '₡ ${documentSnapshot['Precio']}',
+                                    '₡ ${documentSnapshot['precio']}',
                                     style: const TextStyle(
                                         fontFamily: 'Barlow',
                                         color: Colors.white54,

@@ -164,9 +164,9 @@ class _MyWidgetState extends State<HomePageScreen> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              leading: CircleAvatar(
+                              leading: const CircleAvatar(
                                 backgroundImage:
-                                    AssetImage("Assets/Images/$imagen"),
+                                    AssetImage("Assets/Images/logo2.jpeg"),
                               ),
                               title: Text(
                                 'Fecha: $fechaFormateada\nBarbero: ${documentSnapshot['Barbero']}',
@@ -234,8 +234,9 @@ class _MyWidgetState extends State<HomePageScreen> {
                 height: 500,
                 child: StreamBuilder(
                   stream: FirebaseFirestore.instance
-                      .collection('Servicio')
-                      .where('Disponible', isEqualTo: true)
+                      .collection('ProductoServicio')
+                      .where('disponible', isEqualTo: true)
+                      .orderBy('tipo', descending: true)
                       .snapshots(),
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -253,8 +254,6 @@ class _MyWidgetState extends State<HomePageScreen> {
                       itemBuilder: (context, index) {
                         final DocumentSnapshot documentSnapshot =
                             snapshot.data!.docs[index];
-                        String nombreImagen = documentSnapshot['Imagen'];
-                        imageFromStorage = getImageUrl(nombreImagen).toString();
 
                         return Column(
                           mainAxisSize: MainAxisSize.min,
@@ -271,9 +270,10 @@ class _MyWidgetState extends State<HomePageScreen> {
                                     children: [
                                       Ink.image(
                                         image: //NetworkImage(imageFromStorage),
-                                            AssetImage(
-                                                'Assets/Images/$nombreImagen'),
-                                        colorFilter: ColorFilters.greyScale,
+                                            NetworkImage(
+                                          documentSnapshot['imageURL'],
+                                        ),
+                                        //colorFilter: ColorFilters.greyScale,
                                         height: 130,
                                         width: 180,
                                         fit: BoxFit.fill,
@@ -287,7 +287,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  '${documentSnapshot['Nombre']} / ₡ ${documentSnapshot['Precio']}',
+                                  '${documentSnapshot['nombre']} / ₡ ${documentSnapshot['precio']}',
                                   style: const TextStyle(
                                       fontFamily: 'Barlow',
                                       color: Colors.white54,
