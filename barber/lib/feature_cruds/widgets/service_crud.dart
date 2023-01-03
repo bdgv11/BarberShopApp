@@ -34,6 +34,8 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
   final imagePicker = ImagePicker();
   String? downloadURL;
 
+  /// Creating a variable called _opcionRadio of type RadioOpciones and assigning it the value of
+  /// RadioOpciones.Producto.
   RadioOpciones _opcionRadio = RadioOpciones.Producto;
 
   /// > The initState() function is called when the widget is first created
@@ -43,10 +45,17 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
     super.initState();
   }
 
+  /// The dispose() function is called when the widget is removed from the widget tree
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _priceController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //drawer: DrawerUserWidget(user: _user),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(

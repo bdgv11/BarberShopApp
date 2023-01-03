@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:animate_do/animate_do.dart';
+import 'package:barber/feature_cruds/models/barber.dart';
+import 'package:barber/feature_cruds/models/product_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -22,14 +24,15 @@ class _BarberCrudState extends State<BarberCrud> {
   //
   final _nameFieldController = TextEditingController();
   final _descFieldController = TextEditingController();
+  final _emailFieldController = TextEditingController();
 
   final _focusName = FocusNode();
   final _focusDesc = FocusNode();
+  final _focusEmail = FocusNode();
 
   final _formKey = GlobalKey<FormState>();
   bool _processing = false;
-
-  //late User _user;
+  bool _switchValue = false;
 
   File? _image;
   String imageName = '';
@@ -44,10 +47,17 @@ class _BarberCrudState extends State<BarberCrud> {
     super.initState();
   }
 
+  /// > The dispose() function is called when the widget is removed from the widget tree
+  @override
+  void dispose() {
+    _nameFieldController.dispose();
+    _descFieldController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //drawer: DrawerUserWidget(user: _user),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -65,16 +75,7 @@ class _BarberCrudState extends State<BarberCrud> {
             padding: const EdgeInsets.all(12.0),
             child: Center(
               child: Column(
-                //mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  /*const Text(
-                    'Mantenimiento Barbero',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 25,
-                      fontFamily: 'Barlow',
-                    ),
-                  ),*/
                   Form(
                     key: _formKey,
                     child: Column(
@@ -83,7 +84,7 @@ class _BarberCrudState extends State<BarberCrud> {
                         TextFormField(
                           style: const TextStyle(color: Colors.white),
                           validator: (value) => Validator.validateName(
-                              name: _nameFieldController.text),
+                              name: _nameFieldController.text.trim()),
                           controller: _nameFieldController,
                           focusNode: _focusName,
                           decoration: const InputDecoration(
@@ -106,7 +107,7 @@ class _BarberCrudState extends State<BarberCrud> {
                         TextFormField(
                           style: const TextStyle(color: Colors.white),
                           validator: (value) => Validator.validateName(
-                              name: _nameFieldController.text),
+                              name: _descFieldController.text.trim()),
                           controller: _descFieldController,
                           focusNode: _focusDesc,
                           decoration: const InputDecoration(
@@ -115,7 +116,7 @@ class _BarberCrudState extends State<BarberCrud> {
                               size: 25,
                               color: Colors.white,
                             ),
-                            hintText: 'Descripcion',
+                            hintText: 'Descripción',
                             errorStyle: TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'Barlow',
@@ -124,6 +125,55 @@ class _BarberCrudState extends State<BarberCrud> {
                               color: Colors.white,
                             ),
                           ),
+                        ),
+                        const Padding(padding: EdgeInsets.all(12)),
+                        TextFormField(
+                          style: const TextStyle(color: Colors.white),
+                          validator: (value) => Validator.validateEmail(
+                              email: _emailFieldController.text.trim()),
+                          controller: _emailFieldController,
+                          focusNode: _focusEmail,
+                          decoration: const InputDecoration(
+                            icon: Icon(
+                              Icons.alternate_email_outlined,
+                              size: 25,
+                              color: Colors.white,
+                            ),
+                            hintText: 'Correo electrónico',
+                            errorStyle: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Barlow',
+                                fontWeight: FontWeight.bold),
+                            hintStyle: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        const Padding(padding: EdgeInsets.all(12)),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Icon(
+                              Icons.event_available_outlined,
+                              size: 25,
+                              color: Colors.white,
+                            ),
+                            Text(
+                              _switchValue ? 'Disponible' : 'No disponible',
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Barlow',
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            CupertinoSwitch(
+                              value: _switchValue,
+                              onChanged: (value) {
+                                setState(() {
+                                  _switchValue = value;
+                                });
+                              },
+                            )
+                          ],
                         ),
                         const Padding(padding: EdgeInsets.all(12)),
                         Row(
@@ -261,11 +311,11 @@ class _BarberCrudState extends State<BarberCrud> {
                                       ),
                                       leading: CircleAvatar(
                                         backgroundImage: NetworkImage(
-                                          documentSnapshot['ImagenURL'],
+                                          documentSnapshot['imagenUrl'],
                                         ),
                                       ),
                                       title: Text(
-                                        documentSnapshot['Nombre'],
+                                        documentSnapshot['nombre'],
                                         style: const TextStyle(
                                             color: Colors.white,
                                             fontFamily: 'Barlow',
@@ -274,7 +324,7 @@ class _BarberCrudState extends State<BarberCrud> {
                                             overflow: TextOverflow.ellipsis),
                                       ),
                                       subtitle: Text(
-                                        documentSnapshot['Descripcion'],
+                                        documentSnapshot['descripcion'],
                                         style: const TextStyle(
                                             color: Colors.white,
                                             fontFamily: 'Barlow',
@@ -315,12 +365,12 @@ class _BarberCrudState extends State<BarberCrud> {
                                                         ? _deleteBarber(
                                                             documentSnapshot.id,
                                                             documentSnapshot[
-                                                                'Nombre'],
+                                                                'nombre'],
                                                             context) //cupertinoDialog(context)
                                                         : _deleteBarberAndroid(
                                                             documentSnapshot.id,
                                                             documentSnapshot[
-                                                                'Nombre'],
+                                                                'nombre'],
                                                             context); //androidDialog(context);
                                                   },
                                                 );
@@ -387,23 +437,27 @@ class _BarberCrudState extends State<BarberCrud> {
     await ref.putFile(_image!);
     downloadURL = await ref.getDownloadURL();
 
-    // upload to firestore
+    final barber = Barber(
+        nombre: _nameFieldController.text,
+        descripcion: _descFieldController.text,
+        correoElectronico: _emailFieldController.text,
+        disponible: _switchValue,
+        imagenUrl: downloadURL.toString());
 
-    await firestore.collection('Barbero').add({
-      'Nombre': _nameFieldController.text,
-      'Disponible': true,
-      'ImagenURL': downloadURL,
-      'Descripcion': _descFieldController.text
-    }).whenComplete(
-      () => showSnackBar(
-        'Barbero agregado correctamente',
-        const Duration(seconds: 3),
-      ),
-    );
+    final jsonData = barber.toJson();
+
+    // upload to firestore
+    await firestore.collection('Barbero').add(jsonData).whenComplete(
+          () => showSnackBar(
+            'Barbero agregado correctamente',
+            const Duration(seconds: 3),
+          ),
+        );
 
     setState(() {
       _nameFieldController.clear();
       _descFieldController.clear();
+      _emailFieldController.clear();
       imageName = '';
     });
   }
@@ -418,15 +472,17 @@ class _BarberCrudState extends State<BarberCrud> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
   final TextEditingController _urlImageController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   bool _opcion = false;
   String? urlEdited;
 
   Future<void> _updateBarber([DocumentSnapshot? documentSnapshot]) async {
     if (documentSnapshot != null) {
-      _nameController.text = documentSnapshot['Nombre'];
-      _descController.text = documentSnapshot['Descripcion'];
-      _urlImageController.text = documentSnapshot['ImagenURL'];
-      _opcion = documentSnapshot['Disponible'];
+      _nameController.text = documentSnapshot['nombre'];
+      _descController.text = documentSnapshot['descripcion'];
+      _urlImageController.text = documentSnapshot['imagenUrl'];
+      _opcion = documentSnapshot['disponible'];
+      _emailController.text = documentSnapshot['correoElectronico'];
     }
 
     await showModalBottomSheet(
@@ -451,6 +507,12 @@ class _BarberCrudState extends State<BarberCrud> {
                   controller: _descController,
                   decoration: const InputDecoration(
                     labelText: 'Descripcion',
+                  ),
+                ),
+                TextField(
+                  controller: _emailController,
+                  decoration: const InputDecoration(
+                    labelText: 'Correo',
                   ),
                 ),
                 const SizedBox(
@@ -516,23 +578,28 @@ class _BarberCrudState extends State<BarberCrud> {
                   onPressed: () async {
                     final String nombre = _nameController.text;
                     final String desc = _descController.text;
+                    final String email = _emailController.text;
                     final bool disponible = _opcion;
                     if (desc.isNotEmpty && nombre.isNotEmpty) {
                       if (_image == null) {
+                        final barberEdit = Barber.withOutImage(
+                            nombre: nombre,
+                            descripcion: desc,
+                            correoElectronico: email,
+                            disponible: disponible);
+
+                        final jsonData = barberEdit.toJsonWithoutImage();
+
                         await _barberCollection
                             .doc(documentSnapshot!.id)
-                            .update({
-                          "Nombre": nombre,
-                          "Descripcion": desc,
-                          'Disponible': disponible,
-                        });
+                            .update(jsonData);
 
                         if (!mounted) return;
                         Navigator.of(context).pop();
                       } else {
                         FirebaseStorage.instance
                             .ref('Barbero')
-                            .child(documentSnapshot?['Nombre'])
+                            .child(documentSnapshot?['nombre'])
                             .delete();
                         Reference ref = FirebaseStorage.instance
                             .ref('Barbero')
@@ -546,14 +613,19 @@ class _BarberCrudState extends State<BarberCrud> {
                         imageName = '';
 
                         if (downloadURL != null) {
+                          final barberEdit = Barber(
+                              nombre: nombre,
+                              descripcion: desc,
+                              correoElectronico: email,
+                              imagenUrl: _urlImageController.text,
+                              disponible: disponible);
+
+                          final jsonData = barberEdit.toJson();
+
                           await _barberCollection
                               .doc(documentSnapshot!.id)
-                              .update({
-                            "Nombre": nombre,
-                            "Descripcion": desc,
-                            'Disponible': disponible,
-                            'ImagenURL': _urlImageController.text
-                          });
+                              .update(jsonData);
+
                           if (!mounted) return;
 
                           Navigator.of(context).pop();

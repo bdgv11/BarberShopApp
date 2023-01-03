@@ -326,7 +326,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                 StreamBuilder(
                   stream: FirebaseFirestore.instance
                       .collection('Barbero')
-                      .where('Disponible', isEqualTo: true)
+                      .where('disponible', isEqualTo: true)
                       .snapshots(),
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -350,14 +350,14 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                             leading: CircleAvatar(
                                 radius: 30,
                                 backgroundImage: NetworkImage(
-                                  documentSnapshot['ImagenURL'],
+                                  documentSnapshot['imagenUrl'],
                                 )
                                 //AssetImage("Assets/Images/corteybarba.png"),
                                 ),
                             title: Row(
                               children: <Widget>[
                                 Text(
-                                  documentSnapshot['Nombre'],
+                                  documentSnapshot['nombre'],
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontFamily: 'Barlow',
@@ -372,7 +372,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                               ],
                             ),
                             subtitle: Text(
-                              documentSnapshot['Descripcion'],
+                              documentSnapshot['descripcion'],
                               style: const TextStyle(
                                   color: Colors.white,
                                   fontFamily: 'Barlow',
@@ -383,7 +383,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                               setState(() {
                                 indexBarber = index;
                                 barberoSeleccionado =
-                                    documentSnapshot['Nombre'].toString();
+                                    documentSnapshot['nombre'].toString();
                                 getInfo(fecha, barberoSeleccionado);
                               });
                             },
