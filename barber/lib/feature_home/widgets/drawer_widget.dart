@@ -46,7 +46,7 @@ class _DrawerUserWidgetState extends State<DrawerUserWidget> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
                     CircleAvatar(
-                      backgroundImage: AssetImage("Assets/Images/avatar1.jpeg"),
+                      backgroundImage: AssetImage("Assets/Images/logo2.jpeg"),
                       radius: 40,
                     ),
                   ],

@@ -270,7 +270,8 @@ class _BarberCrudState extends State<BarberCrud> {
                                             color: Colors.white,
                                             fontFamily: 'Barlow',
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 20),
+                                            fontSize: 20,
+                                            overflow: TextOverflow.ellipsis),
                                       ),
                                       subtitle: Text(
                                         documentSnapshot['Descripcion'],

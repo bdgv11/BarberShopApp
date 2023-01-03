@@ -29,6 +29,13 @@
             {
               "client_id": "1062509959853-1gc41krbgmfggmrun7e20a0c0q5v9kcp.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1062509959853-p76arsjh22bhe4ntgu3ffe7re2qo31h3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.barber.bryanguzman.barber"
+              }
             }
           ]
         }

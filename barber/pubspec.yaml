@@ -48,6 +48,7 @@ dependencies:
   animate_do:
   firebase_storage: ^11.0.9
   image_picker: ^0.8.6
+  firebase_performance: ^0.9.0+9
 
 
 dev_dependencies:
