@@ -22,15 +22,6 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
 
   late User _user;
   DateTime today = DateTime.now();
-  void _focusDaySelected(DateTime day, DateTime focusedDay) {
-    setState(() {
-      today = day;
-      barberoSeleccionado = '';
-      servicioSeleccionado = '';
-      indexServicio = 100;
-      indexBarber = 10;
-    });
-  }
 
   bool existInfo = false;
   String servicioSeleccionado = '';
@@ -538,6 +529,27 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
     );
   }
 
+  /// _focusDaySelected(DateTime day, DateTime focusedDay) is a function that takes two parameters, day
+  /// and focusedDay, and sets the state of the app to the day selected
+  ///
+  /// Args:
+  ///   day (DateTime): The day that was selected.
+  ///   focusedDay (DateTime): The day that is currently focused.
+  void _focusDaySelected(DateTime day, DateTime focusedDay) {
+    setState(() {
+      today = day;
+      barberoSeleccionado = '';
+      servicioSeleccionado = '';
+      indexServicio = 100;
+      indexBarber = 10;
+    });
+  }
+
+  /// It checks if there is information in the database for the selected date and barber.
+  ///
+  /// Args:
+  ///   fecha (String): The date selected by the user.
+  ///   barbero (String): Barber's name
   void getInfo(String fecha, String barbero) async {
     DateTime dateTimeFecha = DateTime.parse(fecha);
     CollectionReference citas = FirebaseFirestore.instance.collection('Cita');
@@ -567,6 +579,13 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
   }
 }
 
+/// It takes in a service, client, and id, and updates the document with the id with the service,
+/// client, and sets the hour to false
+///
+/// Args:
+///   servicio (String): The type of service the user wants to book.
+///   cliente (String): The name of the client
+///   id (String): The id of the document to update.
 void _updateHour(String servicio, String cliente, String id) {
   // Este metodo va a poner en false (ocupada) el valor de la hora de ese dia en especifico!
   FirebaseFirestore.instance.collection('Cita').doc(id).update({
@@ -576,6 +595,19 @@ void _updateHour(String servicio, String cliente, String id) {
   });
 }
 
+/// It returns an AlertDialog widget that contains a title, a content, and two actions
+///
+/// Args:
+///   context (BuildContext): The context of the widget that is calling the dialog.
+///   fecha (String): Date
+///   servicio (String): The service that the user selected.
+///   barbero (String): The name of the barber
+///   horaSeleccionada (String): The hour selected by the user.
+///   id (String): The id of the hour that the user selected.
+///   cliente (String): The name of the client
+///
+/// Returns:
+///   A widget that is an AlertDialog.
 Widget androidDialog(BuildContext context, String fecha, String servicio,
     String barbero, String horaSeleccionada, String id, String cliente) {
   return AlertDialog(
@@ -615,6 +647,19 @@ Widget androidDialog(BuildContext context, String fecha, String servicio,
   );
 }
 
+/// It returns a CupertinoAlertDialog widget with a title, content, and two actions
+///
+/// Args:
+///   context (BuildContext): The current BuildContext.
+///   fecha (String): The date selected by the user.
+///   servicio (String): The service that the user selected.
+///   barbero (String): The name of the barber
+///   horaSeleccionada (String): The hour selected by the user.
+///   id (String): The id of the hour that the user selected.
+///   cliente (String): The name of the client
+///
+/// Returns:
+///   A CupertinoAlertDialog widget.
 Widget cupertinoDialog(BuildContext context, String fecha, String servicio,
     String barbero, String horaSeleccionada, String id, String cliente) {
   return CupertinoAlertDialog(

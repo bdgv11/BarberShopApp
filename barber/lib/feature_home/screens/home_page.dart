@@ -19,19 +19,6 @@ class HomePageScreen extends StatefulWidget {
 class _MyWidgetState extends State<HomePageScreen> {
   static final FirebaseStorage storage = FirebaseStorage.instance;
   String imageFromStorage = '';
-  Future<String?> getImageUrl(String? imgName) async {
-    if (imgName == null) {
-      return null;
-    }
-    try {
-      var ref = storage.ref('Servicio').child(imgName);
-      var imgURL = await ref.getDownloadURL();
-
-      return imgURL;
-    } catch (e) {
-      return null;
-    }
-  }
 
   //
   late User _user;
@@ -248,6 +235,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                     }
 
                     return GridView.builder(
+                      physics: const BouncingScrollPhysics(),
                       itemCount: snapshot.data!.docs.length,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
@@ -312,5 +300,26 @@ class _MyWidgetState extends State<HomePageScreen> {
         user: _user,
       ),
     );
+  }
+
+  /// It takes a string as an argument, and returns a string
+  ///
+  /// Args:
+  ///   imgName (String): The name of the image you want to get the URL for.
+  ///
+  /// Returns:
+  ///   The image url is being returned.
+  Future<String?> getImageUrl(String? imgName) async {
+    if (imgName == null) {
+      return null;
+    }
+    try {
+      var ref = storage.ref('Servicio').child(imgName);
+      var imgURL = await ref.getDownloadURL();
+
+      return imgURL;
+    } catch (e) {
+      return null;
+    }
   }
 }
