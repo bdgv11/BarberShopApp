@@ -141,6 +141,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                     if (snapshot.hasData) {
                       return ListView.builder(
                         shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
                         itemCount: snapshot.data!.docs.length,
                         itemBuilder: (context, index) {
                           final DocumentSnapshot documentSnapshot =
@@ -273,7 +274,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                                             NetworkImage(
                                           documentSnapshot['imageURL'],
                                         ),
-                                        //colorFilter: ColorFilters.greyScale,
+                                        colorFilter: ColorFilters.greyScale,
                                         height: 130,
                                         width: 180,
                                         fit: BoxFit.fill,

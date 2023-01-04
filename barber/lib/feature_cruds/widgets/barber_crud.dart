@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:animate_do/animate_do.dart';
 import 'package:barber/feature_cruds/models/barber.dart';
-import 'package:barber/feature_cruds/models/product_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -293,6 +292,7 @@ class _BarberCrudState extends State<BarberCrud> {
 
                         if (snapshot.hasData) {
                           return ListView.builder(
+                            physics: const BouncingScrollPhysics(),
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index) {
                               final DocumentSnapshot documentSnapshot =

@@ -221,6 +221,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                       }
                       return ListView.builder(
                         scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: snapshot.data!.docs.length,
                         itemBuilder: (context, index) {
@@ -336,6 +337,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                       );
                     }
                     return ListView.builder(
+                      physics: const BouncingScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {

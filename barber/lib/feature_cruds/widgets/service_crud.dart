@@ -345,6 +345,7 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
 
                         if (snapshot.hasData) {
                           return ListView.builder(
+                            physics: const BouncingScrollPhysics(),
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index) {
                               final DocumentSnapshot documentSnapshot =
