@@ -1,13 +1,15 @@
 import 'dart:io';
 import 'package:barber/feature_appointment/firebase_methods/collections_methods.dart';
-import 'package:barber/feature_home/models/color_filter.dart';
 import 'package:barber/feature_home/widgets/bottom_navigation.dart';
 import 'package:barber/feature_home/widgets/drawer_widget.dart';
+import 'package:barber/utils/globals.dart' as globals;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+
+import '../widgets/service_widget.dart';
 
 class AppointmentScreen extends StatefulWidget {
   final User user;
@@ -24,15 +26,15 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
   DateTime today = DateTime.now();
 
   bool existInfo = false;
-  String servicioSeleccionado = '';
   String barberoSeleccionado = '';
-  int indexServicio = 100;
-  int indexBarber = 10;
+  int indexBarber = 100;
   late String _hora;
 
   @override
   void initState() {
     _user = widget.user;
+    globals.servicioSeleccionado = '';
+    globals.indexServicio = 100;
     super.initState();
   }
 
@@ -168,128 +170,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                   ),
                 ),
                 const Padding(padding: EdgeInsets.all(5)),
-                const Divider(
-                  thickness: 1,
-                  color: Colors.white,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Servicio: $servicioSeleccionado',
-                      textAlign: TextAlign.right,
-                      style: const TextStyle(
-                          fontFamily: 'Barlow',
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    const Icon(
-                      Icons.navigate_next_sharp,
-                      color: Colors.white,
-                      size: 40,
-                    )
-                  ],
-                ),
-                const Divider(
-                  thickness: 1,
-                  color: Colors.white,
-                ),
-                SizedBox(
-                  height: 200,
-                  child: StreamBuilder(
-                    stream: FirebaseFirestore.instance
-                        .collection('ProductoServicio')
-                        .where('disponible', isEqualTo: true)
-                        .where('tipo', isEqualTo: 'Servicio')
-                        .snapshots(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<QuerySnapshot> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      return ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        physics: const BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: snapshot.data!.docs.length,
-                        itemBuilder: (context, index) {
-                          final DocumentSnapshot documentSnapshot =
-                              snapshot.data!.docs[index];
-
-                          return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Center(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      indexServicio = index;
-                                      servicioSeleccionado =
-                                          documentSnapshot['nombre'];
-                                    });
-                                  },
-                                  child: Card(
-                                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(14)),
-                                    child: Stack(
-                                      alignment: Alignment.bottomCenter,
-                                      children: [
-                                        Ink.image(
-                                          image: NetworkImage(
-                                            documentSnapshot['imageURL'],
-                                          ),
-                                          colorFilter: ColorFilters.greyScale,
-                                          height: 130,
-                                          width: 180,
-                                          fit: BoxFit.fill,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Text(
-                                    '${documentSnapshot['nombre']}',
-                                    style: const TextStyle(
-                                        fontFamily: 'Barlow',
-                                        color: Colors.white54,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Icon(
-                                    Icons.check_circle,
-                                    color: indexServicio == index
-                                        ? Colors.teal
-                                        : Colors.grey,
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    '₡ ${documentSnapshot['precio']}',
-                                    style: const TextStyle(
-                                        fontFamily: 'Barlow',
-                                        color: Colors.white54,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              )
-                            ],
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ),
+                const ServiceWidget(),
 
                 const Padding(padding: EdgeInsets.all(8)),
                 const Divider(
@@ -464,7 +345,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                                           ? cupertinoDialog(
                                               context,
                                               fechaShowDialog,
-                                              servicioSeleccionado,
+                                              globals.servicioSeleccionado,
                                               barberoSeleccionado,
                                               _hora,
                                               id,
@@ -473,7 +354,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                                           : androidDialog(
                                               context,
                                               fechaShowDialog,
-                                              servicioSeleccionado,
+                                              globals.servicioSeleccionado,
                                               barberoSeleccionado,
                                               _hora,
                                               id,
@@ -539,9 +420,8 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
     setState(() {
       today = day;
       barberoSeleccionado = '';
-      servicioSeleccionado = '';
-      indexServicio = 100;
-      indexBarber = 10;
+      globals.servicioSeleccionado = '';
+      indexBarber = 100;
     });
   }
 
@@ -574,7 +454,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
           _user.displayName!,
           Timestamp.fromMillisecondsSinceEpoch(
               dateTimeFecha.millisecondsSinceEpoch),
-          servicioSeleccionado);
+          globals.servicioSeleccionado);
     }
   }
 }

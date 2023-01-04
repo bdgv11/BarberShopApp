@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:animate_do/animate_do.dart';
@@ -433,7 +434,9 @@ class _BarberCrudState extends State<BarberCrud> {
     Reference ref = FirebaseStorage.instance
         .ref('Barbero')
         // ignore: unnecessary_string_interpolations
-        .child('${_nameFieldController.text}');
+        .child(
+            // ignore: unnecessary_string_interpolations
+            '${_nameFieldController.text.replaceAll(" ", "").toLowerCase()}');
     await ref.putFile(_image!);
     downloadURL = await ref.getDownloadURL();
 
@@ -674,9 +677,14 @@ class _BarberCrudState extends State<BarberCrud> {
         TextButton(
           onPressed: () {
             // This method will delete the barber
+            log('Eliminando a $id de la coleccion Barbero');
             FirebaseFirestore.instance.collection('Barbero').doc(id).delete();
 
-            FirebaseStorage.instance.ref('Barbero').child(nombre).delete();
+            log('Eliminando a ${nombre.replaceAll(" ", "").toLowerCase()} de la coleccion Barbero');
+            FirebaseStorage.instance
+                .ref('Barbero')
+                .child(nombre.replaceAll(" ", "").toLowerCase())
+                .delete();
             Navigator.of(context).pop();
           },
           child: const Padding(
@@ -716,9 +724,14 @@ class _BarberCrudState extends State<BarberCrud> {
         TextButton(
           onPressed: () {
             // This method will delete the barber
+            log('Eliminando a $id de la coleccion Barbero');
             FirebaseFirestore.instance.collection('Barbero').doc(id).delete();
 
-            FirebaseStorage.instance.ref('Barbero').child(nombre).delete();
+            log('Eliminando a ${nombre.replaceAll(" ", "").toLowerCase()} de la coleccion Barbero');
+            FirebaseStorage.instance
+                .ref('Barbero')
+                .child(nombre.replaceAll(" ", "").toLowerCase())
+                .delete();
             Navigator.of(context).pop();
           },
           child: const Padding(

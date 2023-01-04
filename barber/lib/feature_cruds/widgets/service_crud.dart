@@ -418,7 +418,10 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                                                         ? _deleteProdService(
                                                             documentSnapshot.id,
                                                             documentSnapshot[
-                                                                'nombre'],
+                                                                    'nombre']
+                                                                .replaceAll(
+                                                                    " ", "")
+                                                                .toLowerCase(),
                                                             context,
                                                             documentSnapshot[
                                                                 'tipo'],
@@ -426,7 +429,10 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                                                         : _deleteProdServiceAnd(
                                                             documentSnapshot.id,
                                                             documentSnapshot[
-                                                                'nombre'],
+                                                                    'nombre']
+                                                                .replaceAll(
+                                                                    " ", "")
+                                                                .toLowerCase(),
                                                             context,
                                                             documentSnapshot[
                                                                 'tipo'],
@@ -487,11 +493,13 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
 
   // Method to add to firebase
   Future addProductService() async {
+    //imagen.replaceAll(" ", "").toLowerCase()
+
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     Reference ref = FirebaseStorage.instance
         .ref('ProductoServicio')
         // ignore: unnecessary_string_interpolations
-        .child('${_nameController.text}');
+        .child('${_nameController.text.replaceAll(" ", "").toLowerCase()}');
     await ref.putFile(_image!);
     downloadURL = await ref.getDownloadURL();
 
@@ -566,7 +574,7 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
   // Android dialog
   Widget _deleteProdServiceAnd(
       String id, String nombre, BuildContext context, String tipo) {
-    return CupertinoAlertDialog(
+    return AlertDialog(
       title: Text(
         '¿Desea eliminar el $tipo?',
         style: const TextStyle(
