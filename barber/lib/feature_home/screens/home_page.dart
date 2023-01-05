@@ -112,7 +112,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                 child: StreamBuilder(
                   stream: FirebaseFirestore.instance
                       .collection('Cita')
-                      .where('Cliente', isEqualTo: _user.displayName.toString())
+                      .where('Cliente', isEqualTo: _user.uid.toString())
                       .where('Fecha',
                           isGreaterThanOrEqualTo:
                               Timestamp.fromDate(dateTimeFecha))

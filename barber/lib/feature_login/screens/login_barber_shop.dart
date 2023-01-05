@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:barber/feature_home/screens/home_page.dart';
 import 'package:barber/feature_register/screens/register_page.dart';
 import 'package:barber/firebase/firebase_authentication.dart';
@@ -8,7 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import '../../feature_forgot_password/screens/forgot_password.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+
+import '../../firebase/google_authentication.dart';
 
 class LoginBarberShop extends StatefulWidget {
   const LoginBarberShop({super.key});
@@ -30,6 +29,7 @@ class _MyWidgetState extends State<LoginBarberShop> {
   final _formKey = GlobalKey<FormState>();
 
   bool _processingLogIn = false;
+  bool _processingGoogleLogIn = false;
 
   @override
   void dispose() {
@@ -75,7 +75,7 @@ class _MyWidgetState extends State<LoginBarberShop> {
                               child: CircleAvatar(
                                 backgroundImage:
                                     AssetImage("Assets/Images/logo2.jpeg"),
-                                radius: 60,
+                                radius: 65,
                               ),
                             ),
                             //const Padding(padding: EdgeInsets.all(20)),
@@ -119,6 +119,28 @@ class _MyWidgetState extends State<LoginBarberShop> {
                                 ),
                               ),
                               obscureText: true,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                const SizedBox(height: 24),
+                                GestureDetector(
+                                  onTap: () =>
+                                      Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: ((context) =>
+                                          const ForgotPasswordPage()),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    'Olvidé contraseña',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'Barlow',
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                )
+                              ],
                             ),
                           ],
                         ),
@@ -211,27 +233,6 @@ class _MyWidgetState extends State<LoginBarberShop> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const SizedBox(height: 24),
-                          GestureDetector(
-                            onTap: () => Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                builder: ((context) =>
-                                    const ForgotPasswordPage()),
-                              ),
-                            ),
-                            child: const Text(
-                              'Olvidé contraseña',
-                              style: TextStyle(
-                                  //decoration: TextDecoration.underline,
-                                  color: Colors.white,
-                                  fontFamily: 'Barlow'),
-                            ),
-                          )
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
                           const Text(
                             '¿No tienes cuenta? ',
                             style: TextStyle(
@@ -255,49 +256,98 @@ class _MyWidgetState extends State<LoginBarberShop> {
                           )
                         ],
                       ),
-                      Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Divider(
-                              thickness: 1,
-                              color: Colors.white,
-                            ),
-                            SizedBox(
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  elevation: 30,
-                                  backgroundColor: Colors.white,
-                                ),
-                                onPressed: _handleSignIn,
-                                child: const Text(
-                                  'Google',
-                                  style: TextStyle(
-                                      color: Color.fromARGB(255, 104, 34, 4),
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Barlow'),
-                                ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Text('Registarse con:',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Barlow')),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      _processingGoogleLogIn
+                          ? const CircularProgressIndicator()
+                          : Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Divider(
+                                    thickness: 1,
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        elevation: 30,
+                                        backgroundColor: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                      ),
+                                      onPressed: () async {
+                                        setState(() {
+                                          _processingGoogleLogIn = true;
+                                        });
+
+                                        User? user = await Authentication
+                                            .signInWithGoogle(context: context);
+
+                                        setState(() {
+                                          _processingGoogleLogIn = false;
+                                        });
+
+                                        if (user != null) {
+                                          if (!mounted) return;
+                                          Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  HomePageScreen(
+                                                user: user,
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0, 10, 0, 10),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: const <Widget>[
+                                            Image(
+                                              image: AssetImage(
+                                                  "Assets/Images/google_logo.png"),
+                                              height: 30,
+                                              fit: BoxFit.fitWidth,
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  EdgeInsets.only(left: 10),
+                                              child: Text(
+                                                'Iniciar sesion con Google',
+                                                style: TextStyle(
+                                                    color: Color.fromARGB(
+                                                        255, 104, 34, 4),
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: 'Barlow'),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            SizedBox(
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  elevation: 30,
-                                  backgroundColor: Colors.white,
-                                ),
-                                onPressed: () {},
-                                child: const Text(
-                                  'Facebook',
-                                  style: TextStyle(
-                                      color: Color.fromARGB(255, 104, 34, 4),
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Barlow'),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      )
                     ],
                   ),
                 );
@@ -316,23 +366,5 @@ class _MyWidgetState extends State<LoginBarberShop> {
   Future<FirebaseApp> _initFirebase() async {
     FirebaseApp firebaseapp = await Firebase.initializeApp();
     return firebaseapp;
-  }
-
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: [
-      'email',
-      'https://www.googleapis.com/auth/contacts.readonly',
-    ],
-  );
-
-  Future<void> _handleSignIn() async {
-    try {
-      await _googleSignIn.signIn();
-      log(_googleSignIn.currentUser.toString());
-      log(_googleSignIn.currentUser!.email.toString());
-      log(_googleSignIn.currentUser!.displayName.toString());
-    } catch (error) {
-      log(error.toString());
-    }
   }
 }

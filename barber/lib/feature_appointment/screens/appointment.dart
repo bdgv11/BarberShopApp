@@ -347,7 +347,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                                               barberoSeleccionado,
                                               _hora,
                                               id,
-                                              _user.displayName
+                                              _user.uid
                                                   .toString()) //cupertinoDialog(context)
                                           : androidDialog(
                                               context,
@@ -356,7 +356,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                                               barberoSeleccionado,
                                               _hora,
                                               id,
-                                              _user.displayName
+                                              _user.uid
                                                   .toString()); //androidDialog(context);
                                     },
                                   );
