@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:barber/feature_home/screens/home_page.dart';
 import 'package:barber/feature_register/screens/register_page.dart';
 import 'package:barber/firebase/firebase_authentication.dart';
@@ -5,8 +7,8 @@ import 'package:barber/utils/validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
 import '../../feature_forgot_password/screens/forgot_password.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginBarberShop extends StatefulWidget {
   const LoginBarberShop({super.key});
@@ -253,6 +255,49 @@ class _MyWidgetState extends State<LoginBarberShop> {
                           )
                         ],
                       ),
+                      Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Divider(
+                              thickness: 1,
+                              color: Colors.white,
+                            ),
+                            SizedBox(
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  elevation: 30,
+                                  backgroundColor: Colors.white,
+                                ),
+                                onPressed: _handleSignIn,
+                                child: const Text(
+                                  'Google',
+                                  style: TextStyle(
+                                      color: Color.fromARGB(255, 104, 34, 4),
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Barlow'),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  elevation: 30,
+                                  backgroundColor: Colors.white,
+                                ),
+                                onPressed: () {},
+                                child: const Text(
+                                  'Facebook',
+                                  style: TextStyle(
+                                      color: Color.fromARGB(255, 104, 34, 4),
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Barlow'),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 );
@@ -271,5 +316,23 @@ class _MyWidgetState extends State<LoginBarberShop> {
   Future<FirebaseApp> _initFirebase() async {
     FirebaseApp firebaseapp = await Firebase.initializeApp();
     return firebaseapp;
+  }
+
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: [
+      'email',
+      'https://www.googleapis.com/auth/contacts.readonly',
+    ],
+  );
+
+  Future<void> _handleSignIn() async {
+    try {
+      await _googleSignIn.signIn();
+      log(_googleSignIn.currentUser.toString());
+      log(_googleSignIn.currentUser!.email.toString());
+      log(_googleSignIn.currentUser!.displayName.toString());
+    } catch (error) {
+      log(error.toString());
+    }
   }
 }

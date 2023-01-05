@@ -236,6 +236,8 @@ class _MyWidgetState extends State<HomePageScreen> {
 
                     return GridView.builder(
                       physics: const BouncingScrollPhysics(),
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
                       itemCount: snapshot.data!.docs.length,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
@@ -276,12 +278,28 @@ class _MyWidgetState extends State<HomePageScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  '${documentSnapshot['nombre']} / ₡ ${documentSnapshot['precio']}',
+                                  '${documentSnapshot['nombre']}',
                                   style: const TextStyle(
-                                      fontFamily: 'Barlow',
-                                      color: Colors.white54,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
+                                    fontFamily: 'Barlow',
+                                    color: Colors.white54,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  '₡${documentSnapshot['precio']}',
+                                  style: const TextStyle(
+                                    fontFamily: 'Barlow',
+                                    color: Colors.white54,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ],
                             ),

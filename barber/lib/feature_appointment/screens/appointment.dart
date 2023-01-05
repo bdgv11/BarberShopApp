@@ -33,7 +33,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
   @override
   void initState() {
     _user = widget.user;
-    globals.servicioSeleccionado = '';
+    //globals.servicioSeleccionado = '';
     globals.indexServicio = 100;
     super.initState();
   }
@@ -195,7 +195,6 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                   thickness: 1,
                   color: Colors.white,
                 ),
-                const Padding(padding: EdgeInsets.all(5)),
                 StreamBuilder(
                   stream: FirebaseFirestore.instance
                       .collection('Barbero')
@@ -267,7 +266,6 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                     );
                   },
                 ),
-                const Padding(padding: EdgeInsets.all(8)),
                 // test stream Builder
 
                 // TIME SELECTION

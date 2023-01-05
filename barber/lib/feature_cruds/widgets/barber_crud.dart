@@ -22,6 +22,9 @@ class BarberCrud extends StatefulWidget {
 
 class _BarberCrudState extends State<BarberCrud> {
   //
+  final CollectionReference _barberCollection =
+      FirebaseFirestore.instance.collection('Barbero');
+
   final _nameFieldController = TextEditingController();
   final _descFieldController = TextEditingController();
   final _emailFieldController = TextEditingController();
@@ -52,6 +55,11 @@ class _BarberCrudState extends State<BarberCrud> {
   void dispose() {
     _nameFieldController.dispose();
     _descFieldController.dispose();
+
+    _nameController.dispose();
+    _descController.dispose();
+    _urlImageController.dispose();
+    _emailController.dispose();
     super.dispose();
   }
 
@@ -279,9 +287,7 @@ class _BarberCrudState extends State<BarberCrud> {
                   SizedBox(
                     height: 320,
                     child: StreamBuilder(
-                      stream: FirebaseFirestore.instance
-                          .collection('Barbero')
-                          .snapshots(),
+                      stream: _barberCollection.snapshots(),
                       builder: (BuildContext context,
                           AsyncSnapshot<QuerySnapshot> snapshot) {
                         if (snapshot.connectionState ==
@@ -406,6 +412,8 @@ class _BarberCrudState extends State<BarberCrud> {
 
   // Image picker
   Future imagePickerMethod() async {
+    log('---------');
+    log('Inicia el proceso de crear/actualizar un barbero, seleccionando una imagen...');
     final pick = await imagePicker.pickImage(source: ImageSource.gallery);
 
     setState(() {
@@ -417,6 +425,8 @@ class _BarberCrudState extends State<BarberCrud> {
             'Seleccione la imagen', const Duration(milliseconds: 1000));
       }
     });
+
+    log('Imagen seleccionada: $imageName');
   }
 
   showSnackBar(String snackText, Duration d) {
@@ -430,13 +440,14 @@ class _BarberCrudState extends State<BarberCrud> {
   // Upload the image, then getting the download url and then
   // adding that url to my cloud firestore
   Future uploadImage() async {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    log('Inicia proceso para subir la imagen del barbero al STORAGE');
     Reference ref = FirebaseStorage.instance
         .ref('Barbero')
         // ignore: unnecessary_string_interpolations
         .child(
             // ignore: unnecessary_string_interpolations
             '${_nameFieldController.text.replaceAll(" ", "").toLowerCase()}');
+    log('Nombre de la imagen a subir (barbero): ${_nameFieldController.text.replaceAll(" ", "").toLowerCase()}');
     await ref.putFile(_image!);
     downloadURL = await ref.getDownloadURL();
 
@@ -450,7 +461,8 @@ class _BarberCrudState extends State<BarberCrud> {
     final jsonData = barber.toJson();
 
     // upload to firestore
-    await firestore.collection('Barbero').add(jsonData).whenComplete(
+    log('Inicia el proceso de subir la informacion a la coleccion Barbero en la base de datos..');
+    await _barberCollection.add(jsonData).whenComplete(
           () => showSnackBar(
             'Barbero agregado correctamente',
             const Duration(seconds: 3),
@@ -468,18 +480,16 @@ class _BarberCrudState extends State<BarberCrud> {
   // --------------------------------------------- CRUD UPDATE --------------------------------------------- //
   // ------------------------------------------------------------------------------------------------------- //
 
-  final CollectionReference _barberCollection =
-      FirebaseFirestore.instance.collection('Barbero');
-
   // Controller - Edit view
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
   final TextEditingController _urlImageController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   bool _opcion = false;
-  String? urlEdited;
 
   Future<void> _updateBarber([DocumentSnapshot? documentSnapshot]) async {
+    log('---------');
+    log('Inicia el proceso de actualizar al barbero, primero se levanta el modal con la info.');
     if (documentSnapshot != null) {
       _nameController.text = documentSnapshot['nombre'];
       _descController.text = documentSnapshot['descripcion'];
@@ -514,6 +524,7 @@ class _BarberCrudState extends State<BarberCrud> {
                 ),
                 TextField(
                   controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(
                     labelText: 'Correo',
                   ),
@@ -579,19 +590,24 @@ class _BarberCrudState extends State<BarberCrud> {
                         fontWeight: FontWeight.bold),
                   ),
                   onPressed: () async {
-                    final String nombre = _nameController.text;
-                    final String desc = _descController.text;
-                    final String email = _emailController.text;
                     final bool disponible = _opcion;
-                    if (desc.isNotEmpty && nombre.isNotEmpty) {
+                    if (_descController.text.isNotEmpty &&
+                        _nameController.text.isNotEmpty &&
+                        _emailController.text.isNotEmpty) {
                       if (_image == null) {
                         final barberEdit = Barber.withOutImage(
-                            nombre: nombre,
-                            descripcion: desc,
-                            correoElectronico: email,
-                            disponible: disponible);
+                            nombre: _nameController.text,
+                            descripcion: _descController.text,
+                            correoElectronico: _emailController.text,
+                            disponible: _opcion);
 
                         final jsonData = barberEdit.toJsonWithoutImage();
+                        log('Eliminando el actual y modificandolo por el nuevo nombre ya sea que se cambio o no, esto en el storage.');
+                        FirebaseStorage.instance
+                            .ref('Barbero')
+                            .child(documentSnapshot?['nombre'])
+                            .delete();
+                        log('Actualizando con el nombre: ${_nameController.text} en la coleccion Barbero - sin editar imagen');
 
                         await _barberCollection
                             .doc(documentSnapshot!.id)
@@ -600,6 +616,7 @@ class _BarberCrudState extends State<BarberCrud> {
                         if (!mounted) return;
                         Navigator.of(context).pop();
                       } else {
+                        log('Actualizando con el nombre: ${_nameController.text} en el STORAGE');
                         FirebaseStorage.instance
                             .ref('Barbero')
                             .child(documentSnapshot?['nombre'])
@@ -607,24 +624,28 @@ class _BarberCrudState extends State<BarberCrud> {
                         Reference ref = FirebaseStorage.instance
                             .ref('Barbero')
                             // ignore: unnecessary_string_interpolations
-                            .child('${_nameController.text}');
+                            .child(
+                                // ignore: unnecessary_string_interpolations
+                                '${_nameController.text.replaceAll(" ", "").toLowerCase()}');
                         await ref.putFile(_image!);
                         downloadURL = await ref.getDownloadURL();
 
                         _urlImageController.text = downloadURL.toString();
+                        log('Se obtiene el URL de vuelta para modificar el campo en la base de datos: ${_urlImageController.text}');
 
                         imageName = '';
 
                         if (downloadURL != null) {
                           final barberEdit = Barber(
-                              nombre: nombre,
-                              descripcion: desc,
-                              correoElectronico: email,
+                              nombre: _nameController.text,
+                              descripcion: _descController.text,
+                              correoElectronico: _emailController.text,
                               imagenUrl: _urlImageController.text,
                               disponible: disponible);
 
                           final jsonData = barberEdit.toJson();
 
+                          log('Se actualiza la colecion Barbero en la base de datos.');
                           await _barberCollection
                               .doc(documentSnapshot!.id)
                               .update(jsonData);
@@ -652,6 +673,8 @@ class _BarberCrudState extends State<BarberCrud> {
   // ------------------------------------------------------------------------------------------------------- //
 
   Widget _deleteBarber(String id, String nombre, BuildContext context) {
+    log('---------');
+    log('Inicia proceso de eliminar - IOS DEVICE');
     return CupertinoAlertDialog(
       title: const Text(
         '¿Desea eliminar el barbero?',
@@ -678,7 +701,7 @@ class _BarberCrudState extends State<BarberCrud> {
           onPressed: () {
             // This method will delete the barber
             log('Eliminando a $id de la coleccion Barbero');
-            FirebaseFirestore.instance.collection('Barbero').doc(id).delete();
+            _barberCollection.doc(id).delete();
 
             log('Eliminando a ${nombre.replaceAll(" ", "").toLowerCase()} de la coleccion Barbero');
             FirebaseStorage.instance
@@ -699,6 +722,8 @@ class _BarberCrudState extends State<BarberCrud> {
   }
 
   Widget _deleteBarberAndroid(String id, String nombre, BuildContext context) {
+    log('---------');
+    log('Inicia proceso de eliminar - Android DEVICE');
     return CupertinoAlertDialog(
       title: const Text(
         '¿Desea eliminar el barbero?',
@@ -725,7 +750,7 @@ class _BarberCrudState extends State<BarberCrud> {
           onPressed: () {
             // This method will delete the barber
             log('Eliminando a $id de la coleccion Barbero');
-            FirebaseFirestore.instance.collection('Barbero').doc(id).delete();
+            _barberCollection.doc(id).delete();
 
             log('Eliminando a ${nombre.replaceAll(" ", "").toLowerCase()} de la coleccion Barbero');
             FirebaseStorage.instance
