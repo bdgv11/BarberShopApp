@@ -41,33 +41,33 @@ class _DrawerUserWidgetState extends State<DrawerUserWidget> {
               color: Colors.white,
             ),
             child: Center(
-              child: Column(children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    CircleAvatar(
-                      backgroundImage: AssetImage("Assets/Images/logo2.jpeg"),
-                      radius: 40,
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
+              child: Column(
+                children: [
+                  if (_user.photoURL != null)
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: const [
-                        IconButton(
-                          onPressed: null,
-                          icon: Icon(
-                            Icons.edit,
-                            color: Colors.white,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircleAvatar(
+                          backgroundImage: NetworkImage(
+                            _user.photoURL.toString(),
                           ),
+                          radius: 65,
                         ),
                       ],
                     ),
-                  ],
-                ),
-              ]),
+                  if (_user.photoURL == null)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        CircleAvatar(
+                          backgroundImage:
+                              AssetImage("Assets/Images/logo2.jpeg"),
+                          radius: 60,
+                        ),
+                      ],
+                    ),
+                ],
+              ),
             ),
           ),
           ListTile(

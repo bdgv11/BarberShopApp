@@ -5,7 +5,6 @@ import 'package:barber/feature_home/widgets/drawer_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class HomePageScreen extends StatefulWidget {
@@ -17,7 +16,6 @@ class HomePageScreen extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<HomePageScreen> {
-  static final FirebaseStorage storage = FirebaseStorage.instance;
   String imageFromStorage = '';
 
   //
@@ -219,7 +217,7 @@ class _MyWidgetState extends State<HomePageScreen> {
               //GRIDVIEW PARA PONER TODOS LOS SERVICIOS
 
               SizedBox(
-                height: 500,
+                //height: 500,
                 child: StreamBuilder(
                   stream: FirebaseFirestore.instance
                       .collection('ProductoServicio')
@@ -260,8 +258,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                                     alignment: Alignment.bottomCenter,
                                     children: [
                                       Ink.image(
-                                        image: //NetworkImage(imageFromStorage),
-                                            NetworkImage(
+                                        image: NetworkImage(
                                           documentSnapshot['imageURL'],
                                         ),
                                         colorFilter: ColorFilters.greyScale,
@@ -318,26 +315,5 @@ class _MyWidgetState extends State<HomePageScreen> {
         user: _user,
       ),
     );
-  }
-
-  /// It takes a string as an argument, and returns a string
-  ///
-  /// Args:
-  ///   imgName (String): The name of the image you want to get the URL for.
-  ///
-  /// Returns:
-  ///   The image url is being returned.
-  Future<String?> getImageUrl(String? imgName) async {
-    if (imgName == null) {
-      return null;
-    }
-    try {
-      var ref = storage.ref('Servicio').child(imgName);
-      var imgURL = await ref.getDownloadURL();
-
-      return imgURL;
-    } catch (e) {
-      return null;
-    }
   }
 }
