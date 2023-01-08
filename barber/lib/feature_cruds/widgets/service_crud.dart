@@ -256,8 +256,9 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                                   fontFamily: 'Barlow',
                                   fontWeight: FontWeight.bold),
                             ),
-                            CupertinoSwitch(
+                            Switch.adaptive(
                               value: _switchValue,
+                              activeColor: Colors.green,
                               onChanged: (value) {
                                 setState(() {
                                   _switchValue = value;

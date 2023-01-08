@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:barber/feature_appointment/firebase_methods/collections_methods.dart';
+import 'package:barber/feature_appointment/models/appointment.dart';
 import 'package:barber/feature_home/widgets/bottom_navigation.dart';
 import 'package:barber/feature_home/widgets/drawer_widget.dart';
 import 'package:barber/utils/globals.dart' as globals;
@@ -298,11 +298,11 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                   child: StreamBuilder(
                     stream: FirebaseFirestore.instance
                         .collection('Cita')
-                        .where('Fecha',
+                        .where('fecha',
                             isEqualTo: Timestamp.fromMillisecondsSinceEpoch(
                                 dateTimeFecha.millisecondsSinceEpoch))
-                        .where('Barbero', isEqualTo: barberoSeleccionado)
-                        .orderBy('Hora', descending: false)
+                        .where('barbero', isEqualTo: barberoSeleccionado)
+                        .orderBy('hora', descending: false)
                         .snapshots(),
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -321,7 +321,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                           final DocumentSnapshot documentSnapshot =
                               snapshot.data!.docs[index];
 
-                          if (documentSnapshot['HoraDisponible'] == true) {
+                          if (documentSnapshot['horaDisponible'] == true) {
                             return Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: ElevatedButton(
@@ -333,7 +333,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                                   ),
                                 ),
                                 onPressed: () {
-                                  _hora = documentSnapshot['Hora'];
+                                  _hora = documentSnapshot['hora'];
                                   String id =
                                       snapshot.data!.docs[index].reference.id;
                                   showDialog(
@@ -362,7 +362,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                                   );
                                 },
                                 child: Text(
-                                  documentSnapshot['Hora'],
+                                  documentSnapshot['hora'],
                                   style: const TextStyle(
                                       color: Colors.black,
                                       fontFamily: 'Barlow',
@@ -383,7 +383,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                                 ),
                                 onPressed: null,
                                 child: Text(
-                                  documentSnapshot['Hora'],
+                                  documentSnapshot['hora'],
                                   style: const TextStyle(
                                       color: Colors.black,
                                       fontFamily: 'Barlow',
@@ -418,7 +418,6 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
     setState(() {
       today = day;
       barberoSeleccionado = '';
-      globals.servicioSeleccionado = '';
       indexBarber = 100;
     });
   }
@@ -432,11 +431,11 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
     DateTime dateTimeFecha = DateTime.parse(fecha);
     CollectionReference citas = FirebaseFirestore.instance.collection('Cita');
     QuerySnapshot query = await citas
-        .where('Fecha',
+        .where('fecha',
             isEqualTo: Timestamp.fromMillisecondsSinceEpoch(
                 dateTimeFecha.millisecondsSinceEpoch))
-        .where('Barbero', isEqualTo: barbero)
-        .orderBy('Hora', descending: false)
+        .where('barbero', isEqualTo: barbero)
+        .orderBy('hora', descending: false)
         .get();
 
     if (query.docs.isNotEmpty) {
@@ -447,12 +446,20 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
       existInfo = true;
     } else {
       DateTime dateTimeFecha = DateTime.parse(fecha);
-      CollectionMethods().addHours(
-          barberoSeleccionado,
-          _user.displayName!,
-          Timestamp.fromMillisecondsSinceEpoch(
+
+      final appointment = Appointment(
+          barbero: barbero,
+          cliente: '',
+          diaDisponible: true,
+          fecha: Timestamp.fromMillisecondsSinceEpoch(
               dateTimeFecha.millisecondsSinceEpoch),
-          globals.servicioSeleccionado);
+          hora: '10:00 am',
+          horaDisponible: true,
+          tipoServicio: '');
+
+      final jsonDataToAdd = appointment.toJson();
+
+      await citas.add(jsonDataToAdd);
     }
   }
 }
@@ -467,9 +474,9 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
 void _updateHour(String servicio, String cliente, String id) {
   // Este metodo va a poner en false (ocupada) el valor de la hora de ese dia en especifico!
   FirebaseFirestore.instance.collection('Cita').doc(id).update({
-    'TipoServicio': servicio,
-    'HoraDisponible': false,
-    'Cliente': cliente,
+    'tipoServicio': globals.servicioSeleccionado,
+    'horaDisponible': false,
+    'cliente': cliente,
   });
 }
 

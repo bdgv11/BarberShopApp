@@ -173,14 +173,15 @@ class _BarberCrudState extends State<BarberCrud> {
                                   fontFamily: 'Barlow',
                                   fontWeight: FontWeight.bold),
                             ),
-                            CupertinoSwitch(
+                            Switch.adaptive(
                               value: _switchValue,
+                              activeColor: Colors.green,
                               onChanged: (value) {
                                 setState(() {
                                   _switchValue = value;
                                 });
                               },
-                            )
+                            ),
                           ],
                         ),
                         const Padding(padding: EdgeInsets.all(12)),
@@ -284,119 +285,7 @@ class _BarberCrudState extends State<BarberCrud> {
                     thickness: 0.5,
                     color: Colors.white,
                   ),
-                  SizedBox(
-                    height: 320,
-                    child: StreamBuilder(
-                      stream: _barberCollection.snapshots(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<QuerySnapshot> snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-
-                        if (snapshot.hasData) {
-                          return ListView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            itemCount: snapshot.data!.docs.length,
-                            itemBuilder: (context, index) {
-                              final DocumentSnapshot documentSnapshot =
-                                  snapshot.data!.docs[index];
-
-                              return SizedBox(
-                                height: 70,
-                                child: Card(
-                                  elevation: 20,
-                                  color: Colors.black87,
-                                  child: FadeInLeft(
-                                    delay: Duration(milliseconds: 100 * index),
-                                    child: ListTile(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      leading: CircleAvatar(
-                                        backgroundImage: NetworkImage(
-                                          documentSnapshot['imagenUrl'],
-                                        ),
-                                      ),
-                                      title: Text(
-                                        documentSnapshot['nombre'],
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontFamily: 'Barlow',
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20,
-                                            overflow: TextOverflow.ellipsis),
-                                      ),
-                                      subtitle: Text(
-                                        documentSnapshot['descripcion'],
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontFamily: 'Barlow',
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20,
-                                            overflow: TextOverflow.ellipsis),
-                                      ),
-                                      isThreeLine: true,
-                                      dense: true,
-                                      trailing: SizedBox(
-                                        width: 110,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            IconButton(
-                                              icon: const Icon(
-                                                Icons.edit_outlined,
-                                              ),
-                                              color: Colors.white,
-                                              iconSize: 30,
-                                              onPressed: () {
-                                                _updateBarber(documentSnapshot);
-                                              },
-                                            ),
-                                            IconButton(
-                                              icon: const Icon(
-                                                Icons.delete_outline_outlined,
-                                              ),
-                                              color: Colors.white,
-                                              iconSize: 30,
-                                              onPressed: () {
-                                                showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return Platform.isIOS
-                                                        ? _deleteBarber(
-                                                            documentSnapshot.id,
-                                                            documentSnapshot[
-                                                                'nombre'],
-                                                            context) //cupertinoDialog(context)
-                                                        : _deleteBarberAndroid(
-                                                            documentSnapshot.id,
-                                                            documentSnapshot[
-                                                                'nombre'],
-                                                            context); //androidDialog(context);
-                                                  },
-                                                );
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                        }
-                        return const CircularProgressIndicator();
-                      },
-                    ),
-                  ),
+                  barberList(),
                   const Padding(padding: EdgeInsets.all(8)),
                 ],
               ),
@@ -535,11 +424,9 @@ class _BarberCrudState extends State<BarberCrud> {
                 Row(
                   children: [
                     Text(_opcion ? 'Disponible' : 'No disponible'),
-                    CupertinoSwitch(
+                    Switch.adaptive(
                       value: _opcion,
                       activeColor: Colors.green,
-                      trackColor: Colors.grey,
-                      thumbColor: Colors.white,
                       onChanged: (value) {
                         setState(() {
                           _opcion = value;
@@ -767,6 +654,127 @@ class _BarberCrudState extends State<BarberCrud> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget barberList() {
+    return Center(
+      child: Column(
+        children: [
+          SizedBox(
+            height: 320,
+            child: StreamBuilder(
+              stream: _barberCollection.snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      final DocumentSnapshot documentSnapshot =
+                          snapshot.data!.docs[index];
+
+                      return SizedBox(
+                        height: 70,
+                        child: Card(
+                          elevation: 20,
+                          color: Colors.black87,
+                          child: FadeInLeft(
+                            delay: Duration(milliseconds: 100 * index),
+                            child: ListTile(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              leading: CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                  documentSnapshot['imagenUrl'],
+                                ),
+                              ),
+                              title: Text(
+                                documentSnapshot['nombre'],
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'Barlow',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    overflow: TextOverflow.ellipsis),
+                              ),
+                              subtitle: Text(
+                                documentSnapshot['descripcion'],
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'Barlow',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    overflow: TextOverflow.ellipsis),
+                              ),
+                              isThreeLine: true,
+                              dense: true,
+                              trailing: SizedBox(
+                                width: 110,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.edit_outlined,
+                                      ),
+                                      color: Colors.white,
+                                      iconSize: 30,
+                                      onPressed: () {
+                                        _updateBarber(documentSnapshot);
+                                      },
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.delete_outline_outlined,
+                                      ),
+                                      color: Colors.white,
+                                      iconSize: 30,
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return Platform.isIOS
+                                                ? _deleteBarber(
+                                                    documentSnapshot.id,
+                                                    documentSnapshot['nombre'],
+                                                    context) //cupertinoDialog(context)
+                                                : _deleteBarberAndroid(
+                                                    documentSnapshot.id,
+                                                    documentSnapshot['nombre'],
+                                                    context); //androidDialog(context);
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                }
+                return const CircularProgressIndicator();
+              },
+            ),
+          ),
+          const Padding(padding: EdgeInsets.all(8)),
+        ],
+      ),
     );
   }
 }

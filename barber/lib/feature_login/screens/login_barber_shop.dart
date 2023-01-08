@@ -206,7 +206,7 @@ class _MyWidgetState extends State<LoginBarberShop> {
                                               duration:
                                                   Duration(milliseconds: 750),
                                               content: Text(
-                                                'Correo no existe o contrasena incorrecta',
+                                                'Correo no existe o contraseña incorrecta',
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontSize: 25,

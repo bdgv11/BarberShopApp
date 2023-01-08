@@ -31,6 +31,8 @@ class _MyWidgetState extends State<HomePageScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double heightMediaQuery = MediaQuery.of(context).size.height;
+    double widthMediaQuery = MediaQuery.of(context).size.width;
     String getFormattedDate(String year, String month, String day) {
       String fecha;
       String m = '';
@@ -59,6 +61,8 @@ class _MyWidgetState extends State<HomePageScreen> {
       appBar: AppBar(backgroundColor: Colors.black87),
       drawer: DrawerUserWidget(user: _user),
       body: Container(
+        height: heightMediaQuery,
+        width: widthMediaQuery,
         padding: const EdgeInsets.all(20),
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -105,13 +109,14 @@ class _MyWidgetState extends State<HomePageScreen> {
                   )
                 ],
               ),
+
               SizedBox(
                 height: 120,
                 child: StreamBuilder(
                   stream: FirebaseFirestore.instance
                       .collection('Cita')
-                      .where('Cliente', isEqualTo: _user.uid.toString())
-                      .where('Fecha',
+                      .where('cliente', isEqualTo: _user.uid.toString())
+                      .where('fecha',
                           isGreaterThanOrEqualTo:
                               Timestamp.fromDate(dateTimeFecha))
                       .snapshots(),
@@ -132,13 +137,13 @@ class _MyWidgetState extends State<HomePageScreen> {
                           final DocumentSnapshot documentSnapshot =
                               snapshot.data!.docs[index];
 
-                          String imagen = documentSnapshot['TipoServicio'];
+                          String imagen = documentSnapshot['tipoServicio'];
                           imagen =
                               '${imagen.replaceAll(" ", "").toLowerCase()}.png';
 
                           DateTime fechaDesdeBD =
                               DateTime.fromMillisecondsSinceEpoch(
-                                  documentSnapshot['Fecha']
+                                  documentSnapshot['fecha']
                                       .millisecondsSinceEpoch);
 
                           String fechaFormateada =
@@ -155,7 +160,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                                     AssetImage("Assets/Images/logo2.jpeg"),
                               ),
                               title: Text(
-                                'Fecha: $fechaFormateada\nBarbero: ${documentSnapshot['Barbero']}',
+                                'Fecha: $fechaFormateada\nBarbero: ${documentSnapshot['barbero']}',
                                 style: const TextStyle(
                                     color: Colors.white,
                                     fontFamily: 'Barlow',
@@ -163,7 +168,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                                     fontSize: 15),
                               ),
                               subtitle: Text(
-                                'Servicio: ${documentSnapshot['TipoServicio']}',
+                                'Servicio: ${documentSnapshot['tipoServicio']}',
                                 style: const TextStyle(
                                     color: Colors.white,
                                     fontFamily: 'Barlow',
@@ -173,7 +178,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                               isThreeLine: true,
                               dense: true,
                               trailing: Text(
-                                documentSnapshot['Hora'],
+                                documentSnapshot['hora'],
                                 style: const TextStyle(
                                     color: Colors.white,
                                     fontFamily: 'Barlow',
@@ -217,7 +222,6 @@ class _MyWidgetState extends State<HomePageScreen> {
               //GRIDVIEW PARA PONER TODOS LOS SERVICIOS
 
               SizedBox(
-                //height: 500,
                 child: StreamBuilder(
                   stream: FirebaseFirestore.instance
                       .collection('ProductoServicio')
@@ -233,7 +237,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                     }
 
                     return GridView.builder(
-                      physics: const BouncingScrollPhysics(),
+                      //physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
                       itemCount: snapshot.data!.docs.length,
