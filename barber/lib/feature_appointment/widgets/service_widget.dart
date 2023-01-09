@@ -114,10 +114,12 @@ class _ServiceWidgettState extends State<ServiceWidget> {
                           Text(
                             '${documentSnapshot['nombre']}',
                             style: const TextStyle(
-                                fontFamily: 'Barlow',
-                                color: Colors.white54,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
+                              fontFamily: 'Barlow',
+                              color: Colors.white54,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                           Icon(
                             Icons.check_circle,

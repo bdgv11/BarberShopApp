@@ -40,6 +40,8 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double heightMediaQuery = MediaQuery.of(context).size.height;
+    double widthMediaQuery = MediaQuery.of(context).size.width;
     String getFormattedDate(String year, String month, String day) {
       String fecha;
       String m = '';
@@ -69,13 +71,11 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.black87,
-          title: const Text(
-            '',
-            style: TextStyle(fontFamily: 'Barlow'),
-          ),
         ),
         drawer: DrawerUserWidget(user: _user),
         body: Container(
+          height: heightMediaQuery,
+          width: widthMediaQuery,
           padding: const EdgeInsets.all(20),
           decoration: const BoxDecoration(
             //color: Color.fromARGB(234, 57, 5, 2)
@@ -221,12 +221,11 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             leading: CircleAvatar(
-                                radius: 30,
-                                backgroundImage: NetworkImage(
-                                  documentSnapshot['imagenUrl'],
-                                )
-                                //AssetImage("Assets/Images/corteybarba.png"),
-                                ),
+                              radius: 30,
+                              backgroundImage: NetworkImage(
+                                documentSnapshot['imagenUrl'],
+                              ),
+                            ),
                             title: Row(
                               children: <Widget>[
                                 Text(
@@ -347,8 +346,8 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                                               barberoSeleccionado,
                                               _hora,
                                               id,
-                                              _user.uid
-                                                  .toString()) //cupertinoDialog(context)
+                                              _user.uid.toString(),
+                                            ) //cupertinoDialog(context)
                                           : androidDialog(
                                               context,
                                               fechaShowDialog,
@@ -356,8 +355,8 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                                               barberoSeleccionado,
                                               _hora,
                                               id,
-                                              _user.uid
-                                                  .toString()); //androidDialog(context);
+                                              _user.uid.toString(),
+                                            ); //androidDialog(context);
                                     },
                                   );
                                 },
@@ -462,125 +461,125 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
       await citas.add(jsonDataToAdd);
     }
   }
-}
 
-/// It takes in a service, client, and id, and updates the document with the id with the service,
-/// client, and sets the hour to false
-///
-/// Args:
-///   servicio (String): The type of service the user wants to book.
-///   cliente (String): The name of the client
-///   id (String): The id of the document to update.
-void _updateHour(String servicio, String cliente, String id) {
-  // Este metodo va a poner en false (ocupada) el valor de la hora de ese dia en especifico!
-  FirebaseFirestore.instance.collection('Cita').doc(id).update({
-    'tipoServicio': globals.servicioSeleccionado,
-    'horaDisponible': false,
-    'cliente': cliente,
-  });
-}
+  /// It takes in a service, client, and id, and updates the document with the id with the service,
+  /// client, and sets the hour to false
+  ///
+  /// Args:
+  ///   servicio (String): The type of service the user wants to book.
+  ///   cliente (String): The name of the client
+  ///   id (String): The id of the document to update.
+  void _updateHour(String servicio, String cliente, String id) {
+    // Este metodo va a poner en false (ocupada) el valor de la hora de ese dia en especifico!
+    FirebaseFirestore.instance.collection('Cita').doc(id).update({
+      'tipoServicio': globals.servicioSeleccionado,
+      'horaDisponible': false,
+      'cliente': cliente,
+    });
+  }
 
-/// It returns an AlertDialog widget that contains a title, a content, and two actions
-///
-/// Args:
-///   context (BuildContext): The context of the widget that is calling the dialog.
-///   fecha (String): Date
-///   servicio (String): The service that the user selected.
-///   barbero (String): The name of the barber
-///   horaSeleccionada (String): The hour selected by the user.
-///   id (String): The id of the hour that the user selected.
-///   cliente (String): The name of the client
-///
-/// Returns:
-///   A widget that is an AlertDialog.
-Widget androidDialog(BuildContext context, String fecha, String servicio,
-    String barbero, String horaSeleccionada, String id, String cliente) {
-  return AlertDialog(
-    title: const Text(
-      'Resumen',
-      style: TextStyle(
-          fontFamily: 'Barlow', fontWeight: FontWeight.w900, fontSize: 20),
-    ),
-    content: Text(
-      'Fecha: $fecha\nServicio: $servicio\nBarbero: $barbero\nHora: $horaSeleccionada\n¿Desea agendar la cita?',
-      style: const TextStyle(
-          fontFamily: 'Barlow', fontWeight: FontWeight.w900, fontSize: 20),
-    ),
-    actions: [
-      TextButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        child: const Text(
-          'Cancelar',
-          style: TextStyle(color: Colors.red),
-        ),
+  /// It returns an AlertDialog widget that contains a title, a content, and two actions
+  ///
+  /// Args:
+  ///   context (BuildContext): The context of the widget that is calling the dialog.
+  ///   fecha (String): Date
+  ///   servicio (String): The service that the user selected.
+  ///   barbero (String): The name of the barber
+  ///   horaSeleccionada (String): The hour selected by the user.
+  ///   id (String): The id of the hour that the user selected.
+  ///   cliente (String): The name of the client
+  ///
+  /// Returns:
+  ///   A widget that is an AlertDialog.
+  Widget androidDialog(BuildContext context, String fecha, String servicio,
+      String barbero, String horaSeleccionada, String id, String cliente) {
+    return AlertDialog(
+      title: const Text(
+        'Resumen',
+        style: TextStyle(
+            fontFamily: 'Barlow', fontWeight: FontWeight.w900, fontSize: 20),
       ),
-      TextButton(
-        onPressed: () {
-          _updateHour(servicio, cliente, id);
-          Navigator.of(context).pop();
-        },
-        child: const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Text(
-            'Agendar',
+      content: Text(
+        'Fecha: $fecha\nServicio: $servicio\nBarbero: $barbero\nHora: $horaSeleccionada\n¿Desea agendar la cita?',
+        style: const TextStyle(
+            fontFamily: 'Barlow', fontWeight: FontWeight.w900, fontSize: 20),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text(
+            'Cancelar',
+            style: TextStyle(color: Colors.red),
           ),
         ),
-      ),
-    ],
-  );
-}
-
-/// It returns a CupertinoAlertDialog widget with a title, content, and two actions
-///
-/// Args:
-///   context (BuildContext): The current BuildContext.
-///   fecha (String): The date selected by the user.
-///   servicio (String): The service that the user selected.
-///   barbero (String): The name of the barber
-///   horaSeleccionada (String): The hour selected by the user.
-///   id (String): The id of the hour that the user selected.
-///   cliente (String): The name of the client
-///
-/// Returns:
-///   A CupertinoAlertDialog widget.
-Widget cupertinoDialog(BuildContext context, String fecha, String servicio,
-    String barbero, String horaSeleccionada, String id, String cliente) {
-  return CupertinoAlertDialog(
-    title: const Text(
-      'Resumen',
-      style: TextStyle(
-          fontFamily: 'Barlow', fontWeight: FontWeight.w900, fontSize: 20),
-    ),
-    // ignore: prefer_const_constructors
-    content: Text(
-      'Fecha: $fecha\nServicio: $servicio\nBarbero: $barbero\nHora: $horaSeleccionada\n¿Desea agendar la cita?',
-      style: const TextStyle(
-          fontFamily: 'Barlow', fontWeight: FontWeight.w900, fontSize: 20),
-    ),
-    actions: [
-      TextButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        child: const Text(
-          'Cancelar',
-          style: TextStyle(color: Colors.red),
-        ),
-      ),
-      TextButton(
-        onPressed: () {
-          _updateHour(servicio, cliente, id);
-          Navigator.of(context).pop();
-        },
-        child: const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Text(
-            'Agendar',
+        TextButton(
+          onPressed: () {
+            _updateHour(servicio, cliente, id);
+            Navigator.of(context).pop();
+          },
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'Agendar',
+            ),
           ),
         ),
+      ],
+    );
+  }
+
+  /// It returns a CupertinoAlertDialog widget with a title, content, and two actions
+  ///
+  /// Args:
+  ///   context (BuildContext): The current BuildContext.
+  ///   fecha (String): The date selected by the user.
+  ///   servicio (String): The service that the user selected.
+  ///   barbero (String): The name of the barber
+  ///   horaSeleccionada (String): The hour selected by the user.
+  ///   id (String): The id of the hour that the user selected.
+  ///   cliente (String): The name of the client
+  ///
+  /// Returns:
+  ///   A CupertinoAlertDialog widget.
+  Widget cupertinoDialog(BuildContext context, String fecha, String servicio,
+      String barbero, String horaSeleccionada, String id, String cliente) {
+    return CupertinoAlertDialog(
+      title: const Text(
+        'Resumen',
+        style: TextStyle(
+            fontFamily: 'Barlow', fontWeight: FontWeight.w900, fontSize: 20),
       ),
-    ],
-  );
+      // ignore: prefer_const_constructors
+      content: Text(
+        'Fecha: $fecha\nServicio: $servicio\nBarbero: $barbero\nHora: $horaSeleccionada\n¿Desea agendar la cita?',
+        style: const TextStyle(
+            fontFamily: 'Barlow', fontWeight: FontWeight.w900, fontSize: 20),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text(
+            'Cancelar',
+            style: TextStyle(color: Colors.red),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            _updateHour(servicio, cliente, id);
+            Navigator.of(context).pop();
+          },
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'Agendar',
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }

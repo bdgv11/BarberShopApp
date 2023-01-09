@@ -237,7 +237,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                     }
 
                     return GridView.builder(
-                      //physics: const BouncingScrollPhysics(),
+                      physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
                       itemCount: snapshot.data!.docs.length,
@@ -310,7 +310,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                     );
                   },
                 ),
-              )
+              ),
             ],
           ),
         ),
