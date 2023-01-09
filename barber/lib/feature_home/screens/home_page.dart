@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:barber/utils/globals.dart' as globals;
 
 class HomePageScreen extends StatefulWidget {
   final User user;
@@ -25,7 +26,9 @@ class _MyWidgetState extends State<HomePageScreen> {
   @override
   void initState() {
     _user = widget.user;
+
     Firebase.initializeApp();
+    validateAdminUser();
     super.initState();
   }
 
@@ -320,5 +323,19 @@ class _MyWidgetState extends State<HomePageScreen> {
         user: _user,
       ),
     );
+  }
+
+  /// Check If Document Exists
+  void validateAdminUser() async {
+    // Get reference to Firestore collection
+
+    CollectionReference admin =
+        FirebaseFirestore.instance.collection('Administrador');
+    QuerySnapshot query =
+        await admin.where('correo', isEqualTo: _user.email.toString()).get();
+
+    if (query.docs.isNotEmpty) {
+      globals.isAdmin = true;
+    }
   }
 }

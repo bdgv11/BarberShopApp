@@ -6,3 +6,6 @@ library globals;
 //Appointment
 String servicioSeleccionado = '';
 int indexServicio = 100;
+
+//
+bool isAdmin = false;

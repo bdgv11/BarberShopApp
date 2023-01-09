@@ -1,3 +1,4 @@
+import 'package:barber/feature_cruds/widgets/admin.dart';
 import 'package:barber/feature_cruds/widgets/barber_crud.dart';
 import 'package:barber/feature_cruds/widgets/service_crud.dart';
 import 'package:barber/feature_home/widgets/bottom_navigation.dart';
@@ -47,7 +48,7 @@ class _CrudPageState extends State<CrudPage> {
           ),
         ),
         child: DefaultTabController(
-          length: 2,
+          length: 3,
           child: Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.black87,
@@ -63,6 +64,10 @@ class _CrudPageState extends State<CrudPage> {
                     text: 'Productos y Servicios',
                     icon: Icon(Icons.cut_outlined),
                   ),
+                  Tab(
+                    text: 'Administradores',
+                    icon: Icon(Icons.admin_panel_settings_outlined),
+                  ),
                 ],
               ),
             ),
@@ -71,7 +76,8 @@ class _CrudPageState extends State<CrudPage> {
                 //Barber Crud Page
                 BarberCrud(user: _user),
                 // Service Crud Page
-                ProductServiceCrud(user: _user)
+                ProductServiceCrud(user: _user),
+                const AdminUsers(),
               ],
             ),
           ),

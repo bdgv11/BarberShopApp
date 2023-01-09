@@ -2,6 +2,7 @@ import 'package:barber/feature_cruds/screens/cruds.dart';
 import 'package:barber/feature_login/screens/login_barber_shop.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:barber/utils/globals.dart' as globals;
 
 class DrawerUserWidget extends StatefulWidget {
   final User user;
@@ -13,6 +14,8 @@ class DrawerUserWidget extends StatefulWidget {
 
 class _DrawerUserWidgetState extends State<DrawerUserWidget> {
   //
+
+  bool isAdmin = false;
 
   late User _user;
   //
@@ -124,6 +127,7 @@ class _DrawerUserWidgetState extends State<DrawerUserWidget> {
               ),
             ),
             onTap: () {
+              globals.isAdmin = false;
               FirebaseAuth.instance.signOut();
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
@@ -133,7 +137,7 @@ class _DrawerUserWidgetState extends State<DrawerUserWidget> {
             },
           ),
           const Divider(),
-          if (_user.email == 'bdgv11@gmail.com')
+          if (globals.isAdmin)
             ListTile(
               leading: const Icon(
                 Icons.settings,
