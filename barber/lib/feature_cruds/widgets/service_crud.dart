@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:animate_do/animate_do.dart';
@@ -401,6 +402,8 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                                               iconSize: 30,
                                               onPressed: () {
                                                 // METODO PARA EDITAR
+                                                _updateProductService(
+                                                    documentSnapshot);
                                               },
                                             ),
                                             IconButton(
@@ -527,6 +530,168 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
 
   // --------------------------------------------- CRUD UPDATE --------------------------------------------- //
   // ------------------------------------------------------------------------------------------------------- //
+
+  // Controller - Edit view
+  final TextEditingController _nameEditController = TextEditingController();
+  final TextEditingController _priceEditController = TextEditingController();
+  final TextEditingController _urlImageController = TextEditingController();
+  bool _opcion = false;
+
+  Future<void> _updateProductService(
+      [DocumentSnapshot? documentSnapshot]) async {
+    log('---------');
+    log('Inicia el proceso de actualizar al barbero, primero se levanta el modal con la info.');
+    if (documentSnapshot != null) {
+      _nameEditController.text = documentSnapshot['nombre'];
+      _priceEditController.text = documentSnapshot['precio'].toString();
+      if (documentSnapshot['tipo'] == 'Servicio') {
+        _opcionRadio = RadioOpciones.Servicio;
+      } else {
+        _opcionRadio = RadioOpciones.Producto;
+      }
+      _urlImageController.text = documentSnapshot['imageURL'];
+      _opcion = documentSnapshot['disponible'];
+    }
+
+    await showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (BuildContext ctx) {
+          return Padding(
+            padding: EdgeInsets.only(
+                top: 20,
+                left: 20,
+                right: 20,
+                bottom: MediaQuery.of(ctx).viewInsets.bottom + 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextField(
+                  controller: _nameEditController,
+                  decoration: const InputDecoration(labelText: 'Nombre'),
+                ),
+                TextField(
+                  controller: _priceEditController,
+                  decoration: const InputDecoration(
+                    labelText: 'Precio',
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Icon(
+                      Icons.camera_rounded,
+                      size: 25,
+                      color: Colors.white,
+                    ),
+                    Text(
+                      'Producto',
+                      style: RadioOpciones.Producto == _opcionRadio
+                          ? const TextStyle(
+                              color: Colors.black, fontFamily: 'Barlow')
+                          : const TextStyle(),
+                    ),
+                    Radio(
+                      value: RadioOpciones.Producto,
+                      groupValue: _opcionRadio,
+                      fillColor: MaterialStateColor.resolveWith(
+                          (states) => Colors.green),
+                      focusColor: MaterialStateColor.resolveWith(
+                          (states) => Colors.green),
+                      onChanged: (value) {
+                        setState(() {
+                          _opcionRadio = RadioOpciones.Producto;
+                        });
+                      },
+                    ),
+                    Text(
+                      'Servicio',
+                      style: RadioOpciones.Servicio == _opcionRadio
+                          ? const TextStyle(
+                              color: Colors.black, fontFamily: 'Barlow')
+                          : const TextStyle(),
+                    ),
+                    Radio(
+                      value: RadioOpciones.Servicio,
+                      fillColor: MaterialStateColor.resolveWith(
+                          (states) => Colors.green),
+                      focusColor: MaterialStateColor.resolveWith(
+                          (states) => Colors.green),
+                      groupValue: _opcionRadio,
+                      onChanged: (value) {
+                        setState(() {
+                          _opcionRadio = RadioOpciones.Servicio;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  children: [
+                    Text(_opcion ? 'Disponible' : 'No disponible'),
+                    Switch.adaptive(
+                      value: _opcion,
+                      activeColor: Colors.green,
+                      onChanged: (value) {
+                        setState(() {
+                          _opcion = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    imagePickerMethod();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    elevation: 10,
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  child: const Text(
+                    'Seleccionar imagen',
+                    style: TextStyle(
+                        color: Color.fromARGB(255, 104, 34, 4),
+                        fontFamily: 'Barlow',
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Text(
+                  imageName,
+                  style: const TextStyle(
+                    overflow: TextOverflow.ellipsis,
+                    color: Colors.black,
+                  ),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 10,
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  child: const Text(
+                    'Editar',
+                    style: TextStyle(
+                        color: Color.fromARGB(255, 104, 34, 4),
+                        fontFamily: 'Barlow',
+                        fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: () async {},
+                ),
+              ],
+            ),
+          );
+        });
+  }
 
   // --------------------------------------------- CRUD DELETE --------------------------------------------- //
   // ------------------------------------------------------------------------------------------------------- //
