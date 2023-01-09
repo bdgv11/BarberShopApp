@@ -320,7 +320,6 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                                   ),
                                 ],
                               ),
-                        const Padding(padding: EdgeInsets.all(8)),
                       ],
                     ),
                   ),
@@ -401,7 +400,7 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                                               color: Colors.white,
                                               iconSize: 30,
                                               onPressed: () {
-                                                //_updateBarber(documentSnapshot);
+                                                // METODO PARA EDITAR
                                               },
                                             ),
                                             IconButton(
@@ -525,6 +524,9 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
       _image = null;
     });
   }
+
+  // --------------------------------------------- CRUD UPDATE --------------------------------------------- //
+  // ------------------------------------------------------------------------------------------------------- //
 
   // --------------------------------------------- CRUD DELETE --------------------------------------------- //
   // ------------------------------------------------------------------------------------------------------- //

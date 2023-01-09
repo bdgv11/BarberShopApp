@@ -1,7 +1,7 @@
 class ProductService {
   String nombre;
   int precio;
-  String imageURL;
+  String? imageURL;
   bool disponible;
   String tipo;
 
@@ -9,6 +9,12 @@ class ProductService {
       {required this.nombre,
       required this.precio,
       required this.imageURL,
+      required this.disponible,
+      required this.tipo});
+
+  ProductService.withOutImage(
+      {required this.nombre,
+      required this.precio,
       required this.disponible,
       required this.tipo});
 

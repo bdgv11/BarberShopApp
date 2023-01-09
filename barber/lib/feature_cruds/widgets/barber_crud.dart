@@ -502,6 +502,9 @@ class _BarberCrudState extends State<BarberCrud> {
 
                         if (!mounted) return;
                         Navigator.of(context).pop();
+
+                        showSnackBar("Editado correctamente",
+                            const Duration(seconds: 3));
                       } else {
                         log('Actualizando con el nombre: ${_nameController.text} en el STORAGE');
                         FirebaseStorage.instance

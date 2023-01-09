@@ -158,6 +158,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                               leading: const CircleAvatar(
                                 backgroundImage:
                                     AssetImage("Assets/Images/logo2.jpeg"),
+                                radius: 25,
                               ),
                               title: Text(
                                 'Fecha: $fechaFormateada\nBarbero: ${documentSnapshot['barbero']}',
