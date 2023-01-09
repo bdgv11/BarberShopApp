@@ -56,8 +56,12 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
 
   @override
   Widget build(BuildContext context) {
+    double heightMediaQuery = MediaQuery.of(context).size.height;
+    double widthMediaQuery = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Container(
+        height: heightMediaQuery,
+        width: widthMediaQuery,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topRight,
@@ -154,7 +158,7 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                           focusNode: _focusName,
                           decoration: const InputDecoration(
                             icon: Icon(
-                              Icons.note_add_outlined,
+                              Icons.paste_outlined,
                               size: 25,
                               color: Colors.white,
                             ),
@@ -197,7 +201,7 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Icon(
-                              Icons.camera_rounded,
+                              Icons.design_services_outlined,
                               size: 25,
                               color: Colors.white,
                             ),
@@ -517,7 +521,15 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
 
     final json = productService.toJson();
 
-    await firestore.collection('ProductoServicio').add(json);
+    await firestore
+        .collection('ProductoServicio')
+        .add(json)
+        .whenComplete(() => () {
+              showSnackBar(
+                "Agregado correctamente",
+                const Duration(seconds: 3),
+              );
+            });
     setState(() {
       _nameController.clear();
       _priceController.clear();
@@ -539,8 +551,6 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
 
   Future<void> _updateProductService(
       [DocumentSnapshot? documentSnapshot]) async {
-    log('---------');
-    log('Inicia el proceso de actualizar al barbero, primero se levanta el modal con la info.');
     if (documentSnapshot != null) {
       _nameEditController.text = documentSnapshot['nombre'];
       _priceEditController.text = documentSnapshot['precio'].toString();
@@ -578,13 +588,8 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                   ),
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Icon(
-                      Icons.camera_rounded,
-                      size: 25,
-                      color: Colors.white,
-                    ),
                     Text(
                       'Producto',
                       style: RadioOpciones.Producto == _opcionRadio
@@ -685,7 +690,94 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                         fontFamily: 'Barlow',
                         fontWeight: FontWeight.bold),
                   ),
-                  onPressed: () async {},
+                  onPressed: () async {
+                    //
+                    // ACA EMPIEZA EL EDITAR CON O SIN IMAGEN, SON 2 METODOS //
+                    //
+                    final bool disponible = _opcion;
+                    if (_nameEditController.text.isNotEmpty &&
+                        _priceEditController.text.isNotEmpty) {
+                      if (_image == null) {
+                        // Aca actualiza los datos excepto la imagen, esa deja la misma URL.
+                        //
+                        final prodServ = ProductService.withOutImage(
+                          nombre: _nameEditController.text,
+                          precio: int.parse(_priceEditController.text),
+                          tipo: _opcionRadio.name,
+                          disponible: disponible,
+                        );
+
+                        final jsonData = prodServ.toJsonWithOutImage();
+
+                        await FirebaseFirestore.instance
+                            .collection('ProductoServicio')
+                            .doc(documentSnapshot!.id)
+                            .update(jsonData);
+
+                        if (!mounted) return;
+                        Navigator.of(context).pop();
+
+                        showSnackBar(
+                          "Editado correctamente",
+                          const Duration(seconds: 3),
+                        );
+                      } else {
+                        // Aca edita todo lo que se cambio y UNA NUEVA imagen, por lo que se debe eliminar la anterior y agregar esta nueva
+                        // agarrar el nuevo URL y ponerselo a la tabla de ProductoServicio en la BD
+                        String nombreAEliminar = documentSnapshot?['nombre']
+                            .replaceAll(" ", "")
+                            .toLowerCase();
+                        log(nombreAEliminar);
+                        FirebaseStorage.instance
+                            .ref('ProductoServicio')
+                            .child(nombreAEliminar)
+                            .delete();
+
+                        // Aca agrega una nueva imagen e el storage para el nuevo prod/servicio
+                        Reference ref = FirebaseStorage.instance
+                            .ref('ProductoServicio')
+                            // ignore: unnecessary_string_interpolations
+                            .child(
+                                // ignore: unnecessary_string_interpolations
+                                '${_nameEditController.text.replaceAll(" ", "").toLowerCase()}');
+                        await ref.putFile(_image!);
+                        downloadURL = await ref.getDownloadURL();
+
+                        _urlImageController.text = downloadURL.toString();
+
+                        imageName = '';
+
+                        if (downloadURL != null) {
+                          final prodServ = ProductService(
+                              nombre: _nameEditController.text,
+                              precio: int.parse(_priceEditController.text),
+                              imageURL: downloadURL.toString(),
+                              tipo: _opcionRadio.name,
+                              disponible: disponible);
+
+                          final jsonData = prodServ.toJson();
+
+                          await FirebaseFirestore.instance
+                              .collection('ProductoServicio')
+                              .doc(documentSnapshot!.id)
+                              .update(jsonData);
+
+                          if (!mounted) return;
+                          Navigator.of(context).pop();
+                          showSnackBar(
+                            "Editado correctamente",
+                            const Duration(seconds: 3),
+                          );
+                        }
+                      }
+                      setState(() {
+                        _nameEditController.clear();
+                        _priceEditController.clear();
+                        imageName = '';
+                        _image = null;
+                      });
+                    }
+                  },
                 ),
               ],
             ),

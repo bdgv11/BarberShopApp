@@ -65,8 +65,12 @@ class _BarberCrudState extends State<BarberCrud> {
 
   @override
   Widget build(BuildContext context) {
+    double heightMediaQuery = MediaQuery.of(context).size.height;
+    double widthMediaQuery = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Container(
+        height: heightMediaQuery,
+        width: widthMediaQuery,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topRight,
@@ -157,15 +161,10 @@ class _BarberCrudState extends State<BarberCrud> {
                             ),
                           ),
                         ),
-                        const Padding(padding: EdgeInsets.all(12)),
+                        const Padding(padding: EdgeInsets.all(8)),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            const Icon(
-                              Icons.event_available_outlined,
-                              size: 25,
-                              color: Colors.white,
-                            ),
                             Text(
                               _switchValue ? 'Disponible' : 'No disponible',
                               style: const TextStyle(
@@ -173,6 +172,7 @@ class _BarberCrudState extends State<BarberCrud> {
                                   fontFamily: 'Barlow',
                                   fontWeight: FontWeight.bold),
                             ),
+                            const Padding(padding: EdgeInsets.only(right: 20)),
                             Switch.adaptive(
                               value: _switchValue,
                               activeColor: Colors.green,
@@ -184,16 +184,11 @@ class _BarberCrudState extends State<BarberCrud> {
                             ),
                           ],
                         ),
-                        const Padding(padding: EdgeInsets.all(12)),
+                        const Padding(padding: EdgeInsets.all(8)),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            const Icon(
-                              Icons.image_outlined,
-                              size: 25,
-                              color: Colors.white,
-                            ),
-                            const Padding(padding: EdgeInsets.only(right: 20)),
+                            //const Padding(padding: EdgeInsets.only(right: 20)),
                             ElevatedButton(
                               onPressed: () {
                                 imagePickerMethod();
@@ -224,7 +219,7 @@ class _BarberCrudState extends State<BarberCrud> {
                             ),
                           ],
                         ),
-                        const Padding(padding: EdgeInsets.all(12)),
+                        const Padding(padding: EdgeInsets.all(8)),
                         _processing
                             ? const CircularProgressIndicator()
                             : Row(
@@ -233,7 +228,7 @@ class _BarberCrudState extends State<BarberCrud> {
                                   Expanded(
                                     child: ElevatedButton(
                                       style: ElevatedButton.styleFrom(
-                                        elevation: 30,
+                                        elevation: 10,
                                         backgroundColor: Colors.white,
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
@@ -665,7 +660,7 @@ class _BarberCrudState extends State<BarberCrud> {
       child: Column(
         children: [
           SizedBox(
-            height: 320,
+            height: 300,
             child: StreamBuilder(
               stream: _barberCollection.snapshots(),
               builder: (BuildContext context,

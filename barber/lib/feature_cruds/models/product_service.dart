@@ -25,4 +25,11 @@ class ProductService {
         'disponible': disponible,
         'tipo': tipo,
       };
+
+  Map<String, dynamic> toJsonWithOutImage() => {
+        'nombre': nombre,
+        'precio': precio,
+        'disponible': disponible,
+        'tipo': tipo,
+      };
 }
