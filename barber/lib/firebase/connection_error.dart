@@ -18,7 +18,7 @@ class ConnectionError extends StatelessWidget {
             'Error de conexion',
             style: TextStyle(
                 color: Colors.white,
-                fontFamily: 'Barlow',
+                fontFamily: 'Lato',
                 fontSize: 25,
                 fontWeight: FontWeight.bold),
           ),

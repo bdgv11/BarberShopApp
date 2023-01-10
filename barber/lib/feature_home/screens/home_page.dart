@@ -88,7 +88,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                     'Hola, ${_user.displayName}',
                     textAlign: TextAlign.left,
                     style: const TextStyle(
-                        fontFamily: 'Barlow',
+                        fontFamily: 'Lato',
                         color: Colors.white,
                         fontSize: 20,
                         fontWeight: FontWeight.bold),
@@ -108,7 +108,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                         color: Colors.white,
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        fontFamily: 'Barlow'),
+                        fontFamily: 'Lato'),
                   )
                 ],
               ),
@@ -168,7 +168,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                                 'Fecha: $fechaFormateada\nBarbero: ${documentSnapshot['barbero']}',
                                 style: const TextStyle(
                                     color: Colors.white,
-                                    fontFamily: 'Barlow',
+                                    fontFamily: 'Lato',
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15),
                               ),
@@ -176,7 +176,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                                 'Servicio: ${documentSnapshot['tipoServicio']}',
                                 style: const TextStyle(
                                     color: Colors.white,
-                                    fontFamily: 'Barlow',
+                                    fontFamily: 'Lato',
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15),
                               ),
@@ -186,7 +186,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                                 documentSnapshot['hora'],
                                 style: const TextStyle(
                                     color: Colors.white,
-                                    fontFamily: 'Barlow',
+                                    fontFamily: 'Lato',
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20),
                               ),
@@ -211,7 +211,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                     'Servicios y productos:',
                     textAlign: TextAlign.right,
                     style: TextStyle(
-                        fontFamily: 'Barlow',
+                        fontFamily: 'Lato',
                         color: Colors.white,
                         fontSize: 15,
                         fontWeight: FontWeight.bold),
@@ -286,7 +286,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                                 Text(
                                   '${documentSnapshot['nombre']}',
                                   style: const TextStyle(
-                                    fontFamily: 'Barlow',
+                                    fontFamily: 'Lato',
                                     color: Colors.white54,
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
@@ -301,7 +301,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                                 Text(
                                   '₡${documentSnapshot['precio']}',
                                   style: const TextStyle(
-                                    fontFamily: 'Barlow',
+                                    fontFamily: 'Lato',
                                     color: Colors.white54,
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,

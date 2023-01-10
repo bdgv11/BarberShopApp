@@ -96,7 +96,7 @@ class _MyWidgetState extends State<LoginBarberShop> {
                           ),
                           hintStyle: TextStyle(
                               color: Colors.white,
-                              fontFamily: 'Barlow',
+                              fontFamily: 'Lato',
                               fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -119,7 +119,7 @@ class _MyWidgetState extends State<LoginBarberShop> {
                               color: Colors.teal, fontWeight: FontWeight.bold),
                           hintStyle: TextStyle(
                             color: Colors.white,
-                            fontFamily: 'Barlow',
+                            fontFamily: 'Lato',
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -140,7 +140,7 @@ class _MyWidgetState extends State<LoginBarberShop> {
                               'Olvidé contraseña',
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontFamily: 'Barlow',
+                                  fontFamily: 'Lato',
                                   fontWeight: FontWeight.bold),
                             ),
                           )
@@ -210,7 +210,7 @@ class _MyWidgetState extends State<LoginBarberShop> {
                                           style: TextStyle(
                                               fontSize: 25,
                                               fontWeight: FontWeight.bold,
-                                              fontFamily: 'Barlow'),
+                                              fontFamily: 'Lato'),
                                         ),
                                       ),
                                     );
@@ -222,7 +222,7 @@ class _MyWidgetState extends State<LoginBarberShop> {
                                 style: TextStyle(
                                     color: Color.fromARGB(255, 104, 34, 4),
                                     fontWeight: FontWeight.bold,
-                                    fontFamily: 'Barlow'),
+                                    fontFamily: 'Lato'),
                               ),
                             ),
                           ),
@@ -233,8 +233,7 @@ class _MyWidgetState extends State<LoginBarberShop> {
                   children: [
                     const Text(
                       '¿No tienes cuenta? ',
-                      style:
-                          TextStyle(color: Colors.white, fontFamily: 'Barlow'),
+                      style: TextStyle(color: Colors.white, fontFamily: 'Lato'),
                     ),
                     TextButton(
                       onPressed: () {
@@ -249,7 +248,7 @@ class _MyWidgetState extends State<LoginBarberShop> {
                         style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
-                            fontFamily: 'Barlow'),
+                            fontFamily: 'Lato'),
                       ),
                     )
                   ],
@@ -263,7 +262,7 @@ class _MyWidgetState extends State<LoginBarberShop> {
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontFamily: 'Barlow'),
+                          fontFamily: 'Lato'),
                     ),
                   ],
                 ),
@@ -334,7 +333,7 @@ class _MyWidgetState extends State<LoginBarberShop> {
                                               color: Color.fromARGB(
                                                   255, 104, 34, 4),
                                               fontWeight: FontWeight.bold,
-                                              fontFamily: 'Barlow'),
+                                              fontFamily: 'Lato'),
                                         ),
                                       )
                                     ],

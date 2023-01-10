@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.barber.bryanguzman.barber">
    <application
-        android:label="barber"
+        android:label="Dream Home"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

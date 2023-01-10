@@ -42,6 +42,18 @@
       <excludeFolder url="file://$MODULE_DIR$/barber/ios/.symlinks/plugins/firebase_core/build" />
       <excludeFolder url="file://$MODULE_DIR$/barber/ios/.symlinks/plugins/firebase_core/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/barber/ios/.symlinks/plugins/firebase_core/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/barber/ios/.symlinks/plugins/google_sign_in_ios/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/barber/ios/.symlinks/plugins/google_sign_in_ios/build" />
+      <excludeFolder url="file://$MODULE_DIR$/barber/ios/.symlinks/plugins/google_sign_in_ios/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/barber/ios/.symlinks/plugins/firebase_performance/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/barber/ios/.symlinks/plugins/firebase_performance/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/barber/ios/.symlinks/plugins/firebase_performance/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/barber/ios/.symlinks/plugins/firebase_performance/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/barber/ios/.symlinks/plugins/firebase_performance/build" />
+      <excludeFolder url="file://$MODULE_DIR$/barber/ios/.symlinks/plugins/firebase_performance/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/barber/ios/.symlinks/plugins/google_sign_in_ios/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/barber/ios/.symlinks/plugins/google_sign_in_ios/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/barber/ios/.symlinks/plugins/google_sign_in_ios/example/.pub" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

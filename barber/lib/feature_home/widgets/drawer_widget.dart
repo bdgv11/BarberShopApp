@@ -83,14 +83,14 @@ class _DrawerUserWidgetState extends State<DrawerUserWidget> {
               '${_user.displayName}',
               style: const TextStyle(
                 fontSize: 20,
-                fontFamily: 'Barlow',
+                fontFamily: 'Lato',
                 overflow: TextOverflow.ellipsis,
               ),
             ),
             subtitle: Text(
               '${_user.email}',
               style: const TextStyle(
-                fontFamily: 'Barlow',
+                fontFamily: 'Lato',
                 color: Colors.black,
                 fontSize: 16,
                 overflow: TextOverflow.ellipsis,
@@ -108,7 +108,7 @@ class _DrawerUserWidgetState extends State<DrawerUserWidget> {
               'Historial',
               style: TextStyle(
                 fontSize: 20,
-                fontFamily: 'Barlow',
+                fontFamily: 'Lato',
               ),
             ),
           ),
@@ -123,7 +123,7 @@ class _DrawerUserWidgetState extends State<DrawerUserWidget> {
               'Salir',
               style: TextStyle(
                 fontSize: 20,
-                fontFamily: 'Barlow',
+                fontFamily: 'Lato',
               ),
             ),
             onTap: () {
@@ -148,7 +148,7 @@ class _DrawerUserWidgetState extends State<DrawerUserWidget> {
                 'Configuraciones',
                 style: TextStyle(
                   fontSize: 20,
-                  fontFamily: 'Barlow',
+                  fontFamily: 'Lato',
                 ),
               ),
               onTap: () {

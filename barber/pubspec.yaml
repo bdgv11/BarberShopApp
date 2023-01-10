@@ -107,6 +107,9 @@ flutter:
     - family: Barlow
       fonts:
         - asset: Assets/Fonts/Barlow-Thin.ttf
+    - family: Lato
+      fonts:
+        - asset: Assets/Fonts/Lato-Regular.ttf        
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

@@ -56,7 +56,7 @@ class _CrudPageState extends State<CrudPage> {
                 indicatorColor: Colors.teal,
                 labelStyle: TextStyle(
                   fontSize: 20,
-                  fontFamily: 'Barlow',
+                  fontFamily: 'Lato',
                 ),
                 tabs: [
                   Tab(text: 'Barberos', icon: Icon(Icons.person_pin_outlined)),

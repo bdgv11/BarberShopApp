@@ -35,7 +35,7 @@ class _ServiceWidgettState extends State<ServiceWidget> {
               'Servicio: ${globals.servicioSeleccionado}',
               textAlign: TextAlign.right,
               style: const TextStyle(
-                  fontFamily: 'Barlow',
+                  fontFamily: 'Lato',
                   color: Colors.white,
                   fontSize: 20,
                   fontWeight: FontWeight.bold),
@@ -115,7 +115,7 @@ class _ServiceWidgettState extends State<ServiceWidget> {
                           Text(
                             '${documentSnapshot['nombre']}',
                             style: const TextStyle(
-                              fontFamily: 'Barlow',
+                              fontFamily: 'Lato',
                               color: Colors.white54,
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -135,7 +135,7 @@ class _ServiceWidgettState extends State<ServiceWidget> {
                           Text(
                             '₡ ${documentSnapshot['precio']}',
                             style: const TextStyle(
-                                fontFamily: 'Barlow',
+                                fontFamily: 'Lato',
                                 color: Colors.white54,
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold),
