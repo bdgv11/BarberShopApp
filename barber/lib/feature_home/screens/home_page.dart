@@ -26,7 +26,7 @@ class _MyWidgetState extends State<HomePageScreen> {
   @override
   void initState() {
     _user = widget.user;
-
+    globals.servicioSeleccionado = '';
     Firebase.initializeApp();
     validateAdminUser();
     super.initState();
@@ -118,7 +118,8 @@ class _MyWidgetState extends State<HomePageScreen> {
                 child: StreamBuilder(
                   stream: FirebaseFirestore.instance
                       .collection('Cita')
-                      .where('cliente', isEqualTo: _user.uid.toString())
+                      .where('idCliente', isEqualTo: _user.uid.toString())
+                      .where('estadoCita', isEqualTo: 'Agendada')
                       .where('fecha',
                           isGreaterThanOrEqualTo:
                               Timestamp.fromDate(dateTimeFecha))

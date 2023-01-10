@@ -58,226 +58,104 @@ class _MyWidgetState extends State<LoginBarberShop> {
           ),
         ),
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              //const Padding(padding: EdgeInsets.only(top: 150)),
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    const Center(
-                      child: CircleAvatar(
-                        backgroundImage: AssetImage("Assets/Images/logo2.jpeg"),
-                        radius: 85,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                //const Padding(padding: EdgeInsets.only(top: 150)),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      const Center(
+                        child: CircleAvatar(
+                          backgroundImage:
+                              AssetImage("Assets/Images/logo2.jpeg"),
+                          radius: 85,
+                        ),
                       ),
-                    ),
-                    const Padding(padding: EdgeInsets.only(top: 50)),
-                    TextFormField(
-                      style: const TextStyle(color: Colors.white),
-                      validator: (value) => Validator.validateEmail(
-                          email: _emailFieldController.text),
-                      controller: _emailFieldController,
-                      focusNode: _focusEmail,
-                      keyboardType: TextInputType.emailAddress,
-                      cursorColor: Colors.white,
-                      decoration: const InputDecoration(
-                        icon: Icon(
-                          Icons.email_outlined,
-                          size: 25,
-                          color: Colors.white,
+                      const Padding(padding: EdgeInsets.only(top: 50)),
+                      TextFormField(
+                        style: const TextStyle(color: Colors.white),
+                        validator: (value) => Validator.validateEmail(
+                            email: _emailFieldController.text),
+                        controller: _emailFieldController,
+                        focusNode: _focusEmail,
+                        keyboardType: TextInputType.emailAddress,
+                        cursorColor: Colors.white,
+                        decoration: const InputDecoration(
+                          icon: Icon(
+                            Icons.email_outlined,
+                            size: 25,
+                            color: Colors.white,
+                          ),
+                          hintText: 'Correo electrónico',
+                          errorStyle: TextStyle(
+                            color: Colors.teal,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          hintStyle: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Barlow',
+                              fontWeight: FontWeight.bold),
                         ),
-                        hintText: 'Correo electrónico',
-                        errorStyle: TextStyle(
-                          color: Colors.teal,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        hintStyle: TextStyle(
+                      ),
+                      const Padding(padding: EdgeInsets.all(20)),
+                      TextFormField(
+                        style: const TextStyle(color: Colors.white),
+                        validator: (value) => Validator.validatePassword(
+                            password: _passwordFieldController.text),
+                        controller: _passwordFieldController,
+                        focusNode: _focusPassword,
+                        cursorColor: Colors.white,
+                        decoration: const InputDecoration(
+                          icon: Icon(
+                            Icons.key_outlined,
+                            size: 25,
+                            color: Colors.white,
+                          ),
+                          hintText: 'Contraseña',
+                          errorStyle: TextStyle(
+                              color: Colors.teal, fontWeight: FontWeight.bold),
+                          hintStyle: TextStyle(
                             color: Colors.white,
                             fontFamily: 'Barlow',
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    const Padding(padding: EdgeInsets.all(20)),
-                    TextFormField(
-                      style: const TextStyle(color: Colors.white),
-                      validator: (value) => Validator.validatePassword(
-                          password: _passwordFieldController.text),
-                      controller: _passwordFieldController,
-                      focusNode: _focusPassword,
-                      cursorColor: Colors.white,
-                      decoration: const InputDecoration(
-                        icon: Icon(
-                          Icons.key_outlined,
-                          size: 25,
-                          color: Colors.white,
-                        ),
-                        hintText: 'Contraseña',
-                        errorStyle: TextStyle(
-                            color: Colors.teal, fontWeight: FontWeight.bold),
-                        hintStyle: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Barlow',
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      obscureText: true,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        const SizedBox(height: 24),
-                        GestureDetector(
-                          onTap: () => Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: ((context) =>
-                                  const ForgotPasswordPage()),
-                            ),
+                            fontWeight: FontWeight.bold,
                           ),
-                          child: const Text(
-                            'Olvidé contraseña',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Barlow',
-                                fontWeight: FontWeight.bold),
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              const Padding(padding: EdgeInsets.all(20)),
-              _processingLogIn
-                  ? const CircularProgressIndicator()
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              elevation: 30,
-                              backgroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
+                        ),
+                        obscureText: true,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          const SizedBox(height: 24),
+                          GestureDetector(
+                            onTap: () => Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: ((context) =>
+                                    const ForgotPasswordPage()),
                               ),
                             ),
-                            onPressed: () async {
-                              /// Checking if the form is valid.
-                              _focusEmail.unfocus();
-                              _focusPassword.unfocus();
-
-                              /// Validating the form.
-                              if (_formKey.currentState!.validate()) {
-                                setState(() {
-                                  _processingLogIn = true;
-                                });
-
-                                /// Trying to log in the user using the email and password that
-                                /// the user has entered.
-                                User? user = await FirebaseAuthentication
-                                    .signInUsingEmailAndPassword(
-                                        email:
-                                            _emailFieldController.text.trim(),
-                                        password:
-                                            _passwordFieldController.text);
-
-                                /// Telling the framework to rebuild the widget.
-                                setState(() {
-                                  _processingLogIn = false;
-                                });
-
-                                /// Checking if the user is not null. If the user is not null, it
-                                /// is navigating to the HomePageScreen.
-                                if (user != null) {
-                                  if (!mounted) return;
-                                  Navigator.of(context)
-                                      .pushReplacement(MaterialPageRoute(
-                                    builder: (context) =>
-                                        HomePageScreen(user: user),
-                                  ));
-                                } else {
-                                  if (!mounted) return;
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      backgroundColor: Colors.black,
-                                      duration: Duration(milliseconds: 750),
-                                      content: Text(
-                                        'Correo no existe o contraseña incorrecta',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'Barlow'),
-                                      ),
-                                    ),
-                                  );
-                                }
-                              }
-                            },
                             child: const Text(
-                              'Iniciar Sesión',
+                              'Olvidé contraseña',
                               style: TextStyle(
-                                  color: Color.fromARGB(255, 104, 34, 4),
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Barlow'),
+                                  color: Colors.white,
+                                  fontFamily: 'Barlow',
+                                  fontWeight: FontWeight.bold),
                             ),
-                          ),
-                        ),
-                      ],
-                    ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    '¿No tienes cuenta? ',
-                    style: TextStyle(color: Colors.white, fontFamily: 'Barlow'),
+                          )
+                        ],
+                      ),
+                    ],
                   ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const RegisterScreen(),
-                        ),
-                      );
-                    },
-                    child: const Text(
-                      'Registrate',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Barlow'),
-                    ),
-                  )
-                ],
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Text(
-                    'Registarse con:',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Barlow'),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              _processingGoogleLogIn
-                  ? const CircularProgressIndicator()
-                  : Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                ),
+                const Padding(padding: EdgeInsets.all(20)),
+                _processingLogIn
+                    ? const CircularProgressIndicator()
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          const Divider(
-                            thickness: 1,
-                            color: Colors.white,
-                          ),
-                          SizedBox(
+                          Expanded(
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 elevation: 30,
@@ -287,62 +165,188 @@ class _MyWidgetState extends State<LoginBarberShop> {
                                 ),
                               ),
                               onPressed: () async {
-                                setState(() {
-                                  _processingGoogleLogIn = true;
-                                });
+                                /// Checking if the form is valid.
+                                _focusEmail.unfocus();
+                                _focusPassword.unfocus();
 
-                                User? user =
-                                    await Authentication.signInWithGoogle(
-                                        context: context);
+                                /// Validating the form.
+                                if (_formKey.currentState!.validate()) {
+                                  setState(() {
+                                    _processingLogIn = true;
+                                  });
 
-                                setState(() {
-                                  _processingGoogleLogIn = false;
-                                });
+                                  /// Trying to log in the user using the email and password that
+                                  /// the user has entered.
+                                  User? user = await FirebaseAuthentication
+                                      .signInUsingEmailAndPassword(
+                                          email:
+                                              _emailFieldController.text.trim(),
+                                          password:
+                                              _passwordFieldController.text);
 
-                                if (user != null) {
-                                  if (!mounted) return;
-                                  Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                      builder: (context) => HomePageScreen(
-                                        user: user,
+                                  /// Telling the framework to rebuild the widget.
+                                  setState(() {
+                                    _processingLogIn = false;
+                                  });
+
+                                  /// Checking if the user is not null. If the user is not null, it
+                                  /// is navigating to the HomePageScreen.
+                                  if (user != null) {
+                                    if (!mounted) return;
+                                    Navigator.of(context)
+                                        .pushReplacement(MaterialPageRoute(
+                                      builder: (context) =>
+                                          HomePageScreen(user: user),
+                                    ));
+                                  } else {
+                                    if (!mounted) return;
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        backgroundColor: Colors.black,
+                                        duration: Duration(milliseconds: 750),
+                                        content: Text(
+                                          'Correo no existe o contraseña incorrecta',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 25,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Barlow'),
+                                        ),
                                       ),
-                                    ),
-                                  );
+                                    );
+                                  }
                                 }
                               },
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const <Widget>[
-                                    Image(
-                                      image: AssetImage(
-                                          "Assets/Images/google_logo.png"),
-                                      height: 30,
-                                      fit: BoxFit.fitWidth,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 10),
-                                      child: Text(
-                                        'Iniciar sesion con Google',
-                                        style: TextStyle(
-                                            color:
-                                                Color.fromARGB(255, 104, 34, 4),
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'Barlow'),
-                                      ),
-                                    )
-                                  ],
-                                ),
+                              child: const Text(
+                                'Iniciar Sesión',
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 104, 34, 4),
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Barlow'),
                               ),
                             ),
                           ),
                         ],
                       ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      '¿No tienes cuenta? ',
+                      style:
+                          TextStyle(color: Colors.white, fontFamily: 'Barlow'),
                     ),
-            ],
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const RegisterScreen(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'Registrate',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Barlow'),
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text(
+                      'Registarse con:',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Barlow'),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                _processingGoogleLogIn
+                    ? const CircularProgressIndicator()
+                    : Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Divider(
+                              thickness: 1,
+                              color: Colors.white,
+                            ),
+                            SizedBox(
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  elevation: 30,
+                                  backgroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  setState(() {
+                                    _processingGoogleLogIn = true;
+                                  });
+
+                                  User? user =
+                                      await Authentication.signInWithGoogle(
+                                          context: context);
+
+                                  setState(() {
+                                    _processingGoogleLogIn = false;
+                                  });
+
+                                  if (user != null) {
+                                    if (!mounted) return;
+                                    Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                        builder: (context) => HomePageScreen(
+                                          user: user,
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const <Widget>[
+                                      Image(
+                                        image: AssetImage(
+                                            "Assets/Images/google_logo.png"),
+                                        height: 30,
+                                        fit: BoxFit.fitWidth,
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 10),
+                                        child: Text(
+                                          'Iniciar sesion con Google',
+                                          style: TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 104, 34, 4),
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Barlow'),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+              ],
+            ),
           ),
         ),
       ),

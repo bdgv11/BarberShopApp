@@ -33,7 +33,6 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
   @override
   void initState() {
     _user = widget.user;
-    //globals.servicioSeleccionado = '';
     globals.indexServicio = 100;
     super.initState();
   }
@@ -335,30 +334,42 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                                   _hora = documentSnapshot['hora'];
                                   String id =
                                       snapshot.data!.docs[index].reference.id;
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return Platform.isIOS
-                                          ? cupertinoDialog(
-                                              context,
-                                              fechaShowDialog,
-                                              globals.servicioSeleccionado,
-                                              barberoSeleccionado,
-                                              _hora,
-                                              id,
-                                              _user.uid.toString(),
-                                            ) //cupertinoDialog(context)
-                                          : androidDialog(
-                                              context,
-                                              fechaShowDialog,
-                                              globals.servicioSeleccionado,
-                                              barberoSeleccionado,
-                                              _hora,
-                                              id,
-                                              _user.uid.toString(),
-                                            ); //androidDialog(context);
-                                    },
-                                  );
+
+                                  if (globals.servicioSeleccionado == '') {
+                                    const snack = SnackBar(
+                                      content:
+                                          Text('Debe seleccionar un servicio'),
+                                      duration: Duration(seconds: 2),
+                                      backgroundColor: Colors.red,
+                                    );
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snack);
+                                  } else {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return Platform.isIOS
+                                            ? cupertinoDialog(
+                                                context,
+                                                fechaShowDialog,
+                                                globals.servicioSeleccionado,
+                                                barberoSeleccionado,
+                                                _hora,
+                                                id,
+                                                _user.uid.toString(),
+                                              ) //cupertinoDialog(context)
+                                            : androidDialog(
+                                                context,
+                                                fechaShowDialog,
+                                                globals.servicioSeleccionado,
+                                                barberoSeleccionado,
+                                                _hora,
+                                                id,
+                                                _user.uid.toString(),
+                                              ); //androidDialog(context);
+                                      },
+                                    );
+                                  }
                                 },
                                 child: Text(
                                   documentSnapshot['hora'],
@@ -446,19 +457,39 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
     } else {
       DateTime dateTimeFecha = DateTime.parse(fecha);
 
-      final appointment = Appointment(
+      List<String> horas = [
+        '09:00 am',
+        '10:00 am',
+        '11:00 am',
+        '12:00 md',
+        '1:00 pm',
+        '2:00 pm',
+        '3:00 pm',
+        '4:00 pm',
+        '5:00 pm',
+        '6:00 pm',
+        '7:00 pm'
+      ];
+
+      for (var i = 0; i < horas.length; i++) {
+        final appointment = Appointment(
           barbero: barbero,
-          cliente: '',
+          idCliente: '',
           diaDisponible: true,
           fecha: Timestamp.fromMillisecondsSinceEpoch(
               dateTimeFecha.millisecondsSinceEpoch),
-          hora: '10:00 am',
+          hora: horas[i],
           horaDisponible: true,
-          tipoServicio: '');
+          tipoServicio: '',
+          precio: 0,
+          nombreCliente: '',
+          estadoCita: 'Creada',
+        );
 
-      final jsonDataToAdd = appointment.toJson();
+        final jsonDataToAdd = appointment.toJson();
 
-      await citas.add(jsonDataToAdd);
+        await citas.add(jsonDataToAdd);
+      }
     }
   }
 
@@ -469,12 +500,15 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
   ///   servicio (String): The type of service the user wants to book.
   ///   cliente (String): The name of the client
   ///   id (String): The id of the document to update.
-  void _updateHour(String servicio, String cliente, String id) {
+  void _updateHour(String servicio, String cliente, String id, int precio) {
     // Este metodo va a poner en false (ocupada) el valor de la hora de ese dia en especifico!
     FirebaseFirestore.instance.collection('Cita').doc(id).update({
       'tipoServicio': globals.servicioSeleccionado,
       'horaDisponible': false,
-      'cliente': cliente,
+      'idCliente': _user.uid,
+      'nombreCliente': _user.displayName,
+      'precio': precio,
+      'estadoCita': 'Agendada'
     });
   }
 
@@ -516,7 +550,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
         ),
         TextButton(
           onPressed: () {
-            _updateHour(servicio, cliente, id);
+            _updateHour(servicio, cliente, id, globals.precioServicio);
             Navigator.of(context).pop();
           },
           child: const Padding(
@@ -569,7 +603,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
         ),
         TextButton(
           onPressed: () {
-            _updateHour(servicio, cliente, id);
+            _updateHour(servicio, cliente, id, globals.precioServicio);
             Navigator.of(context).pop();
           },
           child: const Padding(

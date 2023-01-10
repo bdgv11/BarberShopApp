@@ -16,7 +16,6 @@ class ServiceWidget extends StatefulWidget {
 class _ServiceWidgettState extends State<ServiceWidget> {
   int indexServicio = 100;
   String servicioSeleccionado = '';
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -86,6 +85,8 @@ class _ServiceWidgettState extends State<ServiceWidget> {
                               servicioSeleccionado = documentSnapshot['nombre'];
                               globals.servicioSeleccionado =
                                   documentSnapshot['nombre'];
+                              globals.precioServicio =
+                                  documentSnapshot['precio'];
                             });
                           },
                           child: Card(
