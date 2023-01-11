@@ -103,7 +103,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                       'Fecha: ${today.day}/${today.month}/${today.year}',
                       textAlign: TextAlign.left,
                       style: const TextStyle(
-                          fontFamily: 'Lato',
+                          fontFamily: 'OpenSans',
                           color: Colors.white,
                           fontSize: 20,
                           fontWeight: FontWeight.bold),
@@ -145,7 +145,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                     formatButtonVisible: false,
                     titleTextStyle: TextStyle(
                       color: Colors.white,
-                      fontFamily: 'Lato',
+                      fontFamily: 'OpenSans',
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -183,7 +183,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                       'Barbero: $barberoSeleccionado',
                       textAlign: TextAlign.right,
                       style: const TextStyle(
-                          fontFamily: 'Lato',
+                          fontFamily: 'OpenSans',
                           color: Colors.white,
                           fontSize: 20,
                           fontWeight: FontWeight.bold),
@@ -231,7 +231,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                                   documentSnapshot['nombre'],
                                   style: const TextStyle(
                                     color: Colors.white,
-                                    fontFamily: 'Lato',
+                                    fontFamily: 'OpenSans',
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -246,7 +246,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                               documentSnapshot['descripcion'],
                               style: const TextStyle(
                                   color: Colors.white,
-                                  fontFamily: 'Lato',
+                                  fontFamily: 'OpenSans',
                                   fontSize: 20),
                             ),
                             isThreeLine: true,
@@ -278,7 +278,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                       'Hora: ',
                       textAlign: TextAlign.right,
                       style: TextStyle(
-                          fontFamily: 'Lato',
+                          fontFamily: 'OpenSans',
                           color: Colors.white,
                           fontSize: 20,
                           fontWeight: FontWeight.bold),
@@ -375,7 +375,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                                   documentSnapshot['hora'],
                                   style: const TextStyle(
                                       color: Colors.black,
-                                      fontFamily: 'Lato',
+                                      fontFamily: 'OpenSans',
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
@@ -396,7 +396,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                                   documentSnapshot['hora'],
                                   style: const TextStyle(
                                       color: Colors.black,
-                                      fontFamily: 'Lato',
+                                      fontFamily: 'OpenSans',
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
@@ -531,12 +531,12 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
       title: const Text(
         'Resumen',
         style: TextStyle(
-            fontFamily: 'Lato', fontWeight: FontWeight.w900, fontSize: 20),
+            fontFamily: 'OpenSans', fontWeight: FontWeight.w900, fontSize: 20),
       ),
       content: Text(
         'Fecha: $fecha\nServicio: $servicio\nBarbero: $barbero\nHora: $horaSeleccionada\n¿Desea agendar la cita?',
         style: const TextStyle(
-            fontFamily: 'Lato', fontWeight: FontWeight.w900, fontSize: 20),
+            fontFamily: 'OpenSans', fontWeight: FontWeight.w900, fontSize: 20),
       ),
       actions: [
         TextButton(
@@ -583,13 +583,13 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
       title: const Text(
         'Resumen',
         style: TextStyle(
-            fontFamily: 'Lato', fontWeight: FontWeight.w900, fontSize: 20),
+            fontFamily: 'OpenSans', fontWeight: FontWeight.w900, fontSize: 20),
       ),
       // ignore: prefer_const_constructors
       content: Text(
         'Fecha: $fecha\nServicio: $servicio\nBarbero: $barbero\nHora: $horaSeleccionada\n¿Desea agendar la cita?',
         style: const TextStyle(
-            fontFamily: 'Lato', fontWeight: FontWeight.w900, fontSize: 20),
+            fontFamily: 'OpenSans', fontWeight: FontWeight.w900, fontSize: 20),
       ),
       actions: [
         TextButton(

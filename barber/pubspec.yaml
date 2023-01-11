@@ -103,13 +103,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts:
-    - family: Barlow
+  fonts: 
+    - family: OpenSans
       fonts:
-        - asset: Assets/Fonts/Barlow-Thin.ttf
-    - family: Lato
-      fonts:
-        - asset: Assets/Fonts/Lato-Regular.ttf        
+        - asset: Assets/Fonts/OpenSans-Light.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

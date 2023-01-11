@@ -61,7 +61,7 @@ class _AdminUsersState extends State<AdminUsers> {
                             hintText: 'Nombre',
                             errorStyle: TextStyle(
                                 color: Colors.white,
-                                fontFamily: 'Lato',
+                                fontFamily: 'OpenSans',
                                 fontWeight: FontWeight.bold),
                             hintStyle: TextStyle(
                               color: Colors.white,
@@ -83,7 +83,7 @@ class _AdminUsersState extends State<AdminUsers> {
                             hintText: 'Correo',
                             errorStyle: TextStyle(
                                 color: Colors.white,
-                                fontFamily: 'Lato',
+                                fontFamily: 'OpenSans',
                                 fontWeight: FontWeight.bold),
                             hintStyle: TextStyle(
                               color: Colors.white,
@@ -161,7 +161,7 @@ class _AdminUsersState extends State<AdminUsers> {
                                             color:
                                                 Color.fromARGB(255, 104, 34, 4),
                                             fontWeight: FontWeight.bold,
-                                            fontFamily: 'Lato'),
+                                            fontFamily: 'OpenSans'),
                                       ),
                                     ),
                                   ),
@@ -180,7 +180,7 @@ class _AdminUsersState extends State<AdminUsers> {
                         'Usuarios Administradores',
                         style: TextStyle(
                           color: Colors.white,
-                          fontFamily: 'Lato',
+                          fontFamily: 'OpenSans',
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
                         ),
@@ -222,7 +222,7 @@ class _AdminUsersState extends State<AdminUsers> {
                                   child: const Text(
                                     'Eliminar',
                                     style: TextStyle(
-                                        fontFamily: 'Lato',
+                                        fontFamily: 'OpenSans',
                                         fontSize: 25,
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold),
@@ -249,7 +249,7 @@ class _AdminUsersState extends State<AdminUsers> {
                                         '${documentSnapshot['nombre']}',
                                         style: const TextStyle(
                                             color: Colors.white,
-                                            fontFamily: 'Lato',
+                                            fontFamily: 'OpenSans',
                                             fontWeight: FontWeight.bold,
                                             fontSize: 20),
                                       ),
@@ -257,7 +257,7 @@ class _AdminUsersState extends State<AdminUsers> {
                                         '${documentSnapshot['correo']}',
                                         style: const TextStyle(
                                             color: Colors.white,
-                                            fontFamily: 'Lato',
+                                            fontFamily: 'OpenSans',
                                             fontWeight: FontWeight.bold,
                                             fontSize: 19,
                                             overflow: TextOverflow.ellipsis),

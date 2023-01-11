@@ -125,7 +125,7 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                             'Seleccionar imagen',
                             style: TextStyle(
                                 color: Color.fromARGB(255, 104, 34, 4),
-                                fontFamily: 'Lato',
+                                fontFamily: 'OpenSans',
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -165,7 +165,7 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                             hintText: 'Nombre',
                             errorStyle: TextStyle(
                                 color: Colors.white,
-                                fontFamily: 'Lato',
+                                fontFamily: 'OpenSans',
                                 fontWeight: FontWeight.bold),
                             hintStyle: TextStyle(
                               color: Colors.white,
@@ -189,7 +189,7 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                             hintText: 'Precio',
                             errorStyle: TextStyle(
                                 color: Colors.white,
-                                fontFamily: 'Lato',
+                                fontFamily: 'OpenSans',
                                 fontWeight: FontWeight.bold),
                             hintStyle: TextStyle(
                               color: Colors.white,
@@ -258,7 +258,7 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                               _switchValue ? 'Disponible' : 'No disponible',
                               style: const TextStyle(
                                   color: Colors.white,
-                                  fontFamily: 'Lato',
+                                  fontFamily: 'OpenSans',
                                   fontWeight: FontWeight.bold),
                             ),
                             Switch.adaptive(
@@ -319,7 +319,7 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                                             color:
                                                 Color.fromARGB(255, 104, 34, 4),
                                             fontWeight: FontWeight.bold,
-                                            fontFamily: 'Lato'),
+                                            fontFamily: 'OpenSans'),
                                       ),
                                     ),
                                   ),
@@ -376,7 +376,7 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                                         documentSnapshot['nombre'],
                                         style: const TextStyle(
                                             color: Colors.white,
-                                            fontFamily: 'Lato',
+                                            fontFamily: 'OpenSans',
                                             fontWeight: FontWeight.bold,
                                             fontSize: 20,
                                             overflow: TextOverflow.ellipsis),
@@ -385,7 +385,7 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                                         '₡ ${documentSnapshot['precio'].toString()} / ${documentSnapshot['tipo']}',
                                         style: const TextStyle(
                                             color: Colors.white,
-                                            fontFamily: 'Lato',
+                                            fontFamily: 'OpenSans',
                                             fontWeight: FontWeight.bold,
                                             fontSize: 20,
                                             overflow: TextOverflow.ellipsis),
@@ -594,7 +594,7 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                       'Producto',
                       style: RadioOpciones.Producto == _opcionRadio
                           ? const TextStyle(
-                              color: Colors.black, fontFamily: 'Lato')
+                              color: Colors.black, fontFamily: 'OpenSans')
                           : const TextStyle(),
                     ),
                     Radio(
@@ -614,7 +614,7 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                       'Servicio',
                       style: RadioOpciones.Servicio == _opcionRadio
                           ? const TextStyle(
-                              color: Colors.black, fontFamily: 'Lato')
+                              color: Colors.black, fontFamily: 'OpenSans')
                           : const TextStyle(),
                     ),
                     Radio(
@@ -664,7 +664,7 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                     'Seleccionar imagen',
                     style: TextStyle(
                         color: Color.fromARGB(255, 104, 34, 4),
-                        fontFamily: 'Lato',
+                        fontFamily: 'OpenSans',
                         fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -687,7 +687,7 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                     'Editar',
                     style: TextStyle(
                         color: Color.fromARGB(255, 104, 34, 4),
-                        fontFamily: 'Lato',
+                        fontFamily: 'OpenSans',
                         fontWeight: FontWeight.bold),
                   ),
                   onPressed: () async {
@@ -794,7 +794,7 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
       title: Text(
         '¿Desea eliminar el $tipo?',
         style: const TextStyle(
-            fontFamily: 'Lato', fontWeight: FontWeight.w900, fontSize: 20),
+            fontFamily: 'OpenSans', fontWeight: FontWeight.w900, fontSize: 20),
       ),
       actions: [
         TextButton(
@@ -838,7 +838,7 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
       title: Text(
         '¿Desea eliminar el $tipo?',
         style: const TextStyle(
-            fontFamily: 'Lato', fontWeight: FontWeight.w900, fontSize: 20),
+            fontFamily: 'OpenSans', fontWeight: FontWeight.w900, fontSize: 20),
       ),
       actions: [
         TextButton(

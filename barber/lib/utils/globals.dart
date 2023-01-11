@@ -10,3 +10,6 @@ int precioServicio = 0;
 
 //
 bool isAdmin = false;
+
+//
+int totalDelDia = 0;

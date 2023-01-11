@@ -108,7 +108,7 @@ class _BarberCrudState extends State<BarberCrud> {
                             hintText: 'Nombre',
                             errorStyle: TextStyle(
                                 color: Colors.white,
-                                fontFamily: 'Lato',
+                                fontFamily: 'OpenSans',
                                 fontWeight: FontWeight.bold),
                             hintStyle: TextStyle(
                               color: Colors.white,
@@ -131,7 +131,7 @@ class _BarberCrudState extends State<BarberCrud> {
                             hintText: 'Descripción',
                             errorStyle: TextStyle(
                                 color: Colors.white,
-                                fontFamily: 'Lato',
+                                fontFamily: 'OpenSans',
                                 fontWeight: FontWeight.bold),
                             hintStyle: TextStyle(
                               color: Colors.white,
@@ -154,7 +154,7 @@ class _BarberCrudState extends State<BarberCrud> {
                             hintText: 'Correo electrónico',
                             errorStyle: TextStyle(
                                 color: Colors.white,
-                                fontFamily: 'Lato',
+                                fontFamily: 'OpenSans',
                                 fontWeight: FontWeight.bold),
                             hintStyle: TextStyle(
                               color: Colors.white,
@@ -169,7 +169,7 @@ class _BarberCrudState extends State<BarberCrud> {
                               _switchValue ? 'Disponible' : 'No disponible',
                               style: const TextStyle(
                                   color: Colors.white,
-                                  fontFamily: 'Lato',
+                                  fontFamily: 'OpenSans',
                                   fontWeight: FontWeight.bold),
                             ),
                             const Padding(padding: EdgeInsets.only(right: 20)),
@@ -204,7 +204,7 @@ class _BarberCrudState extends State<BarberCrud> {
                                 'Seleccionar imagen',
                                 style: TextStyle(
                                     color: Color.fromARGB(255, 104, 34, 4),
-                                    fontFamily: 'Lato',
+                                    fontFamily: 'OpenSans',
                                     fontWeight: FontWeight.bold),
                               ),
                             ),
@@ -266,7 +266,7 @@ class _BarberCrudState extends State<BarberCrud> {
                                             color:
                                                 Color.fromARGB(255, 104, 34, 4),
                                             fontWeight: FontWeight.bold,
-                                            fontFamily: 'Lato'),
+                                            fontFamily: 'OpenSans'),
                                       ),
                                     ),
                                   ),
@@ -445,7 +445,7 @@ class _BarberCrudState extends State<BarberCrud> {
                     'Seleccionar imagen',
                     style: TextStyle(
                         color: Color.fromARGB(255, 104, 34, 4),
-                        fontFamily: 'Lato',
+                        fontFamily: 'OpenSans',
                         fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -468,7 +468,7 @@ class _BarberCrudState extends State<BarberCrud> {
                     'Editar',
                     style: TextStyle(
                         color: Color.fromARGB(255, 104, 34, 4),
-                        fontFamily: 'Lato',
+                        fontFamily: 'OpenSans',
                         fontWeight: FontWeight.bold),
                   ),
                   onPressed: () async {
@@ -564,13 +564,13 @@ class _BarberCrudState extends State<BarberCrud> {
       title: const Text(
         '¿Desea eliminar el barbero?',
         style: TextStyle(
-            fontFamily: 'Lato', fontWeight: FontWeight.w900, fontSize: 20),
+            fontFamily: 'OpenSans', fontWeight: FontWeight.w900, fontSize: 20),
       ),
       // ignore: prefer_const_constructors
       content: Text(
         'Podria perderse informacion de citas...',
         style: const TextStyle(
-            fontFamily: 'Lato', fontWeight: FontWeight.w900, fontSize: 20),
+            fontFamily: 'OpenSans', fontWeight: FontWeight.w900, fontSize: 20),
       ),
       actions: [
         TextButton(
@@ -613,13 +613,13 @@ class _BarberCrudState extends State<BarberCrud> {
       title: const Text(
         '¿Desea eliminar el barbero?',
         style: TextStyle(
-            fontFamily: 'Lato', fontWeight: FontWeight.w900, fontSize: 20),
+            fontFamily: 'OpenSans', fontWeight: FontWeight.w900, fontSize: 20),
       ),
       // ignore: prefer_const_constructors
       content: Text(
         'Podria perderse informacion de citas...',
         style: const TextStyle(
-            fontFamily: 'Lato', fontWeight: FontWeight.w900, fontSize: 20),
+            fontFamily: 'OpenSans', fontWeight: FontWeight.w900, fontSize: 20),
       ),
       actions: [
         TextButton(
@@ -701,7 +701,7 @@ class _BarberCrudState extends State<BarberCrud> {
                                 documentSnapshot['nombre'],
                                 style: const TextStyle(
                                     color: Colors.white,
-                                    fontFamily: 'Lato',
+                                    fontFamily: 'OpenSans',
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,
                                     overflow: TextOverflow.ellipsis),
@@ -710,7 +710,7 @@ class _BarberCrudState extends State<BarberCrud> {
                                 documentSnapshot['descripcion'],
                                 style: const TextStyle(
                                     color: Colors.white,
-                                    fontFamily: 'Lato',
+                                    fontFamily: 'OpenSans',
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,
                                     overflow: TextOverflow.ellipsis),

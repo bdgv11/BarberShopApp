@@ -52,7 +52,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 30,
-                    fontFamily: 'Lato',
+                    fontFamily: 'OpenSans',
                   ),
                 ),
                 const Padding(padding: EdgeInsets.all(30)),
@@ -70,7 +70,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       fontWeight: FontWeight.bold,
                     ),
                     hintStyle:
-                        TextStyle(color: Colors.white, fontFamily: 'Lato'),
+                        TextStyle(color: Colors.white, fontFamily: 'OpenSans'),
                   ),
                 ),
                 const Padding(padding: EdgeInsets.all(15)),
@@ -108,7 +108,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                 style: TextStyle(
                                     color: Color.fromARGB(255, 104, 34, 4),
                                     fontWeight: FontWeight.bold,
-                                    fontFamily: 'Lato'),
+                                    fontFamily: 'OpenSans'),
                               ),
                             ),
                           )
@@ -119,7 +119,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   children: [
                     const Text(
                       '¿La recordaste? ',
-                      style: TextStyle(color: Colors.white, fontFamily: 'Lato'),
+                      style: TextStyle(
+                          color: Colors.white, fontFamily: 'OpenSans'),
                     ),
                     TextButton(
                       onPressed: () {
@@ -135,7 +136,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           textStyle: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
-                            fontFamily: 'Lato',
+                            fontFamily: 'OpenSans',
                           ),
                         ),
                       ),
@@ -165,7 +166,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           content: Text(
             'Correo enviado.',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 25, fontFamily: 'Lato'),
+            style: TextStyle(fontSize: 25, fontFamily: 'OpenSans'),
           ),
         ),
       );
@@ -177,7 +178,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           content: Text(
             'No existe ese correo.',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 25, fontFamily: 'Lato'),
+            style: TextStyle(fontSize: 25, fontFamily: 'OpenSans'),
           ),
         ),
       );
