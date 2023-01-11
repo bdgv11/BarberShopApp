@@ -113,7 +113,6 @@ class _DrawerUserWidgetState extends State<DrawerUserWidget> {
               ),
             ),
           ),
-          const Divider(),
           if (globals.isAdmin)
             ListTile(
               leading: const Icon(
@@ -138,7 +137,6 @@ class _DrawerUserWidgetState extends State<DrawerUserWidget> {
                 );
               },
             ),
-          const Divider(),
           if (globals.isAdmin)
             ListTile(
               leading: const Icon(

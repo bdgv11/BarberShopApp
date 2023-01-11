@@ -28,7 +28,7 @@ class Appointment {
   Map<String, dynamic> toJson() => {
         'barbero': barbero,
         'idCliente': idCliente,
-        'disDisponible': diaDisponible,
+        'diaDisponible': diaDisponible,
         'fecha': fecha,
         'hora': hora,
         'horaDisponible': horaDisponible,

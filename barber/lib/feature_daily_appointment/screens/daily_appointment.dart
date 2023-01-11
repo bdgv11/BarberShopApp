@@ -1,6 +1,10 @@
+import 'dart:io';
+
+import 'package:animate_do/animate_do.dart';
 import 'package:barber/feature_home/widgets/drawer_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:barber/utils/globals.dart' as globals;
 
@@ -161,49 +165,93 @@ class _DailyReportState extends State<DailyReport> {
 
                             globals.totalDelDia = montoTotal;
 
-                            return Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              color: Colors.black,
-                              child: ListTile(
-                                leading: Text(
-                                  '${documentSnapshot['hora']}',
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'OpenSans',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15),
+                            return FadeIn(
+                              delay: const Duration(milliseconds: 100),
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
-                                title: Text(
-                                  documentSnapshot['tipoServicio'] != ''
-                                      ? '${documentSnapshot['tipoServicio']} / ${documentSnapshot['precio']}'
-                                      : 'Espacio libre',
-                                  style: const TextStyle(
+                                elevation: 5,
+                                color: documentSnapshot['estadoCita'] ==
+                                        'Finalizada'
+                                    ? Colors.lightGreen
+                                    : Colors.black45,
+                                child: ListTile(
+                                  leading: Text(
+                                    '${documentSnapshot['hora']}',
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontFamily: 'OpenSans',
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 15),
-                                ),
-                                subtitle: Text(
-                                  '${documentSnapshot['nombreCliente']}\n${documentSnapshot['barbero']}',
-                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  title: Text(
+                                    documentSnapshot['tipoServicio'] != ''
+                                        ? '${documentSnapshot['tipoServicio']} / ${documentSnapshot['precio']}'
+                                        : 'Espacio libre',
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontFamily: 'OpenSans',
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 15),
-                                ),
-                                isThreeLine: true,
-                                dense: true,
-                                trailing: Text(
-                                  documentSnapshot['estadoCita'] == 'Creada'
-                                      ? ''
-                                      : documentSnapshot['estadoCita'],
-                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  subtitle: Text(
+                                    '${documentSnapshot['nombreCliente']}\n${documentSnapshot['barbero']}',
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontFamily: 'OpenSans',
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 15),
+                                      fontSize: 15,
+                                      overflow: TextOverflow.visible,
+                                    ),
+                                  ),
+                                  isThreeLine: true,
+                                  trailing: Text(
+                                    documentSnapshot['estadoCita'] == 'Creada'
+                                        ? ''
+                                        : documentSnapshot['estadoCita'],
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'OpenSans',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return Platform.isIOS
+                                            ? cupertinoDialog(
+                                                context,
+                                                documentSnapshot[
+                                                    'tipoServicio'],
+                                                documentSnapshot['barbero'],
+                                                documentSnapshot['hora'],
+                                                documentSnapshot.id,
+                                                documentSnapshot[
+                                                    'nombreCliente'],
+                                                documentSnapshot['precio'],
+                                              ) //cupertinoDialog(context)
+                                            : androidDialog(
+                                                context,
+                                                documentSnapshot[
+                                                    'tipoServicio'],
+                                                documentSnapshot['barbero'],
+                                                documentSnapshot['hora'],
+                                                documentSnapshot.id,
+                                                documentSnapshot[
+                                                    'nombreCliente'],
+                                                documentSnapshot['precio'],
+                                              ); //androidDialog(context)
+                                      },
+                                    );
+                                  },
                                 ),
                               ),
                             );
@@ -227,6 +275,182 @@ class _DailyReportState extends State<DailyReport> {
         ),
       ),
       bottomNavigationBar: BottomNavigationWidget(user: _user),
+    );
+  }
+
+  Widget cupertinoDialog(BuildContext context, String servicio, String barbero,
+      String hora, String id, String cliente, int precio) {
+    return CupertinoAlertDialog(
+      title: const Text(
+        '¿Desea finalizar, liberar o poner la cita como agendada nuevamente?',
+        style: TextStyle(
+            fontFamily: 'OpenSans', fontWeight: FontWeight.w900, fontSize: 20),
+      ),
+      // ignore: prefer_const_constructors
+      content: Text(
+        'Cliente: $cliente\nServicio: $servicio\nBarbero: $barbero\nHora: $hora\nPrecio: $precio\n',
+        style: const TextStyle(
+            fontFamily: 'OpenSans',
+            fontWeight: FontWeight.w900,
+            fontSize: 15,
+            overflow: TextOverflow.visible),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            FirebaseFirestore.instance.collection('Cita').doc(id).update(
+              {
+                'estadoCita': 'Creada',
+                'horaDisponible': true,
+                'idCliente': '',
+                'nombreCliente': '',
+                'precio': 0,
+                'tipoServicio': ''
+              },
+            );
+            Navigator.of(context).pop();
+          },
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'Liberar espacio',
+              style: TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontWeight: FontWeight.w900,
+                  fontSize: 15,
+                  overflow: TextOverflow.ellipsis),
+            ),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            FirebaseFirestore.instance
+                .collection('Cita')
+                .doc(id)
+                .update({'estadoCita': 'Agendada'});
+            Navigator.of(context).pop();
+          },
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'Agendar nuevamente',
+              style: TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontWeight: FontWeight.w900,
+                  fontSize: 15,
+                  overflow: TextOverflow.visible),
+            ),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            FirebaseFirestore.instance
+                .collection('Cita')
+                .doc(id)
+                .update({'estadoCita': 'Finalizada', 'horaDisponible': false});
+            Navigator.of(context).pop();
+          },
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'Finalizar Cita',
+              style: TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontWeight: FontWeight.w900,
+                  fontSize: 15,
+                  overflow: TextOverflow.ellipsis),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget androidDialog(BuildContext context, String servicio, String barbero,
+      String hora, String id, String cliente, int precio) {
+    return AlertDialog(
+      title: const Text(
+        '¿Desea finalizar, liberar o poner la cita como agendada nuevamente?',
+        style: TextStyle(
+            fontFamily: 'OpenSans', fontWeight: FontWeight.w900, fontSize: 20),
+      ),
+      // ignore: prefer_const_constructors
+      content: Text(
+        'Cliente: $cliente\nServicio: $servicio\nBarbero: $barbero\nHora: $hora\nPrecio: $precio\n',
+        style: const TextStyle(
+            fontFamily: 'OpenSans',
+            fontWeight: FontWeight.w900,
+            fontSize: 15,
+            overflow: TextOverflow.visible),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            FirebaseFirestore.instance.collection('Cita').doc(id).update(
+              {
+                'estadoCita': 'Creada',
+                'horaDisponible': true,
+                'idCliente': '',
+                'nombreCliente': '',
+                'precio': 0,
+                'tipoServicio': ''
+              },
+            );
+            Navigator.of(context).pop();
+          },
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'Liberar espacio',
+              style: TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontWeight: FontWeight.w900,
+                  fontSize: 15,
+                  overflow: TextOverflow.ellipsis),
+            ),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            FirebaseFirestore.instance
+                .collection('Cita')
+                .doc(id)
+                .update({'estadoCita': 'Agendada'});
+            Navigator.of(context).pop();
+          },
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'Agendar nuevamente',
+              style: TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontWeight: FontWeight.w900,
+                  fontSize: 15,
+                  overflow: TextOverflow.visible),
+            ),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            FirebaseFirestore.instance
+                .collection('Cita')
+                .doc(id)
+                .update({'estadoCita': 'Finalizada', 'horaDisponible': false});
+            Navigator.of(context).pop();
+          },
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'Finalizar Cita',
+              style: TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontWeight: FontWeight.w900,
+                  fontSize: 15,
+                  overflow: TextOverflow.ellipsis),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

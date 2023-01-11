@@ -256,26 +256,30 @@ class _MyWidgetState extends State<HomePageScreen> {
                         return Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Center(
-                              child: FadeIn(
-                                delay: Duration(milliseconds: 100 * index),
-                                child: Card(
-                                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(14)),
-                                  child: Stack(
-                                    alignment: Alignment.bottomCenter,
-                                    children: [
-                                      Ink.image(
-                                        image: NetworkImage(
-                                          documentSnapshot['imageURL'],
+                            SizedBox(
+                              height: 120,
+                              child: Center(
+                                child: FadeIn(
+                                  delay: Duration(milliseconds: 100 * index),
+                                  child: Card(
+                                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(14)),
+                                    child: Stack(
+                                      alignment: Alignment.bottomCenter,
+                                      children: [
+                                        Ink.image(
+                                          image: NetworkImage(
+                                            documentSnapshot['imageURL'],
+                                          ),
+                                          colorFilter: ColorFilters.greyScale,
+                                          height: 130,
+                                          width: 180,
+                                          fit: BoxFit.fill,
                                         ),
-                                        colorFilter: ColorFilters.greyScale,
-                                        height: 130,
-                                        width: 180,
-                                        fit: BoxFit.fill,
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
