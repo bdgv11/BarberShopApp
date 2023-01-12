@@ -16,3 +16,6 @@ double totalFinalizadas = 0;
 double totalGeneralDelDia = 0;
 int cantCitas = 0;
 int cantCitasFinalizadas = 0;
+
+// History
+int cantHistCitas = 0;

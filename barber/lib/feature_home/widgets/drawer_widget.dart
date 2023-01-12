@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:barber/utils/globals.dart' as globals;
 
+import '../../feature_history/screens/history.dart';
+
 class DrawerUserWidget extends StatefulWidget {
   final User user;
   const DrawerUserWidget({super.key, required this.user});
@@ -99,19 +101,28 @@ class _DrawerUserWidgetState extends State<DrawerUserWidget> {
             ),
           ),
           const Divider(),
-          const ListTile(
-            leading: Icon(
+          ListTile(
+            leading: const Icon(
               Icons.history,
               size: 40,
               color: Colors.teal,
             ),
-            title: Text(
+            title: const Text(
               'Historial',
               style: TextStyle(
                 fontSize: 20,
                 fontFamily: 'OpenSans',
               ),
             ),
+            onTap: () {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => UserHistory(
+                    user: _user,
+                  ),
+                ),
+              );
+            },
           ),
           if (globals.isAdmin)
             ListTile(
