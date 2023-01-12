@@ -24,7 +24,7 @@ class _DailyReportState extends State<DailyReport> {
   @override
   void initState() {
     _user = widget.user;
-    globals.totalDelDia = 0;
+    infoMontoTotal();
     super.initState();
   }
 
@@ -58,7 +58,8 @@ class _DailyReportState extends State<DailyReport> {
     DateTime dateTimeFecha = DateTime.parse(fecha);
     dateTimeFecha.millisecondsSinceEpoch;
     //
-    int montoTotal = 0;
+
+    //
     return Scaffold(
       drawer: DrawerUserWidget(user: _user),
       appBar: AppBar(backgroundColor: Colors.black87),
@@ -159,14 +160,8 @@ class _DailyReportState extends State<DailyReport> {
                             final DocumentSnapshot documentSnapshot =
                                 snapshot.data!.docs[index];
 
-                            int total = documentSnapshot['precio'];
-
-                            montoTotal = montoTotal + total;
-
-                            globals.totalDelDia = montoTotal;
-
                             return FadeIn(
-                              delay: const Duration(milliseconds: 100),
+                              //delay: const Duration(milliseconds: 100),
                               child: Card(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -262,13 +257,103 @@ class _DailyReportState extends State<DailyReport> {
                     },
                   ),
                 ),
-                const SizedBox(
-                  height: 20,
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Total de citas:',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'OpenSans',
+                              fontSize: 20,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Text(
+                            globals.cantCitas.toString(),
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'OpenSans',
+                                fontSize: 20,
+                                overflow: TextOverflow.ellipsis),
+                          ),
+                          const Text(
+                            'Citas finalizadas:',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'OpenSans',
+                              fontSize: 20,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Text(
+                            globals.cantCitasFinalizadas.toString(),
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'OpenSans',
+                                fontSize: 20,
+                                overflow: TextOverflow.ellipsis),
+                          )
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Monto total para hoy:',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'OpenSans',
+                                fontSize: 20,
+                                overflow: TextOverflow.ellipsis),
+                          ),
+                          Text(
+                            '₡ ${globals.totalGeneralDelDia.toString()}',
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'OpenSans',
+                                fontSize: 20,
+                                overflow: TextOverflow.ellipsis),
+                          )
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Monto de citas terminadas:',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'OpenSans',
+                              fontSize: 20,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Text(
+                            '₡ ${globals.totalFinalizadas.toString()}',
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'OpenSans',
+                                fontSize: 20,
+                                overflow: TextOverflow.ellipsis),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [Text(globals.totalDelDia.toString())],
-                )
               ],
             ),
           ),
@@ -308,6 +393,8 @@ class _DailyReportState extends State<DailyReport> {
                 'tipoServicio': ''
               },
             );
+
+            infoMontoTotal();
             Navigator.of(context).pop();
           },
           child: const Padding(
@@ -328,6 +415,7 @@ class _DailyReportState extends State<DailyReport> {
                 .collection('Cita')
                 .doc(id)
                 .update({'estadoCita': 'Agendada'});
+            infoMontoTotal();
             Navigator.of(context).pop();
           },
           child: const Padding(
@@ -348,6 +436,8 @@ class _DailyReportState extends State<DailyReport> {
                 .collection('Cita')
                 .doc(id)
                 .update({'estadoCita': 'Finalizada', 'horaDisponible': false});
+
+            infoMontoTotal();
             Navigator.of(context).pop();
           },
           child: const Padding(
@@ -396,6 +486,8 @@ class _DailyReportState extends State<DailyReport> {
                 'tipoServicio': ''
               },
             );
+
+            infoMontoTotal();
             Navigator.of(context).pop();
           },
           child: const Padding(
@@ -416,6 +508,7 @@ class _DailyReportState extends State<DailyReport> {
                 .collection('Cita')
                 .doc(id)
                 .update({'estadoCita': 'Agendada'});
+            infoMontoTotal();
             Navigator.of(context).pop();
           },
           child: const Padding(
@@ -436,6 +529,7 @@ class _DailyReportState extends State<DailyReport> {
                 .collection('Cita')
                 .doc(id)
                 .update({'estadoCita': 'Finalizada', 'horaDisponible': false});
+            infoMontoTotal();
             Navigator.of(context).pop();
           },
           child: const Padding(
@@ -452,5 +546,70 @@ class _DailyReportState extends State<DailyReport> {
         ),
       ],
     );
+  }
+
+  //
+  void infoMontoTotal() async {
+    String getFormattedDate(String year, String month, String day) {
+      String fecha;
+      String m = '';
+      String d = '';
+      if (month.length == 1) {
+        m = '0$month';
+      } else {
+        m = month;
+      }
+      if (day.length == 1) {
+        d = '0$day';
+      } else {
+        d = day;
+      }
+      fecha = '$year-$m-$d';
+      return fecha;
+    }
+
+    String fecha = getFormattedDate(DateTime.now().year.toString(),
+        DateTime.now().month.toString(), DateTime.now().day.toString());
+
+    DateTime dateTimeFecha = DateTime.parse(fecha);
+    dateTimeFecha.millisecondsSinceEpoch;
+
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('Cita')
+        .where('fecha', isEqualTo: Timestamp.fromDate(dateTimeFecha))
+        //.where('estadoCita', isEqualTo: 'Finalizada')
+        .get();
+
+    setState(() {
+      globals.totalFinalizadas = 0;
+      globals.totalGeneralDelDia = 0;
+      globals.cantCitas = 0;
+      globals.cantCitasFinalizadas = 0;
+    });
+
+    for (var doc in querySnapshot.docs) {
+      // Getting data directly
+
+      if (doc.get('estadoCita') == 'Finalizada') {
+        setState(() {
+          int precio = doc.get('precio');
+          globals.totalFinalizadas += precio;
+          globals.cantCitasFinalizadas++;
+        });
+      }
+
+      if (doc.get('estadoCita') != 'Creada') {
+        setState(() {
+          int precio = doc.get('precio');
+          globals.totalGeneralDelDia += precio;
+          globals.cantCitas++;
+        });
+      }
+      //String name = doc.get('name');
+
+      // Getting data from map
+      /*Map<String, dynamic> data = doc.data();
+        int age = data['age'];*/
+    }
   }
 }

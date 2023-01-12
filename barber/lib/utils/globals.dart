@@ -12,4 +12,7 @@ int precioServicio = 0;
 bool isAdmin = false;
 
 //
-int totalDelDia = 0;
+double totalFinalizadas = 0;
+double totalGeneralDelDia = 0;
+int cantCitas = 0;
+int cantCitasFinalizadas = 0;
