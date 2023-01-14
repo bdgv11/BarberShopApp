@@ -5,6 +5,7 @@ import 'package:barber/utils/validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -186,11 +187,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       });
 
                                       if (user != null) {
+                                        SharedPreferences pref =
+                                            await SharedPreferences
+                                                .getInstance();
+                                        pref.setString(
+                                            "email", user.email.toString());
+                                        pref.setString("userId", user.uid);
+                                        pref.setString("name",
+                                            user.displayName.toString());
                                         if (!mounted) return;
                                         Navigator.of(context).pushReplacement(
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                HomePageScreen(user: user),
+                                                const HomePageScreen(),
                                           ),
                                         );
                                       } else {

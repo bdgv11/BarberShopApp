@@ -48,7 +48,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
 
         if (_currentIndex == 0) {
           Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (context) => HomePageScreen(user: _user),
+            builder: (context) => const HomePageScreen(),
           ));
         }
         if (_currentIndex == 1) {
@@ -58,7 +58,7 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
         }
         if (_currentIndex == 2) {
           Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (context) => HomePageScreen(user: _user),
+            builder: (context) => const HomePageScreen(),
           ));
         }
       },

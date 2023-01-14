@@ -9,8 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:barber/utils/globals.dart' as globals;
 
 class HomePageScreen extends StatefulWidget {
-  final User user;
-  const HomePageScreen({super.key, required this.user});
+  const HomePageScreen({super.key});
 
   @override
   State<HomePageScreen> createState() => _MyWidgetState();
@@ -25,7 +24,11 @@ class _MyWidgetState extends State<HomePageScreen> {
   /// > The initState() function is called when the widget is first created
   @override
   void initState() {
-    _user = widget.user;
+    _user = FirebaseAuth.instance.currentUser!;
+    print(_user.uid);
+    print(_user.displayName);
+    print(_user.email);
+
     globals.servicioSeleccionado = '';
     Firebase.initializeApp();
     validateAdminUser();

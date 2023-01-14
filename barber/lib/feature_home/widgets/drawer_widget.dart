@@ -4,6 +4,7 @@ import 'package:barber/feature_login/screens/login_barber_shop.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:barber/utils/globals.dart' as globals;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../feature_history/screens/history.dart';
 
@@ -186,9 +187,14 @@ class _DrawerUserWidgetState extends State<DrawerUserWidget> {
                 fontFamily: 'OpenSans',
               ),
             ),
-            onTap: () {
+            onTap: () async {
               globals.isAdmin = false;
               FirebaseAuth.instance.signOut();
+              SharedPreferences pref = await SharedPreferences.getInstance();
+              pref.remove("email");
+              pref.remove("userId");
+              pref.remove("name");
+              if (!mounted) return;
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
                   builder: (context) => const LoginBarberShop(),

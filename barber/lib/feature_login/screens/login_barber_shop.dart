@@ -4,6 +4,7 @@ import 'package:barber/firebase/firebase_authentication.dart';
 import 'package:barber/utils/validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../feature_forgot_password/screens/forgot_password.dart';
 
 import '../../firebase/google_authentication.dart';
@@ -192,11 +193,18 @@ class _MyWidgetState extends State<LoginBarberShop> {
                                   /// Checking if the user is not null. If the user is not null, it
                                   /// is navigating to the HomePageScreen.
                                   if (user != null) {
+                                    SharedPreferences pref =
+                                        await SharedPreferences.getInstance();
+                                    pref.setString(
+                                        "email", user.email.toString());
+                                    pref.setString("userId", user.uid);
+                                    pref.setString(
+                                        "name", user.displayName.toString());
                                     if (!mounted) return;
                                     Navigator.of(context)
                                         .pushReplacement(MaterialPageRoute(
                                       builder: (context) =>
-                                          HomePageScreen(user: user),
+                                          const HomePageScreen(),
                                     ));
                                   } else {
                                     if (!mounted) return;
@@ -303,12 +311,18 @@ class _MyWidgetState extends State<LoginBarberShop> {
                                   });
 
                                   if (user != null) {
+                                    SharedPreferences pref =
+                                        await SharedPreferences.getInstance();
+                                    pref.setString(
+                                        "email", user.email.toString());
+                                    pref.setString("userId", user.uid);
+                                    pref.setString(
+                                        "name", user.displayName.toString());
                                     if (!mounted) return;
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                        builder: (context) => HomePageScreen(
-                                          user: user,
-                                        ),
+                                        builder: (context) =>
+                                            const HomePageScreen(),
                                       ),
                                     );
                                   }
