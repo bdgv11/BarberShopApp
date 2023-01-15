@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:animate_do/animate_do.dart';
 import 'package:barber/feature_cruds/models/product_service.dart';
+import 'package:barber/utils/general.dart';
 import 'package:barber/utils/validator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -62,17 +63,7 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
       body: Container(
         height: heightMediaQuery,
         width: widthMediaQuery,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [
-              Colors.black,
-              Color.fromARGB(255, 104, 34, 4),
-              Color.fromARGB(255, 187, 194, 188),
-            ],
-          ),
-        ),
+        decoration: myBoxDecoration,
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(12),
@@ -121,12 +112,9 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ),
-                          child: const Text(
+                          child: Text(
                             'Seleccionar imagen',
-                            style: TextStyle(
-                                color: Color.fromARGB(255, 104, 34, 4),
-                                fontFamily: 'OpenSans',
-                                fontWeight: FontWeight.bold),
+                            style: myButtonTextStyle,
                           ),
                         ),
                         const Padding(padding: EdgeInsets.all(12)),
@@ -151,49 +139,49 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                         ),
                         const Padding(padding: EdgeInsets.all(12)),
                         TextFormField(
-                          style: const TextStyle(color: Colors.white),
+                          style: myTextFieldStyle,
+                          maxLength: 23,
                           validator: (value) => Validator.validateName(
                               name: _nameController.text),
                           controller: _nameController,
                           focusNode: _focusName,
-                          decoration: const InputDecoration(
-                            icon: Icon(
+                          cursorColor: Colors.white,
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(
                               Icons.paste_outlined,
                               size: 25,
                               color: Colors.white,
                             ),
                             hintText: 'Nombre',
-                            errorStyle: TextStyle(
+                            errorStyle: const TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'OpenSans',
                                 fontWeight: FontWeight.bold),
-                            hintStyle: TextStyle(
-                              color: Colors.white,
-                            ),
+                            hintStyle: myHintStyle,
                           ),
                         ),
                         const Padding(padding: EdgeInsets.all(12)),
                         TextFormField(
                           keyboardType: TextInputType.number,
-                          style: const TextStyle(color: Colors.white),
+                          style: myTextFieldStyle,
                           validator: (value) => Validator.validateName(
                               name: _priceController.text),
                           controller: _priceController,
                           focusNode: _focusPrice,
-                          decoration: const InputDecoration(
-                            icon: Icon(
+                          cursorColor: Colors.white,
+                          decoration: InputDecoration(
+                            prefixIconColor: Colors.white,
+                            icon: const Icon(
                               Icons.price_change_outlined,
                               size: 25,
                               color: Colors.white,
                             ),
                             hintText: 'Precio',
-                            errorStyle: TextStyle(
+                            errorStyle: const TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'OpenSans',
                                 fontWeight: FontWeight.bold),
-                            hintStyle: TextStyle(
-                              color: Colors.white,
-                            ),
+                            hintStyle: myHintStyle,
                           ),
                         ),
                         const Padding(padding: EdgeInsets.all(12)),
@@ -313,13 +301,9 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                                           }
                                         }
                                       },
-                                      child: const Text(
+                                      child: Text(
                                         'Agregar',
-                                        style: TextStyle(
-                                            color:
-                                                Color.fromARGB(255, 104, 34, 4),
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'OpenSans'),
+                                        style: myButtonTextStyle,
                                       ),
                                     ),
                                   ),
@@ -374,21 +358,11 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                                       ),
                                       title: Text(
                                         documentSnapshot['nombre'],
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontFamily: 'OpenSans',
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20,
-                                            overflow: TextOverflow.ellipsis),
+                                        style: myTextH1,
                                       ),
                                       subtitle: Text(
                                         '₡ ${documentSnapshot['precio'].toString()} / ${documentSnapshot['tipo']}',
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontFamily: 'OpenSans',
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20,
-                                            overflow: TextOverflow.ellipsis),
+                                        style: myTextH1,
                                       ),
                                       isThreeLine: true,
                                       dense: true,
@@ -580,6 +554,7 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                 TextField(
                   controller: _nameEditController,
                   decoration: const InputDecoration(labelText: 'Nombre'),
+                  maxLength: 23,
                 ),
                 TextField(
                   controller: _priceEditController,
@@ -660,12 +635,9 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Seleccionar imagen',
-                    style: TextStyle(
-                        color: Color.fromARGB(255, 104, 34, 4),
-                        fontFamily: 'OpenSans',
-                        fontWeight: FontWeight.bold),
+                    style: myButtonTextStyle,
                   ),
                 ),
                 Text(
@@ -683,12 +655,9 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Editar',
-                    style: TextStyle(
-                        color: Color.fromARGB(255, 104, 34, 4),
-                        fontFamily: 'OpenSans',
-                        fontWeight: FontWeight.bold),
+                    style: myButtonTextStyle,
                   ),
                   onPressed: () async {
                     //
@@ -793,8 +762,7 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
     return CupertinoAlertDialog(
       title: Text(
         '¿Desea eliminar el $tipo?',
-        style: const TextStyle(
-            fontFamily: 'OpenSans', fontWeight: FontWeight.w900, fontSize: 20),
+        style: myShowDialogStyle,
       ),
       actions: [
         TextButton(
@@ -837,8 +805,7 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
     return AlertDialog(
       title: Text(
         '¿Desea eliminar el $tipo?',
-        style: const TextStyle(
-            fontFamily: 'OpenSans', fontWeight: FontWeight.w900, fontSize: 20),
+        style: myShowDialogStyle,
       ),
       actions: [
         TextButton(

@@ -1,8 +1,10 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:barber/feature_cruds/models/admin.dart';
+import 'package:barber/utils/general.dart';
 import 'package:barber/utils/validator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
+import 'admin_list.dart';
 
 class AdminUsers extends StatefulWidget {
   const AdminUsers({super.key});
@@ -26,17 +28,7 @@ class _AdminUsersState extends State<AdminUsers> {
       body: Container(
         height: heightMediaQuery,
         width: widthMediaQuery,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [
-              Colors.black,
-              Color.fromARGB(255, 104, 34, 4),
-              Color.fromARGB(255, 187, 194, 188),
-            ],
-          ),
-        ),
+        decoration: myBoxDecoration,
         child: SingleChildScrollView(
           child: Center(
             child: Column(
@@ -48,46 +40,43 @@ class _AdminUsersState extends State<AdminUsers> {
                     child: Column(
                       children: [
                         TextFormField(
-                          style: const TextStyle(color: Colors.white),
+                          style: myTextFieldStyle,
                           validator: (value) => Validator.validateName(
                               name: _nameFieldController.text.trim()),
                           controller: _nameFieldController,
-                          decoration: const InputDecoration(
-                            icon: Icon(
+                          decoration: InputDecoration(
+                            icon: const Icon(
                               Icons.person_add_alt_1_outlined,
                               size: 25,
                               color: Colors.white,
                             ),
                             hintText: 'Nombre',
-                            errorStyle: TextStyle(
+                            errorStyle: const TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'OpenSans',
                                 fontWeight: FontWeight.bold),
-                            hintStyle: TextStyle(
-                              color: Colors.white,
-                            ),
+                            hintStyle: myHintStyle,
                           ),
                         ),
                         const Padding(padding: EdgeInsets.all(8)),
                         TextFormField(
-                          style: const TextStyle(color: Colors.white),
+                          style: myTextFieldStyle,
                           validator: (value) => Validator.validateEmail(
                               email: _emailFieldController.text.trim()),
                           controller: _emailFieldController,
-                          decoration: const InputDecoration(
-                            icon: Icon(
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: InputDecoration(
+                            icon: const Icon(
                               Icons.email_outlined,
                               size: 25,
                               color: Colors.white,
                             ),
                             hintText: 'Correo',
-                            errorStyle: TextStyle(
+                            errorStyle: const TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'OpenSans',
                                 fontWeight: FontWeight.bold),
-                            hintStyle: TextStyle(
-                              color: Colors.white,
-                            ),
+                            hintStyle: myHintStyle,
                           ),
                         ),
                         const Padding(padding: EdgeInsets.all(8)),
@@ -95,8 +84,7 @@ class _AdminUsersState extends State<AdminUsers> {
                           children: [
                             Text(
                               _disponible ? 'Disponible' : 'No disponible',
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 15),
+                              style: mySmallStyle,
                             ),
                             const Padding(padding: EdgeInsets.only(right: 20)),
                             Switch.adaptive(
@@ -155,13 +143,9 @@ class _AdminUsersState extends State<AdminUsers> {
                                           });
                                         }
                                       },
-                                      child: const Text(
+                                      child: Text(
                                         'Agregar',
-                                        style: TextStyle(
-                                            color:
-                                                Color.fromARGB(255, 104, 34, 4),
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'OpenSans'),
+                                        style: myButtonTextStyle,
                                       ),
                                     ),
                                   ),
@@ -175,129 +159,15 @@ class _AdminUsersState extends State<AdminUsers> {
                   padding: const EdgeInsets.all(18.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Text(
                         'Usuarios Administradores',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'OpenSans',
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: myTitle25Style,
                       ),
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: StreamBuilder(
-                    stream: FirebaseFirestore.instance
-                        .collection('Administrador')
-                        .where('habilitado', isEqualTo: true)
-                        .snapshots(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<QuerySnapshot> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-
-                      if (snapshot.hasData) {
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: snapshot.data!.docs.length,
-                          itemBuilder: (context, index) {
-                            final DocumentSnapshot documentSnapshot =
-                                snapshot.data!.docs[index];
-
-                            return FadeIn(
-                              delay: Duration(milliseconds: 200 * index),
-                              child: Dismissible(
-                                direction: DismissDirection.endToStart,
-                                background: Container(
-                                  alignment: Alignment.center,
-                                  color: Colors.red,
-                                  child: const Text(
-                                    'Eliminar',
-                                    style: TextStyle(
-                                        fontFamily: 'OpenSans',
-                                        fontSize: 25,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                key: Key(documentSnapshot.id),
-                                child: SizedBox(
-                                  height: 75,
-                                  child: Card(
-                                    elevation: 20,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    color: Colors.black87,
-                                    child: ListTile(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      leading: const Icon(
-                                          Icons.verified_user_outlined,
-                                          color: Colors.white,
-                                          size: 35),
-                                      title: Text(
-                                        '${documentSnapshot['nombre']}',
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontFamily: 'OpenSans',
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20),
-                                      ),
-                                      subtitle: Text(
-                                        '${documentSnapshot['correo']}',
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontFamily: 'OpenSans',
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 19,
-                                            overflow: TextOverflow.ellipsis),
-                                      ),
-                                      isThreeLine: true,
-                                      trailing: SizedBox(
-                                        width: 50,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            IconButton(
-                                              icon: const Icon(
-                                                Icons.delete_outline_outlined,
-                                              ),
-                                              color: Colors.white,
-                                              iconSize: 30,
-                                              onPressed: () async {
-                                                FirebaseFirestore.instance
-                                                    .collection('Administrador')
-                                                    .doc(documentSnapshot.id)
-                                                    .delete();
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      onTap: () {},
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      }
-                      return const CircularProgressIndicator();
-                    },
-                  ),
-                ),
+                const AdminUserList(),
               ],
             ),
           ),

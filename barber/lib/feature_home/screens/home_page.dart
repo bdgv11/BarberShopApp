@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:animate_do/animate_do.dart';
-import 'package:barber/feature_home/models/color_filter.dart';
 import 'package:barber/feature_home/widgets/bottom_navigation.dart';
 import 'package:barber/feature_home/widgets/drawer_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,6 +9,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:barber/utils/globals.dart' as globals;
+
+import '../../utils/general.dart';
 
 class HomePageScreen extends StatefulWidget {
   const HomePageScreen({super.key});
@@ -69,17 +70,7 @@ class _MyWidgetState extends State<HomePageScreen> {
         height: heightMediaQuery,
         width: widthMediaQuery,
         padding: const EdgeInsets.all(20),
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [
-              Colors.black,
-              Color.fromARGB(255, 104, 34, 4),
-              Color.fromARGB(255, 187, 194, 188),
-            ],
-          ),
-        ),
+        decoration: myBoxDecoration,
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -89,11 +80,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                   Text(
                     'Hola, ${_user.displayName}',
                     textAlign: TextAlign.left,
-                    style: const TextStyle(
-                        fontFamily: 'OpenSans',
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
+                    style: myTextH1,
                   ),
                 ],
               ),
@@ -103,20 +90,16 @@ class _MyWidgetState extends State<HomePageScreen> {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: const [
+                children: [
                   Text(
                     'Mi proxima cita:',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'OpenSans'),
+                    style: mySmallStyle,
                   )
                 ],
               ),
 
               SizedBox(
-                height: 120,
+                height: 85,
                 child: StreamBuilder(
                   stream: FirebaseFirestore.instance
                       .collection('Cita')
@@ -165,16 +148,12 @@ class _MyWidgetState extends State<HomePageScreen> {
                                   color: Colors.red,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
-                                    children: const [
+                                    children: [
                                       Text(
                                         'Cancelar cita',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontFamily: 'OpenSans',
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20),
+                                        style: myTextH1,
                                       ),
-                                      Icon(
+                                      const Icon(
                                         Icons.delete_outline,
                                         size: 45,
                                         color: Colors.white,
@@ -205,29 +184,17 @@ class _MyWidgetState extends State<HomePageScreen> {
                                   ),
                                   title: Text(
                                     'Fecha: $fechaFormateada\nBarbero: ${documentSnapshot['barbero']}',
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: 'OpenSans',
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15),
+                                    style: mySmallStyle,
                                   ),
                                   subtitle: Text(
                                     'Servicio: ${documentSnapshot['tipoServicio']}',
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: 'OpenSans',
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15),
+                                    style: mySmallStyle,
                                   ),
                                   isThreeLine: true,
                                   //dense: true,
                                   trailing: Text(
                                     documentSnapshot['hora'],
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: 'OpenSans',
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20),
+                                    style: myTextH1,
                                   ),
                                 ),
                               ),
@@ -246,17 +213,13 @@ class _MyWidgetState extends State<HomePageScreen> {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
+                children: [
                   Text(
                     'Servicios y productos:',
                     textAlign: TextAlign.right,
-                    style: TextStyle(
-                        fontFamily: 'OpenSans',
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
+                    style: myTextH1,
                   ),
-                  Icon(
+                  const Icon(
                     Icons.navigate_next_sharp,
                     color: Colors.white,
                     size: 40,
@@ -302,7 +265,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                             SizedBox(
                               height: 160,
                               child: Center(
-                                child: FadeIn(
+                                child: FadeInLeft(
                                   delay: Duration(milliseconds: 100 * index),
                                   child: Card(
                                     clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -316,7 +279,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                                           image: NetworkImage(
                                             documentSnapshot['imageURL'],
                                           ),
-                                          colorFilter: ColorFilters.greyScale,
+                                          //colorFilter: ColorFilters.greyScale,
                                           height: 130,
                                           width: 180,
                                           fit: BoxFit.fill,
@@ -327,32 +290,23 @@ class _MyWidgetState extends State<HomePageScreen> {
                                 ),
                               ),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  '${documentSnapshot['nombre']}',
-                                  style: const TextStyle(
-                                    fontFamily: 'OpenSans',
-                                    color: Colors.white54,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    overflow: TextOverflow.ellipsis,
+                            SizedBox(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    '${documentSnapshot['nombre']}',
+                                    style: myProductServiceStyle,
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
                                   '₡ ${documentSnapshot['precio']}',
-                                  style: const TextStyle(
-                                    fontFamily: 'OpenSans',
-                                    color: Colors.white54,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  style: myProductServiceStyle,
                                 ),
                               ],
                             ),
@@ -389,10 +343,9 @@ class _MyWidgetState extends State<HomePageScreen> {
 
   Widget _deleteAppointment(String id, BuildContext context) {
     return CupertinoAlertDialog(
-      title: const Text(
+      title: Text(
         '¿Desea cancelar la cita?',
-        style: TextStyle(
-            fontFamily: 'OpenSans', fontWeight: FontWeight.w900, fontSize: 20),
+        style: myShowDialogStyle,
       ),
       actions: [
         TextButton(
@@ -432,10 +385,9 @@ class _MyWidgetState extends State<HomePageScreen> {
 
   Widget _deleteAppointmentAndroid(String id, BuildContext context) {
     return AlertDialog(
-      title: const Text(
+      title: Text(
         '¿Desea cancelar la cita?',
-        style: TextStyle(
-            fontFamily: 'OpenSans', fontWeight: FontWeight.w900, fontSize: 20),
+        style: myShowDialogStyle,
       ),
       actions: [
         TextButton(

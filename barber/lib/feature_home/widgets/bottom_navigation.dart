@@ -6,6 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../utils/general.dart';
+
 class BottomNavigationWidget extends StatefulWidget {
   final User user;
 
@@ -34,16 +36,8 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
       selectedFontSize: 10,
       currentIndex: _currentIndex,
       iconSize: 30,
-      unselectedLabelStyle: const TextStyle(
-          fontFamily: 'OpenSans',
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-          fontSize: 15),
-      selectedLabelStyle: const TextStyle(
-          fontFamily: 'OpenSans',
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-          fontSize: 15),
+      unselectedLabelStyle: mySmallStyle,
+      selectedLabelStyle: mySmallStyle,
       onTap: (value) {
         setState(() {
           _currentIndex = value;

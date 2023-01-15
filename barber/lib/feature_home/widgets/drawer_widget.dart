@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:barber/feature_cruds/screens/cruds.dart';
 import 'package:barber/feature_daily_appointment/screens/daily_appointment.dart';
 import 'package:barber/feature_login/screens/login_barber_shop.dart';
+import 'package:barber/utils/general.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -39,18 +40,7 @@ class _DrawerUserWidgetState extends State<DrawerUserWidget> {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [
-                  Colors.black,
-                  Color.fromARGB(255, 104, 34, 4),
-                  Color.fromARGB(255, 187, 194, 188),
-                ],
-              ),
-              color: Colors.white,
-            ),
+            decoration: myBoxDecoration,
             child: Center(
               child: Column(
                 children: [
@@ -85,51 +75,39 @@ class _DrawerUserWidgetState extends State<DrawerUserWidget> {
             leading: Platform.isIOS
                 ? Icon(
                     CupertinoIcons.person_alt_circle,
-                    size: 40,
+                    size: 35,
                     color: Colors.brown[600],
                   )
                 : Icon(
                     Icons.person_outline,
-                    size: 40,
+                    size: 35,
                     color: Colors.brown[600],
                   ),
             title: Text(
               '${_user.displayName}',
-              style: const TextStyle(
-                fontSize: 20,
-                fontFamily: 'OpenSans',
-                overflow: TextOverflow.ellipsis,
-              ),
+              style: myDrawerListStyle,
             ),
             subtitle: Text(
               '${_user.email}',
-              style: const TextStyle(
-                fontFamily: 'OpenSans',
-                color: Colors.black,
-                fontSize: 16,
-                overflow: TextOverflow.ellipsis,
-              ),
+              style: myDrawerListStyle,
             ),
           ),
           const Divider(),
           ListTile(
             leading: Platform.isIOS
                 ? Icon(
-                    CupertinoIcons.clock,
-                    size: 40,
+                    CupertinoIcons.arrow_clockwise,
+                    size: 35,
                     color: Colors.brown[600],
                   )
                 : Icon(
                     Icons.history,
-                    size: 40,
+                    size: 35,
                     color: Colors.brown[600],
                   ),
-            title: const Text(
+            title: Text(
               'Historial',
-              style: TextStyle(
-                fontSize: 20,
-                fontFamily: 'OpenSans',
-              ),
+              style: myDrawerListStyle,
             ),
             onTap: () {
               Navigator.of(context).pushReplacement(
@@ -145,21 +123,18 @@ class _DrawerUserWidgetState extends State<DrawerUserWidget> {
             ListTile(
               leading: Platform.isIOS
                   ? Icon(
-                      CupertinoIcons.chart_bar_circle,
-                      size: 40,
+                      CupertinoIcons.square_list,
+                      size: 35,
                       color: Colors.brown[600],
                     )
                   : Icon(
-                      Icons.add_chart_outlined,
-                      size: 40,
+                      Icons.list_alt_sharp,
+                      size: 35,
                       color: Colors.brown[600],
                     ),
-              title: const Text(
+              title: Text(
                 'Citas del día',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontFamily: 'OpenSans',
-                ),
+                style: myDrawerListStyle,
               ),
               onTap: () {
                 Navigator.of(context).pushReplacement(
@@ -176,20 +151,17 @@ class _DrawerUserWidgetState extends State<DrawerUserWidget> {
               leading: Platform.isIOS
                   ? Icon(
                       CupertinoIcons.settings,
-                      size: 40,
+                      size: 35,
                       color: Colors.brown[600],
                     )
                   : Icon(
                       Icons.settings,
-                      size: 40,
+                      size: 35,
                       color: Colors.brown[600],
                     ),
-              title: const Text(
+              title: Text(
                 'Configuraciones',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontFamily: 'OpenSans',
-                ),
+                style: myDrawerListStyle,
               ),
               onTap: () {
                 Navigator.of(context).pushReplacement(
@@ -206,20 +178,17 @@ class _DrawerUserWidgetState extends State<DrawerUserWidget> {
             leading: Platform.isIOS
                 ? Icon(
                     Icons.logout_outlined,
-                    size: 40,
+                    size: 35,
                     color: Colors.brown[600],
                   )
                 : Icon(
                     Icons.logout_outlined,
-                    size: 40,
+                    size: 35,
                     color: Colors.brown[600],
                   ),
-            title: const Text(
+            title: Text(
               'Salir',
-              style: TextStyle(
-                fontSize: 20,
-                fontFamily: 'OpenSans',
-              ),
+              style: myDrawerListStyle,
             ),
             onTap: () async {
               globals.isAdmin = false;

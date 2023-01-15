@@ -1,4 +1,5 @@
 import 'package:barber/feature_login/screens/login_barber_shop.dart';
+import 'package:barber/utils/general.dart';
 import 'package:barber/utils/validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -28,17 +29,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [
-              Colors.black,
-              Color.fromARGB(255, 104, 34, 4),
-              Color.fromARGB(255, 187, 194, 188),
-            ],
-          ),
-        ),
+        decoration: myBoxDecoration,
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Form(
@@ -46,18 +37,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
+                Text(
                   'Recibe un email para reestablecer tu contraseña.',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 30,
-                    fontFamily: 'OpenSans',
-                  ),
+                  style: myTitle30Style,
                 ),
                 const Padding(padding: EdgeInsets.all(30)),
                 TextFormField(
-                  style: const TextStyle(color: Colors.white),
+                  style: myTextFieldStyle,
                   validator: (value) =>
                       Validator.validateEmail(email: _emailController.text),
                   controller: _emailController,
@@ -103,12 +90,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                               ),
-                              child: const Text(
+                              child: Text(
                                 'Reestablecer contraseña',
-                                style: TextStyle(
-                                    color: Color.fromARGB(255, 104, 34, 4),
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'OpenSans'),
+                                style: myButtonTextStyle,
                               ),
                             ),
                           )
@@ -160,25 +144,25 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         builder: (context) => const LoginBarberShop(),
       ));
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           backgroundColor: Colors.black,
-          duration: Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 500),
           content: Text(
             'Correo enviado.',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 25, fontFamily: 'OpenSans'),
+            style: myTitle25Style,
           ),
         ),
       );
     } on FirebaseAuthException {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           backgroundColor: Colors.black,
-          duration: Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 500),
           content: Text(
             'No existe ese correo.',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 25, fontFamily: 'OpenSans'),
+            style: myTitle25Style,
           ),
         ),
       );

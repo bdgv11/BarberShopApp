@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:barber/utils/globals.dart' as globals;
 
-import '../../feature_home/models/color_filter.dart';
+import '../../utils/general.dart';
 
 class ServiceWidget extends StatefulWidget {
   const ServiceWidget({
@@ -34,11 +34,7 @@ class _ServiceWidgettState extends State<ServiceWidget> {
             Text(
               'Servicio: ${globals.servicioSeleccionado}',
               textAlign: TextAlign.right,
-              style: const TextStyle(
-                  fontFamily: 'OpenSans',
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
+              style: myTextH1,
             ),
             const Divider(
               thickness: 1,
@@ -100,7 +96,7 @@ class _ServiceWidgettState extends State<ServiceWidget> {
                                   image: NetworkImage(
                                     documentSnapshot['imageURL'],
                                   ),
-                                  colorFilter: ColorFilters.greyScale,
+                                  //colorFilter: ColorFilters.greyScale,
                                   height: 130,
                                   width: 180,
                                   fit: BoxFit.fill,
@@ -114,13 +110,7 @@ class _ServiceWidgettState extends State<ServiceWidget> {
                         children: <Widget>[
                           Text(
                             '${documentSnapshot['nombre']}',
-                            style: const TextStyle(
-                              fontFamily: 'OpenSans',
-                              color: Colors.white54,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                            style: myProductServiceStyle,
                           ),
                           Icon(
                             Icons.check_circle,
@@ -134,11 +124,7 @@ class _ServiceWidgettState extends State<ServiceWidget> {
                         children: [
                           Text(
                             '₡ ${documentSnapshot['precio']}',
-                            style: const TextStyle(
-                                fontFamily: 'OpenSans',
-                                color: Colors.white54,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
+                            style: myProductServiceStyle,
                           ),
                         ],
                       )

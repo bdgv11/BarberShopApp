@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:animate_do/animate_do.dart';
 import 'package:barber/feature_home/widgets/drawer_widget.dart';
+import 'package:barber/utils/general.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -64,83 +65,40 @@ class _DailyReportState extends State<DailyReport> {
       drawer: DrawerUserWidget(user: _user),
       appBar: AppBar(
         backgroundColor: Colors.black87,
-        title: const Text(
+        title: Text(
           'Citas del día',
           textAlign: TextAlign.left,
-          style: TextStyle(
-              fontFamily: 'OpenSans',
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold),
+          style: myTextH1,
         ),
       ),
       body: Container(
         height: heightMediaQuery,
         width: widthMediaQuery,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [
-              Colors.black,
-              Color.fromARGB(255, 104, 34, 4),
-              Color.fromARGB(255, 187, 194, 188),
-            ],
-          ),
-        ),
+        decoration: myBoxDecoration,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    /* Text(
-                        'Citas del día',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            fontFamily: 'OpenSans',
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
-                      ),*/
-                  ],
-                ),
                 Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       Text(
                         'Hora',
                         textAlign: TextAlign.left,
-                        style: TextStyle(
-                            fontFamily: 'OpenSans',
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            overflow: TextOverflow.ellipsis),
+                        style: myTextH1,
                       ),
                       Text(
                         'Info de la cita',
                         textAlign: TextAlign.left,
-                        style: TextStyle(
-                            fontFamily: 'OpenSans',
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            overflow: TextOverflow.ellipsis),
+                        style: myTextH1,
                       ),
                       Text(
                         'Estado',
                         textAlign: TextAlign.left,
-                        style: TextStyle(
-                            fontFamily: 'OpenSans',
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            overflow: TextOverflow.ellipsis),
+                        style: myTextH1,
                       ),
                     ],
                   ),
@@ -184,48 +142,24 @@ class _DailyReportState extends State<DailyReport> {
                                 child: ListTile(
                                   leading: Text(
                                     '${documentSnapshot['hora']}',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'OpenSans',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
+                                    style: mySmallStyle,
                                   ),
                                   title: Text(
                                     documentSnapshot['tipoServicio'] != ''
                                         ? '${documentSnapshot['tipoServicio']} / ${documentSnapshot['precio']}'
                                         : 'Espacio libre',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'OpenSans',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
+                                    style: mySmallStyle,
                                   ),
                                   subtitle: Text(
                                     '${documentSnapshot['nombreCliente']}\n${documentSnapshot['barbero']}',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'OpenSans',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15,
-                                      overflow: TextOverflow.visible,
-                                    ),
+                                    style: mySmallStyle,
                                   ),
                                   isThreeLine: true,
                                   trailing: Text(
                                     documentSnapshot['estadoCita'] == 'Creada'
                                         ? 'Libre'
                                         : documentSnapshot['estadoCita'],
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'OpenSans',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
+                                    style: mySmallStyle,
                                   ),
                                   onTap: () {
                                     documentSnapshot['estadoCita'] != 'Creada'
@@ -295,90 +229,47 @@ class _DailyReportState extends State<DailyReport> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
+                            Text(
                               'Total de citas:',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'OpenSans',
-                                fontSize: 20,
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                              style: myTextH1,
                             ),
                             Text(
                               globals.cantCitas.toString(),
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'OpenSans',
-                                  fontSize: 20,
-                                  overflow: TextOverflow.ellipsis),
+                              style: myTextH1,
                             ),
-                            const Text(
+                            Text(
                               'Citas finalizadas:',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'OpenSans',
-                                fontSize: 20,
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                              style: myTextH1,
                             ),
                             Text(
                               globals.cantCitasFinalizadas.toString(),
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'OpenSans',
-                                  fontSize: 20,
-                                  overflow: TextOverflow.ellipsis),
+                              style: myTextH1,
                             )
                           ],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
+                            Text(
                               'Monto total para hoy:',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'OpenSans',
-                                  fontSize: 20,
-                                  overflow: TextOverflow.ellipsis),
+                              style: myTextH1,
                             ),
                             Text(
                               '₡ ${globals.totalGeneralDelDia.toString()}',
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'OpenSans',
-                                  fontSize: 20,
-                                  overflow: TextOverflow.ellipsis),
+                              style: myTextH1,
                             )
                           ],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
+                            Text(
                               'Monto de citas terminadas:',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'OpenSans',
-                                fontSize: 20,
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                              style: myTextH1,
                             ),
                             Text(
                               '₡ ${globals.totalFinalizadas.toString()}',
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'OpenSans',
-                                  fontSize: 20,
-                                  overflow: TextOverflow.ellipsis),
+                              style: myTextH1,
                             )
                           ],
                         ),
@@ -398,19 +289,14 @@ class _DailyReportState extends State<DailyReport> {
   Widget cupertinoDialog(BuildContext context, String servicio, String barbero,
       String hora, String id, String cliente, int precio) {
     return CupertinoAlertDialog(
-      title: const Text(
+      title: Text(
         '¿Desea finalizar, liberar o poner la cita como agendada nuevamente?',
-        style: TextStyle(
-            fontFamily: 'OpenSans', fontWeight: FontWeight.w900, fontSize: 20),
+        style: myTextH1,
       ),
       // ignore: prefer_const_constructors
       content: Text(
         'Cliente: $cliente\nServicio: $servicio\nBarbero: $barbero\nHora: $hora\nPrecio: $precio\n',
-        style: const TextStyle(
-            fontFamily: 'OpenSans',
-            fontWeight: FontWeight.w900,
-            fontSize: 15,
-            overflow: TextOverflow.visible),
+        style: mySmallStyle,
       ),
       actions: [
         TextButton(
@@ -429,15 +315,11 @@ class _DailyReportState extends State<DailyReport> {
             infoMontoTotal();
             Navigator.of(context).pop();
           },
-          child: const Padding(
-            padding: EdgeInsets.all(8.0),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Text(
               'Liberar espacio',
-              style: TextStyle(
-                  fontFamily: 'OpenSans',
-                  fontWeight: FontWeight.w900,
-                  fontSize: 15,
-                  overflow: TextOverflow.ellipsis),
+              style: mySmallStyle,
             ),
           ),
         ),
@@ -450,15 +332,11 @@ class _DailyReportState extends State<DailyReport> {
             infoMontoTotal();
             Navigator.of(context).pop();
           },
-          child: const Padding(
-            padding: EdgeInsets.all(8.0),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Text(
               'Agendar nuevamente',
-              style: TextStyle(
-                  fontFamily: 'OpenSans',
-                  fontWeight: FontWeight.w900,
-                  fontSize: 15,
-                  overflow: TextOverflow.visible),
+              style: mySmallStyle,
             ),
           ),
         ),
@@ -472,15 +350,11 @@ class _DailyReportState extends State<DailyReport> {
             infoMontoTotal();
             Navigator.of(context).pop();
           },
-          child: const Padding(
-            padding: EdgeInsets.all(8.0),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Text(
               'Finalizar Cita',
-              style: TextStyle(
-                  fontFamily: 'OpenSans',
-                  fontWeight: FontWeight.w900,
-                  fontSize: 15,
-                  overflow: TextOverflow.ellipsis),
+              style: mySmallStyle,
             ),
           ),
         ),
@@ -491,19 +365,14 @@ class _DailyReportState extends State<DailyReport> {
   Widget androidDialog(BuildContext context, String servicio, String barbero,
       String hora, String id, String cliente, int precio) {
     return AlertDialog(
-      title: const Text(
+      title: Text(
         '¿Desea finalizar, liberar o poner la cita como agendada nuevamente?',
-        style: TextStyle(
-            fontFamily: 'OpenSans', fontWeight: FontWeight.w900, fontSize: 20),
+        style: myTextH1,
       ),
       // ignore: prefer_const_constructors
       content: Text(
         'Cliente: $cliente\nServicio: $servicio\nBarbero: $barbero\nHora: $hora\nPrecio: $precio\n',
-        style: const TextStyle(
-            fontFamily: 'OpenSans',
-            fontWeight: FontWeight.w900,
-            fontSize: 15,
-            overflow: TextOverflow.visible),
+        style: mySmallStyle,
       ),
       actions: [
         TextButton(
@@ -522,15 +391,11 @@ class _DailyReportState extends State<DailyReport> {
             infoMontoTotal();
             Navigator.of(context).pop();
           },
-          child: const Padding(
-            padding: EdgeInsets.all(8.0),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Text(
               'Liberar espacio',
-              style: TextStyle(
-                  fontFamily: 'OpenSans',
-                  fontWeight: FontWeight.w900,
-                  fontSize: 15,
-                  overflow: TextOverflow.ellipsis),
+              style: mySmallStyle,
             ),
           ),
         ),
@@ -543,15 +408,11 @@ class _DailyReportState extends State<DailyReport> {
             infoMontoTotal();
             Navigator.of(context).pop();
           },
-          child: const Padding(
-            padding: EdgeInsets.all(8.0),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Text(
               'Agendar nuevamente',
-              style: TextStyle(
-                  fontFamily: 'OpenSans',
-                  fontWeight: FontWeight.w900,
-                  fontSize: 15,
-                  overflow: TextOverflow.visible),
+              style: mySmallStyle,
             ),
           ),
         ),
@@ -564,15 +425,11 @@ class _DailyReportState extends State<DailyReport> {
             infoMontoTotal();
             Navigator.of(context).pop();
           },
-          child: const Padding(
-            padding: EdgeInsets.all(8.0),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Text(
               'Finalizar Cita',
-              style: TextStyle(
-                  fontFamily: 'OpenSans',
-                  fontWeight: FontWeight.w900,
-                  fontSize: 15,
-                  overflow: TextOverflow.ellipsis),
+              style: mySmallStyle,
             ),
           ),
         ),

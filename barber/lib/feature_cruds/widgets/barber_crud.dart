@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:animate_do/animate_do.dart';
 import 'package:barber/feature_cruds/models/barber.dart';
+import 'package:barber/utils/general.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -71,17 +72,7 @@ class _BarberCrudState extends State<BarberCrud> {
       body: Container(
         height: heightMediaQuery,
         width: widthMediaQuery,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [
-              Colors.black,
-              Color.fromARGB(255, 104, 34, 4),
-              Color.fromARGB(255, 187, 194, 188),
-            ],
-          ),
-        ),
+        decoration: myBoxDecoration,
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(12.0),
@@ -94,71 +85,66 @@ class _BarberCrudState extends State<BarberCrud> {
                       children: [
                         const Padding(padding: EdgeInsets.all(8)),
                         TextFormField(
-                          style: const TextStyle(color: Colors.white),
+                          style: myTextFieldStyle,
                           validator: (value) => Validator.validateName(
                               name: _nameFieldController.text.trim()),
                           controller: _nameFieldController,
                           focusNode: _focusName,
-                          decoration: const InputDecoration(
-                            icon: Icon(
+                          decoration: InputDecoration(
+                            icon: const Icon(
                               Icons.person_add_alt_1_outlined,
                               size: 25,
                               color: Colors.white,
                             ),
                             hintText: 'Nombre',
-                            errorStyle: TextStyle(
+                            errorStyle: const TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'OpenSans',
                                 fontWeight: FontWeight.bold),
-                            hintStyle: TextStyle(
-                              color: Colors.white,
-                            ),
+                            hintStyle: myHintStyle,
                           ),
                         ),
                         const Padding(padding: EdgeInsets.all(12)),
                         TextFormField(
-                          style: const TextStyle(color: Colors.white),
+                          style: myTextFieldStyle,
                           validator: (value) => Validator.validateName(
                               name: _descFieldController.text.trim()),
                           controller: _descFieldController,
                           focusNode: _focusDesc,
-                          decoration: const InputDecoration(
-                            icon: Icon(
+                          decoration: InputDecoration(
+                            icon: const Icon(
                               Icons.description_outlined,
                               size: 25,
                               color: Colors.white,
                             ),
                             hintText: 'Descripción',
-                            errorStyle: TextStyle(
+                            errorStyle: const TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'OpenSans',
                                 fontWeight: FontWeight.bold),
-                            hintStyle: TextStyle(
-                              color: Colors.white,
-                            ),
+                            hintStyle: myHintStyle,
                           ),
                         ),
                         const Padding(padding: EdgeInsets.all(12)),
                         TextFormField(
-                          style: const TextStyle(color: Colors.white),
+                          style: myTextFieldStyle,
                           validator: (value) => Validator.validateEmail(
                               email: _emailFieldController.text.trim()),
                           controller: _emailFieldController,
                           focusNode: _focusEmail,
-                          decoration: const InputDecoration(
-                            icon: Icon(
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: InputDecoration(
+                            icon: const Icon(
                               Icons.alternate_email_outlined,
                               size: 25,
                               color: Colors.white,
                             ),
                             hintText: 'Correo electrónico',
-                            errorStyle: TextStyle(
+                            errorStyle: const TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'OpenSans',
                                 fontWeight: FontWeight.bold),
-                            hintStyle: TextStyle(
-                              color: Colors.white,
-                            ),
+                            hintStyle: myHintStyle,
                           ),
                         ),
                         const Padding(padding: EdgeInsets.all(8)),
@@ -200,12 +186,9 @@ class _BarberCrudState extends State<BarberCrud> {
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                               ),
-                              child: const Text(
+                              child: Text(
                                 'Seleccionar imagen',
-                                style: TextStyle(
-                                    color: Color.fromARGB(255, 104, 34, 4),
-                                    fontFamily: 'OpenSans',
-                                    fontWeight: FontWeight.bold),
+                                style: myButtonTextStyle,
                               ),
                             ),
                             const Padding(padding: EdgeInsets.all(8)),
@@ -260,13 +243,9 @@ class _BarberCrudState extends State<BarberCrud> {
                                           }
                                         }
                                       },
-                                      child: const Text(
+                                      child: Text(
                                         'Agregar',
-                                        style: TextStyle(
-                                            color:
-                                                Color.fromARGB(255, 104, 34, 4),
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'OpenSans'),
+                                        style: myButtonTextStyle,
                                       ),
                                     ),
                                   ),
@@ -441,12 +420,9 @@ class _BarberCrudState extends State<BarberCrud> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Seleccionar imagen',
-                    style: TextStyle(
-                        color: Color.fromARGB(255, 104, 34, 4),
-                        fontFamily: 'OpenSans',
-                        fontWeight: FontWeight.bold),
+                    style: myButtonTextStyle,
                   ),
                 ),
                 Text(
@@ -464,12 +440,9 @@ class _BarberCrudState extends State<BarberCrud> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Editar',
-                    style: TextStyle(
-                        color: Color.fromARGB(255, 104, 34, 4),
-                        fontFamily: 'OpenSans',
-                        fontWeight: FontWeight.bold),
+                    style: myButtonTextStyle,
                   ),
                   onPressed: () async {
                     final bool disponible = _opcion;
@@ -561,16 +534,14 @@ class _BarberCrudState extends State<BarberCrud> {
     log('---------');
     log('Inicia proceso de eliminar - IOS DEVICE');
     return CupertinoAlertDialog(
-      title: const Text(
+      title: Text(
         '¿Desea eliminar el barbero?',
-        style: TextStyle(
-            fontFamily: 'OpenSans', fontWeight: FontWeight.w900, fontSize: 20),
+        style: myShowDialogStyle,
       ),
       // ignore: prefer_const_constructors
       content: Text(
-        'Podria perderse informacion de citas...',
-        style: const TextStyle(
-            fontFamily: 'OpenSans', fontWeight: FontWeight.w900, fontSize: 20),
+        'Podria perderse información de citas...',
+        style: myShowDialogStyle,
       ),
       actions: [
         TextButton(
@@ -610,16 +581,14 @@ class _BarberCrudState extends State<BarberCrud> {
     log('---------');
     log('Inicia proceso de eliminar - Android DEVICE');
     return AlertDialog(
-      title: const Text(
+      title: Text(
         '¿Desea eliminar el barbero?',
-        style: TextStyle(
-            fontFamily: 'OpenSans', fontWeight: FontWeight.w900, fontSize: 20),
+        style: myShowDialogStyle,
       ),
       // ignore: prefer_const_constructors
       content: Text(
-        'Podria perderse informacion de citas...',
-        style: const TextStyle(
-            fontFamily: 'OpenSans', fontWeight: FontWeight.w900, fontSize: 20),
+        'Podria perderse información de citas...',
+        style: myShowDialogStyle,
       ),
       actions: [
         TextButton(
@@ -699,21 +668,11 @@ class _BarberCrudState extends State<BarberCrud> {
                               ),
                               title: Text(
                                 documentSnapshot['nombre'],
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'OpenSans',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                    overflow: TextOverflow.ellipsis),
+                                style: myTextH1,
                               ),
                               subtitle: Text(
                                 documentSnapshot['descripcion'],
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'OpenSans',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                    overflow: TextOverflow.ellipsis),
+                                style: myTextH1,
                               ),
                               isThreeLine: true,
                               dense: true,

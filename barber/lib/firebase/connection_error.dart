@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../utils/general.dart';
+
 class ConnectionError extends StatelessWidget {
   const ConnectionError({super.key});
 
@@ -8,19 +10,15 @@ class ConnectionError extends StatelessWidget {
     return Center(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Icon(
+        children: [
+          const Icon(
             Icons.error_outline,
             color: Colors.red,
             size: 50,
           ),
           Text(
             'Error de conexion',
-            style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'OpenSans',
-                fontSize: 25,
-                fontWeight: FontWeight.bold),
+            style: myTextH1,
           ),
         ],
       ),

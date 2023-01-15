@@ -1,6 +1,7 @@
 import 'package:barber/feature_home/screens/home_page.dart';
 import 'package:barber/feature_login/screens/login_barber_shop.dart';
 import 'package:barber/firebase/firebase_authentication.dart';
+import 'package:barber/utils/general.dart';
 import 'package:barber/utils/validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -41,17 +42,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Container(
             height: heightMediaQuery,
             width: widthMediaQuery,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [
-                  Colors.black,
-                  Color.fromARGB(255, 104, 34, 4),
-                  Color.fromARGB(255, 187, 194, 188),
-                ],
-              ),
-            ),
+            decoration: myBoxDecoration,
             child: Padding(
               padding: const EdgeInsets.all(24.0),
               child: Center(
@@ -62,87 +53,74 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       key: _formKey,
                       child: Column(
                         children: [
-                          const Text(
+                          Text(
                             'Registro',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 30,
-                              fontFamily: 'OpenSans',
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: myTitle30Style,
                           ),
                           const Padding(padding: EdgeInsets.all(8)),
                           TextFormField(
-                            style: const TextStyle(color: Colors.white),
+                            style: myTextFieldStyle,
                             validator: (value) => Validator.validateName(
                                 name: _nameFieldController.text),
                             controller: _nameFieldController,
                             focusNode: _focusName,
-                            decoration: const InputDecoration(
-                              icon: Icon(
+                            decoration: InputDecoration(
+                              icon: const Icon(
                                 Icons.person_outline_outlined,
                                 size: 25,
                                 color: Colors.white,
                               ),
                               hintText: 'Nombre completo',
-                              errorStyle: TextStyle(
+                              errorStyle: const TextStyle(
                                 color: Colors.teal,
                                 fontWeight: FontWeight.bold,
                               ),
-                              hintStyle: TextStyle(
-                                color: Colors.white,
-                              ),
+                              hintStyle: myHintStyle,
                             ),
                           ),
                           const Padding(padding: EdgeInsets.all(8)),
                           const SizedBox(height: 8),
                           TextFormField(
-                            style: const TextStyle(color: Colors.white),
+                            style: myTextFieldStyle,
                             validator: (value) => Validator.validateEmail(
                                 email: _emailFieldController.text),
                             controller: _emailFieldController,
                             focusNode: _focusEmail,
                             keyboardType: TextInputType.emailAddress,
-                            decoration: const InputDecoration(
-                              icon: Icon(
+                            decoration: InputDecoration(
+                              icon: const Icon(
                                 Icons.email_outlined,
                                 size: 25,
                                 color: Colors.white,
                               ),
                               hintText: 'Correo Electrónico',
-                              errorStyle: TextStyle(
+                              errorStyle: const TextStyle(
                                 color: Colors.teal,
                                 fontWeight: FontWeight.bold,
                               ),
-                              hintStyle: TextStyle(
-                                color: Colors.white,
-                              ),
+                              hintStyle: myHintStyle,
                             ),
                           ),
                           const Padding(padding: EdgeInsets.all(8)),
                           const SizedBox(height: 8),
                           TextFormField(
-                            style: const TextStyle(color: Colors.white),
+                            style: myTextFieldStyle,
                             validator: (value) => Validator.validatePassword(
                                 password: _passwordFieldController.text),
                             controller: _passwordFieldController,
                             focusNode: _focusPassword,
-                            decoration: const InputDecoration(
-                              icon: Icon(
+                            decoration: InputDecoration(
+                              icon: const Icon(
                                 Icons.key_outlined,
                                 size: 25,
                                 color: Colors.white,
                               ),
                               hintText: 'Contraseña',
-                              errorStyle: TextStyle(
+                              errorStyle: const TextStyle(
                                 color: Colors.teal,
                                 fontWeight: FontWeight.bold,
                               ),
-                              hintStyle: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'OpenSans',
-                                fontWeight: FontWeight.bold,
-                              ),
+                              hintStyle: myHintStyle,
                             ),
                             obscureText: true,
                           ),
@@ -206,27 +184,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         if (!mounted) return;
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
-                                          const SnackBar(
+                                          SnackBar(
                                             backgroundColor: Colors.black,
                                             content: Text(
                                               'Correo en uso',
                                               textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontSize: 25,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily: 'OpenSans'),
+                                              style: myTitle25Style,
                                             ),
                                           ),
                                         );
                                       }
                                     }
                                   },
-                                  child: const Text(
+                                  child: Text(
                                     'Registrarse',
-                                    style: TextStyle(
-                                        color: Color.fromARGB(255, 104, 34, 4),
-                                        fontFamily: 'OpenSans',
-                                        fontWeight: FontWeight.bold),
+                                    style: myButtonTextStyle,
                                   ),
                                 ),
                               ),

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:barber/feature_appointment/models/appointment.dart';
 import 'package:barber/feature_home/widgets/bottom_navigation.dart';
 import 'package:barber/feature_home/widgets/drawer_widget.dart';
+import 'package:barber/utils/general.dart';
 import 'package:barber/utils/globals.dart' as globals;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -76,18 +77,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
           height: heightMediaQuery,
           width: widthMediaQuery,
           padding: const EdgeInsets.all(20),
-          decoration: const BoxDecoration(
-            //color: Color.fromARGB(234, 57, 5, 2)
-            gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [
-                Colors.black,
-                Color.fromARGB(255, 104, 34, 4),
-                Color.fromARGB(255, 187, 194, 188),
-              ],
-            ),
-          ),
+          decoration: myBoxDecoration,
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -102,11 +92,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                     Text(
                       'Fecha: ${today.day}/${today.month}/${today.year}',
                       textAlign: TextAlign.left,
-                      style: const TextStyle(
-                          fontFamily: 'OpenSans',
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
+                      style: myTextH1,
                     ),
                   ],
                 ),
@@ -124,31 +110,26 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                   selectedDayPredicate: (day) => isSameDay(day, today),
                   focusedDay: today,
                   firstDay: DateTime.now(),
-                  lastDay: DateTime.now().add(const Duration(days: 60)),
+                  lastDay: DateTime.now().add(const Duration(days: 15)),
                   startingDayOfWeek: StartingDayOfWeek.monday,
                   locale: 'es_ES',
                   onDaySelected: _focusDaySelected,
                   calendarFormat: CalendarFormat.twoWeeks,
                   weekendDays: const <int>[DateTime.sunday],
                   //Header Style
-                  headerStyle: const HeaderStyle(
-                    headerPadding: EdgeInsets.all(8),
-                    rightChevronIcon: Icon(
+                  headerStyle: HeaderStyle(
+                    headerPadding: const EdgeInsets.all(8),
+                    rightChevronIcon: const Icon(
                       Icons.chevron_right,
                       color: Colors.white,
                     ),
-                    leftChevronIcon: Icon(
+                    leftChevronIcon: const Icon(
                       Icons.chevron_left,
                       color: Colors.white,
                     ),
                     titleCentered: true,
                     formatButtonVisible: false,
-                    titleTextStyle: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'OpenSans',
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    titleTextStyle: myTextH1,
                   ),
 
                   daysOfWeekStyle: const DaysOfWeekStyle(
@@ -182,11 +163,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                     Text(
                       'Barbero: $barberoSeleccionado',
                       textAlign: TextAlign.right,
-                      style: const TextStyle(
-                          fontFamily: 'OpenSans',
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
+                      style: myTextH1,
                     ),
                   ],
                 ),
@@ -229,12 +206,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                               children: <Widget>[
                                 Text(
                                   documentSnapshot['nombre'],
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'OpenSans',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  style: myTextH1,
                                 ),
                                 Icon(Icons.check_circle,
                                     color: indexBarber == index
@@ -244,10 +216,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                             ),
                             subtitle: Text(
                               documentSnapshot['descripcion'],
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'OpenSans',
-                                  fontSize: 20),
+                              style: myTextH1,
                             ),
                             isThreeLine: true,
                             onTap: () {
@@ -273,15 +242,11 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
+                  children: [
                     Text(
                       'Hora: ',
                       textAlign: TextAlign.right,
-                      style: TextStyle(
-                          fontFamily: 'OpenSans',
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
+                      style: myTextH1,
                     ),
                   ],
                 ),
@@ -528,15 +493,13 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
   Widget androidDialog(BuildContext context, String fecha, String servicio,
       String barbero, String horaSeleccionada, String id, String cliente) {
     return AlertDialog(
-      title: const Text(
+      title: Text(
         'Resumen',
-        style: TextStyle(
-            fontFamily: 'OpenSans', fontWeight: FontWeight.w900, fontSize: 20),
+        style: myShowDialogStyle,
       ),
       content: Text(
         'Fecha: $fecha\nServicio: $servicio\nBarbero: $barbero\nHora: $horaSeleccionada\n¿Desea agendar la cita?',
-        style: const TextStyle(
-            fontFamily: 'OpenSans', fontWeight: FontWeight.w900, fontSize: 20),
+        style: myShowDialogStyle,
       ),
       actions: [
         TextButton(
@@ -580,16 +543,14 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
   Widget cupertinoDialog(BuildContext context, String fecha, String servicio,
       String barbero, String horaSeleccionada, String id, String cliente) {
     return CupertinoAlertDialog(
-      title: const Text(
+      title: Text(
         'Resumen',
-        style: TextStyle(
-            fontFamily: 'OpenSans', fontWeight: FontWeight.w900, fontSize: 20),
+        style: myShowDialogStyle,
       ),
       // ignore: prefer_const_constructors
       content: Text(
         'Fecha: $fecha\nServicio: $servicio\nBarbero: $barbero\nHora: $horaSeleccionada\n¿Desea agendar la cita?',
-        style: const TextStyle(
-            fontFamily: 'OpenSans', fontWeight: FontWeight.w900, fontSize: 20),
+        style: myShowDialogStyle,
       ),
       actions: [
         TextButton(

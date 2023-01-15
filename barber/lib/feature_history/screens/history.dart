@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:barber/feature_home/widgets/bottom_navigation.dart';
+import 'package:barber/utils/general.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -61,18 +62,7 @@ class _UserHistoryState extends State<UserHistory> {
       body: Container(
         height: heightMediaQuery,
         width: widthMediaQuery,
-        decoration: const BoxDecoration(
-          //color: Color.fromARGB(234, 57, 5, 2)
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [
-              Colors.black,
-              Color.fromARGB(255, 104, 34, 4),
-              Color.fromARGB(255, 187, 194, 188),
-            ],
-          ),
-        ),
+        decoration: myBoxDecoration,
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(12),
@@ -80,15 +70,11 @@ class _UserHistoryState extends State<UserHistory> {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     Text(
                       'Historial de Citas',
                       textAlign: TextAlign.left,
-                      style: TextStyle(
-                          fontFamily: 'OpenSans',
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
+                      style: myTextH1,
                     ),
                   ],
                 ),
@@ -100,33 +86,21 @@ class _UserHistoryState extends State<UserHistory> {
                   padding: const EdgeInsets.all(12.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       Text(
                         'Fecha',
                         textAlign: TextAlign.left,
-                        style: TextStyle(
-                            fontFamily: 'OpenSans',
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
+                        style: myTextH1,
                       ),
                       Text(
                         'Servicio & Barbero',
                         textAlign: TextAlign.left,
-                        style: TextStyle(
-                            fontFamily: 'OpenSans',
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
+                        style: myTextH1,
                       ),
                       Text(
                         'Monto',
                         textAlign: TextAlign.left,
-                        style: TextStyle(
-                            fontFamily: 'OpenSans',
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
+                        style: myTextH1,
                       ),
                     ],
                   ),
@@ -170,44 +144,20 @@ class _UserHistoryState extends State<UserHistory> {
                                 child: ListTile(
                                   leading: Text(
                                     '${date.day.toString()}/${date.month.toString()}/${date.year.toString()}',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'OpenSans',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
+                                    style: mySmallStyle,
                                   ),
                                   title: Text(
                                     'Servicio: ${documentSnapshot['tipoServicio']}',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'OpenSans',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
+                                    style: mySmallStyle,
                                   ),
                                   subtitle: Text(
                                     'Barbero: ${documentSnapshot['barbero']}',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'OpenSans',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
+                                    style: mySmallStyle,
                                   ),
                                   dense: true,
                                   trailing: Text(
                                     '₡ ${documentSnapshot['precio'].toString()}',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'OpenSans',
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
+                                    style: mySmallStyle,
                                   ),
                                   onTap: () {},
                                 ),
@@ -227,24 +177,13 @@ class _UserHistoryState extends State<UserHistory> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          const Text(
+                          Text(
                             'Cantidad de citas: ',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'OpenSans',
-                              fontSize: 20,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                            style: myTextH1,
                           ),
                           Text(
                             globals.cantHistCitas.toString(),
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'OpenSans',
-                                fontSize: 20,
-                                overflow: TextOverflow.ellipsis),
+                            style: myTextH1,
                           )
                         ],
                       ),
