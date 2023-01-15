@@ -609,7 +609,7 @@ class _BarberCrudState extends State<BarberCrud> {
   Widget _deleteBarberAndroid(String id, String nombre, BuildContext context) {
     log('---------');
     log('Inicia proceso de eliminar - Android DEVICE');
-    return CupertinoAlertDialog(
+    return AlertDialog(
       title: const Text(
         '¿Desea eliminar el barbero?',
         style: TextStyle(

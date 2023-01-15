@@ -62,7 +62,18 @@ class _DailyReportState extends State<DailyReport> {
     //
     return Scaffold(
       drawer: DrawerUserWidget(user: _user),
-      appBar: AppBar(backgroundColor: Colors.black87),
+      appBar: AppBar(
+        backgroundColor: Colors.black87,
+        title: const Text(
+          'Citas del día',
+          textAlign: TextAlign.left,
+          style: TextStyle(
+              fontFamily: 'OpenSans',
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold),
+        ),
+      ),
       body: Container(
         height: heightMediaQuery,
         width: widthMediaQuery,
@@ -77,28 +88,24 @@ class _DailyReportState extends State<DailyReport> {
             ],
           ),
         ),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SingleChildScrollView(
             child: Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
-                    Text(
-                      'Citas del día',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                          fontFamily: 'OpenSans',
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
-                    ),
+                    /* Text(
+                        'Citas del día',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            fontFamily: 'OpenSans',
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),*/
                   ],
-                ),
-                const Divider(
-                  thickness: 0.5,
-                  color: Colors.white,
                 ),
                 Padding(
                   padding: const EdgeInsets.all(12.0),
@@ -139,7 +146,7 @@ class _DailyReportState extends State<DailyReport> {
                   ),
                 ),
                 SizedBox(
-                  height: 500,
+                  height: 420,
                   child: StreamBuilder(
                     stream: FirebaseFirestore.instance
                         .collection('Cita')
@@ -210,7 +217,7 @@ class _DailyReportState extends State<DailyReport> {
                                   isThreeLine: true,
                                   trailing: Text(
                                     documentSnapshot['estadoCita'] == 'Creada'
-                                        ? ''
+                                        ? 'Libre'
                                         : documentSnapshot['estadoCita'],
                                     style: const TextStyle(
                                       color: Colors.white,
@@ -221,34 +228,40 @@ class _DailyReportState extends State<DailyReport> {
                                     ),
                                   ),
                                   onTap: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return Platform.isIOS
-                                            ? cupertinoDialog(
-                                                context,
-                                                documentSnapshot[
-                                                    'tipoServicio'],
-                                                documentSnapshot['barbero'],
-                                                documentSnapshot['hora'],
-                                                documentSnapshot.id,
-                                                documentSnapshot[
-                                                    'nombreCliente'],
-                                                documentSnapshot['precio'],
-                                              ) //cupertinoDialog(context)
-                                            : androidDialog(
-                                                context,
-                                                documentSnapshot[
-                                                    'tipoServicio'],
-                                                documentSnapshot['barbero'],
-                                                documentSnapshot['hora'],
-                                                documentSnapshot.id,
-                                                documentSnapshot[
-                                                    'nombreCliente'],
-                                                documentSnapshot['precio'],
-                                              ); //androidDialog(context)
-                                      },
-                                    );
+                                    documentSnapshot['estadoCita'] != 'Creada'
+                                        ? showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return Platform.isIOS
+                                                  ? cupertinoDialog(
+                                                      context,
+                                                      documentSnapshot[
+                                                          'tipoServicio'],
+                                                      documentSnapshot[
+                                                          'barbero'],
+                                                      documentSnapshot['hora'],
+                                                      documentSnapshot.id,
+                                                      documentSnapshot[
+                                                          'nombreCliente'],
+                                                      documentSnapshot[
+                                                          'precio'],
+                                                    ) //cupertinoDialog(context)
+                                                  : androidDialog(
+                                                      context,
+                                                      documentSnapshot[
+                                                          'tipoServicio'],
+                                                      documentSnapshot[
+                                                          'barbero'],
+                                                      documentSnapshot['hora'],
+                                                      documentSnapshot.id,
+                                                      documentSnapshot[
+                                                          'nombreCliente'],
+                                                      documentSnapshot[
+                                                          'precio'],
+                                                    ); //androidDialog(context)
+                                            },
+                                          )
+                                        : const Text('');
                                   },
                                 ),
                               ),
@@ -260,101 +273,117 @@ class _DailyReportState extends State<DailyReport> {
                     },
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Total de citas:',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'OpenSans',
-                              fontSize: 20,
-                              overflow: TextOverflow.ellipsis,
+                const Divider(
+                  thickness: 0.5,
+                  color: Colors.white,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                const Divider(
+                  thickness: 0.5,
+                  color: Colors.white,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.black54,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Total de citas:',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'OpenSans',
+                                fontSize: 20,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
-                          ),
-                          Text(
-                            globals.cantCitas.toString(),
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'OpenSans',
-                                fontSize: 20,
-                                overflow: TextOverflow.ellipsis),
-                          ),
-                          const Text(
-                            'Citas finalizadas:',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'OpenSans',
-                              fontSize: 20,
-                              overflow: TextOverflow.ellipsis,
+                            Text(
+                              globals.cantCitas.toString(),
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'OpenSans',
+                                  fontSize: 20,
+                                  overflow: TextOverflow.ellipsis),
                             ),
-                          ),
-                          Text(
-                            globals.cantCitasFinalizadas.toString(),
-                            style: const TextStyle(
+                            const Text(
+                              'Citas finalizadas:',
+                              style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: 'OpenSans',
                                 fontSize: 20,
-                                overflow: TextOverflow.ellipsis),
-                          )
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Monto total para hoy:',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'OpenSans',
-                                fontSize: 20,
-                                overflow: TextOverflow.ellipsis),
-                          ),
-                          Text(
-                            '₡ ${globals.totalGeneralDelDia.toString()}',
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'OpenSans',
-                                fontSize: 20,
-                                overflow: TextOverflow.ellipsis),
-                          )
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Monto de citas terminadas:',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'OpenSans',
-                              fontSize: 20,
-                              overflow: TextOverflow.ellipsis,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
-                          ),
-                          Text(
-                            '₡ ${globals.totalFinalizadas.toString()}',
-                            style: const TextStyle(
+                            Text(
+                              globals.cantCitasFinalizadas.toString(),
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'OpenSans',
+                                  fontSize: 20,
+                                  overflow: TextOverflow.ellipsis),
+                            )
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Monto total para hoy:',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'OpenSans',
+                                  fontSize: 20,
+                                  overflow: TextOverflow.ellipsis),
+                            ),
+                            Text(
+                              '₡ ${globals.totalGeneralDelDia.toString()}',
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'OpenSans',
+                                  fontSize: 20,
+                                  overflow: TextOverflow.ellipsis),
+                            )
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Monto de citas terminadas:',
+                              style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: 'OpenSans',
                                 fontSize: 20,
-                                overflow: TextOverflow.ellipsis),
-                          )
-                        ],
-                      ),
-                    ],
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            Text(
+                              '₡ ${globals.totalFinalizadas.toString()}',
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'OpenSans',
+                                  fontSize: 20,
+                                  overflow: TextOverflow.ellipsis),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],

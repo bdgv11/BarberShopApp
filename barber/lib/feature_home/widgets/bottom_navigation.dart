@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:barber/feature_appointment/screens/appointment.dart';
 import 'package:barber/feature_home/screens/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavigationWidget extends StatefulWidget {
@@ -62,19 +65,22 @@ class _BottomNavigationWidgetState extends State<BottomNavigationWidget> {
           ));
         }
       },
-      items: const [
+      items: [
         BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined, color: Colors.white),
+            icon: Platform.isIOS
+                ? const Icon(CupertinoIcons.home, color: Colors.white)
+                : const Icon(Icons.home_outlined, color: Colors.white),
             label: 'Inicio'),
         BottomNavigationBarItem(
-            icon: Icon(
-              Icons.add_box_outlined,
-              color: Colors.white,
-            ),
+            icon: Platform.isIOS
+                ? const Icon(CupertinoIcons.scissors_alt, color: Colors.white)
+                : const Icon(Icons.add_box_outlined, color: Colors.white),
             label: 'Agendar'),
         BottomNavigationBarItem(
-            icon:
-                Icon(Icons.notifications_active_outlined, color: Colors.white),
+            icon: Platform.isIOS
+                ? const Icon(CupertinoIcons.bell, color: Colors.white)
+                : const Icon(Icons.notification_add_outlined,
+                    color: Colors.white),
             label: 'Notificaciones'),
       ],
     );

@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:barber/feature_cruds/screens/cruds.dart';
 import 'package:barber/feature_daily_appointment/screens/daily_appointment.dart';
 import 'package:barber/feature_login/screens/login_barber_shop.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:barber/utils/globals.dart' as globals;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,6 +36,7 @@ class _DrawerUserWidgetState extends State<DrawerUserWidget> {
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
+        padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
             decoration: const BoxDecoration(
@@ -78,11 +82,17 @@ class _DrawerUserWidgetState extends State<DrawerUserWidget> {
             ),
           ),
           ListTile(
-            leading: const Icon(
-              Icons.person_outline,
-              size: 40,
-              color: Colors.teal,
-            ),
+            leading: Platform.isIOS
+                ? Icon(
+                    CupertinoIcons.person_alt_circle,
+                    size: 40,
+                    color: Colors.brown[600],
+                  )
+                : Icon(
+                    Icons.person_outline,
+                    size: 40,
+                    color: Colors.brown[600],
+                  ),
             title: Text(
               '${_user.displayName}',
               style: const TextStyle(
@@ -103,11 +113,17 @@ class _DrawerUserWidgetState extends State<DrawerUserWidget> {
           ),
           const Divider(),
           ListTile(
-            leading: const Icon(
-              Icons.history,
-              size: 40,
-              color: Colors.teal,
-            ),
+            leading: Platform.isIOS
+                ? Icon(
+                    CupertinoIcons.clock,
+                    size: 40,
+                    color: Colors.brown[600],
+                  )
+                : Icon(
+                    Icons.history,
+                    size: 40,
+                    color: Colors.brown[600],
+                  ),
             title: const Text(
               'Historial',
               style: TextStyle(
@@ -127,35 +143,17 @@ class _DrawerUserWidgetState extends State<DrawerUserWidget> {
           ),
           if (globals.isAdmin)
             ListTile(
-              leading: const Icon(
-                Icons.settings,
-                size: 40,
-                color: Colors.teal,
-              ),
-              title: const Text(
-                'Configuraciones',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontFamily: 'OpenSans',
-                ),
-              ),
-              onTap: () {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => CrudPage(
-                      user: _user,
+              leading: Platform.isIOS
+                  ? Icon(
+                      CupertinoIcons.chart_bar_circle,
+                      size: 40,
+                      color: Colors.brown[600],
+                    )
+                  : Icon(
+                      Icons.add_chart_outlined,
+                      size: 40,
+                      color: Colors.brown[600],
                     ),
-                  ),
-                );
-              },
-            ),
-          if (globals.isAdmin)
-            ListTile(
-              leading: const Icon(
-                Icons.add_chart_outlined,
-                size: 40,
-                color: Colors.teal,
-              ),
               title: const Text(
                 'Citas del día',
                 style: TextStyle(
@@ -173,13 +171,49 @@ class _DrawerUserWidgetState extends State<DrawerUserWidget> {
                 );
               },
             ),
+          if (globals.isAdmin)
+            ListTile(
+              leading: Platform.isIOS
+                  ? Icon(
+                      CupertinoIcons.settings,
+                      size: 40,
+                      color: Colors.brown[600],
+                    )
+                  : Icon(
+                      Icons.settings,
+                      size: 40,
+                      color: Colors.brown[600],
+                    ),
+              title: const Text(
+                'Configuraciones',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'OpenSans',
+                ),
+              ),
+              onTap: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => CrudPage(
+                      user: _user,
+                    ),
+                  ),
+                );
+              },
+            ),
           const Divider(),
           ListTile(
-            leading: const Icon(
-              Icons.logout_outlined,
-              size: 40,
-              color: Colors.teal,
-            ),
+            leading: Platform.isIOS
+                ? Icon(
+                    Icons.logout_outlined,
+                    size: 40,
+                    color: Colors.brown[600],
+                  )
+                : Icon(
+                    Icons.logout_outlined,
+                    size: 40,
+                    color: Colors.brown[600],
+                  ),
             title: const Text(
               'Salir',
               style: TextStyle(

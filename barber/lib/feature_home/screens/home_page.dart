@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:barber/feature_home/models/color_filter.dart';
 import 'package:barber/feature_home/widgets/bottom_navigation.dart';
@@ -5,6 +7,7 @@ import 'package:barber/feature_home/widgets/drawer_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:barber/utils/globals.dart' as globals;
 
@@ -25,10 +28,6 @@ class _MyWidgetState extends State<HomePageScreen> {
   @override
   void initState() {
     _user = FirebaseAuth.instance.currentUser!;
-    print(_user.uid);
-    print(_user.displayName);
-    print(_user.email);
-
     globals.servicioSeleccionado = '';
     Firebase.initializeApp();
     validateAdminUser();
@@ -156,44 +155,82 @@ class _MyWidgetState extends State<HomePageScreen> {
                           String fechaFormateada =
                               '${fechaDesdeBD.day.toString()}/${fechaDesdeBD.month.toString()}/${fechaDesdeBD.year.toString()}';
 
-                          return FadeIn(
+                          return FadeInLeft(
                             delay: Duration(milliseconds: 200 * index),
-                            child: ListTile(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
+                            child: SizedBox(
+                              child: Dismissible(
+                                key: Key(documentSnapshot.id),
+                                direction: DismissDirection.endToStart,
+                                background: Container(
+                                  color: Colors.red,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: const [
+                                      Text(
+                                        'Cancelar cita',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: 'OpenSans',
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20),
+                                      ),
+                                      Icon(
+                                        Icons.delete_outline,
+                                        size: 45,
+                                        color: Colors.white,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                onDismissed: (direction) {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return Platform.isIOS
+                                            ? _deleteAppointment(
+                                                documentSnapshot.id,
+                                                context) //cupertinoDialog(context)
+                                            : _deleteAppointmentAndroid(
+                                                documentSnapshot.id, context);
+                                      }); //androidDialog(context);
+                                },
+                                child: ListTile(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  leading: const CircleAvatar(
+                                    backgroundImage:
+                                        AssetImage("Assets/Images/logo2.jpeg"),
+                                    radius: 25,
+                                  ),
+                                  title: Text(
+                                    'Fecha: $fechaFormateada\nBarbero: ${documentSnapshot['barbero']}',
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'OpenSans',
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15),
+                                  ),
+                                  subtitle: Text(
+                                    'Servicio: ${documentSnapshot['tipoServicio']}',
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'OpenSans',
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15),
+                                  ),
+                                  isThreeLine: true,
+                                  //dense: true,
+                                  trailing: Text(
+                                    documentSnapshot['hora'],
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'OpenSans',
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20),
+                                  ),
+                                ),
                               ),
-                              leading: const CircleAvatar(
-                                backgroundImage:
-                                    AssetImage("Assets/Images/logo2.jpeg"),
-                                radius: 25,
-                              ),
-                              title: Text(
-                                'Fecha: $fechaFormateada\nBarbero: ${documentSnapshot['barbero']}',
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'OpenSans',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15),
-                              ),
-                              subtitle: Text(
-                                'Servicio: ${documentSnapshot['tipoServicio']}',
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'OpenSans',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15),
-                              ),
-                              isThreeLine: true,
-                              dense: true,
-                              trailing: Text(
-                                documentSnapshot['hora'],
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'OpenSans',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20),
-                              ),
-                              onTap: () {},
                             ),
                           );
                         },
@@ -216,7 +253,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                     style: TextStyle(
                         fontFamily: 'OpenSans',
                         color: Colors.white,
-                        fontSize: 15,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold),
                   ),
                   Icon(
@@ -230,6 +267,8 @@ class _MyWidgetState extends State<HomePageScreen> {
               //GRIDVIEW PARA PONER TODOS LOS SERVICIOS
 
               SizedBox(
+                width: double.infinity,
+                height: 400,
                 child: StreamBuilder(
                   stream: FirebaseFirestore.instance
                       .collection('ProductoServicio')
@@ -246,12 +285,13 @@ class _MyWidgetState extends State<HomePageScreen> {
 
                     return GridView.builder(
                       physics: const BouncingScrollPhysics(),
-                      scrollDirection: Axis.vertical,
+                      scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
                       itemCount: snapshot.data!.docs.length,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2),
+                        crossAxisCount: 2,
+                      ),
                       itemBuilder: (context, index) {
                         final DocumentSnapshot documentSnapshot =
                             snapshot.data!.docs[index];
@@ -260,7 +300,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             SizedBox(
-                              height: 120,
+                              height: 160,
                               child: Center(
                                 child: FadeIn(
                                   delay: Duration(milliseconds: 100 * index),
@@ -268,7 +308,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                                     clipBehavior: Clip.antiAliasWithSaveLayer,
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
-                                            BorderRadius.circular(14)),
+                                            BorderRadius.circular(10)),
                                     child: Stack(
                                       alignment: Alignment.bottomCenter,
                                       children: [
@@ -306,7 +346,7 @@ class _MyWidgetState extends State<HomePageScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  '₡${documentSnapshot['precio']}',
+                                  '₡ ${documentSnapshot['precio']}',
                                   style: const TextStyle(
                                     fontFamily: 'OpenSans',
                                     color: Colors.white54,
@@ -345,5 +385,91 @@ class _MyWidgetState extends State<HomePageScreen> {
     if (query.docs.isNotEmpty) {
       globals.isAdmin = true;
     }
+  }
+
+  Widget _deleteAppointment(String id, BuildContext context) {
+    return CupertinoAlertDialog(
+      title: const Text(
+        '¿Desea cancelar la cita?',
+        style: TextStyle(
+            fontFamily: 'OpenSans', fontWeight: FontWeight.w900, fontSize: 20),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+            setState(() {});
+          },
+          child: const Text(
+            'No',
+            style: TextStyle(color: Colors.red),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            FirebaseFirestore.instance.collection('Cita').doc(id).update(
+              {
+                'estadoCita': 'Creada',
+                'horaDisponible': true,
+                'idCliente': '',
+                'nombreCliente': '',
+                'precio': 0,
+                'tipoServicio': ''
+              },
+            );
+            Navigator.of(context).pop();
+          },
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'Sí',
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _deleteAppointmentAndroid(String id, BuildContext context) {
+    return AlertDialog(
+      title: const Text(
+        '¿Desea cancelar la cita?',
+        style: TextStyle(
+            fontFamily: 'OpenSans', fontWeight: FontWeight.w900, fontSize: 20),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+            setState(() {});
+          },
+          child: const Text(
+            'No',
+            style: TextStyle(color: Colors.red),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            FirebaseFirestore.instance.collection('Cita').doc(id).update(
+              {
+                'estadoCita': 'Creada',
+                'horaDisponible': true,
+                'idCliente': '',
+                'nombreCliente': '',
+                'precio': 0,
+                'tipoServicio': ''
+              },
+            );
+            Navigator.of(context).pop();
+          },
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'Sí',
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
