@@ -216,7 +216,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                             ),
                             subtitle: Text(
                               documentSnapshot['descripcion'],
-                              style: myTextH1,
+                              style: mySmallStyle,
                             ),
                             isThreeLine: true,
                             onTap: () {

@@ -129,7 +129,7 @@ class _DailyReportState extends State<DailyReport> {
                                 snapshot.data!.docs[index];
 
                             return FadeIn(
-                              //delay: const Duration(milliseconds: 100),
+                              delay: Duration(milliseconds: 10 * index),
                               child: Card(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),

@@ -18,7 +18,6 @@ class _AdminUsersState extends State<AdminUsers> {
   final _nameFieldController = TextEditingController();
   final _emailFieldController = TextEditingController();
   bool _processing = false;
-  final bool _disponible = false;
 
   @override
   Widget build(BuildContext context) {
