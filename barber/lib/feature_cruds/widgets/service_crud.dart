@@ -137,7 +137,7 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                             ),
                           ],
                         ),
-                        const Padding(padding: EdgeInsets.all(12)),
+                        const Padding(padding: EdgeInsets.all(8)),
                         TextFormField(
                           style: myTextFieldStyle,
                           maxLength: 23,
@@ -147,7 +147,7 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                           focusNode: _focusName,
                           cursorColor: Colors.white,
                           decoration: InputDecoration(
-                            prefixIcon: const Icon(
+                            icon: const Icon(
                               Icons.paste_outlined,
                               size: 25,
                               color: Colors.white,
@@ -160,7 +160,7 @@ class _ProductServiceCrudState extends State<ProductServiceCrud> {
                             hintStyle: myHintStyle,
                           ),
                         ),
-                        const Padding(padding: EdgeInsets.all(12)),
+                        const Padding(padding: EdgeInsets.all(8)),
                         TextFormField(
                           keyboardType: TextInputType.number,
                           style: myTextFieldStyle,

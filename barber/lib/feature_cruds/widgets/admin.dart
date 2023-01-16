@@ -18,7 +18,7 @@ class _AdminUsersState extends State<AdminUsers> {
   final _nameFieldController = TextEditingController();
   final _emailFieldController = TextEditingController();
   bool _processing = false;
-  bool _disponible = false;
+  final bool _disponible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +80,7 @@ class _AdminUsersState extends State<AdminUsers> {
                           ),
                         ),
                         const Padding(padding: EdgeInsets.all(8)),
-                        Row(
+                        /*Row(
                           children: [
                             Text(
                               _disponible ? 'Disponible' : 'No disponible',
@@ -97,7 +97,7 @@ class _AdminUsersState extends State<AdminUsers> {
                               },
                             ),
                           ],
-                        ),
+                        ),*/
                         const Padding(padding: EdgeInsets.all(8)),
                         _processing
                             ? const CircularProgressIndicator()
@@ -122,10 +122,9 @@ class _AdminUsersState extends State<AdminUsers> {
                                           });
 
                                           final admin = Administrador(
-                                              nombre: _nameFieldController.text,
-                                              correo:
-                                                  _emailFieldController.text,
-                                              habilitado: _disponible);
+                                            nombre: _nameFieldController.text,
+                                            correo: _emailFieldController.text,
+                                          );
 
                                           final jsonData = admin.toJson();
 
@@ -139,7 +138,6 @@ class _AdminUsersState extends State<AdminUsers> {
                                             _processing = false;
                                             _nameFieldController.clear();
                                             _emailFieldController.clear();
-                                            _disponible = false;
                                           });
                                         }
                                       },

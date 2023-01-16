@@ -48,6 +48,12 @@ TextStyle myShowDialogStyle = const TextStyle(
   fontSize: 20,
 );
 
+TextStyle myShowDialogContentStyle = const TextStyle(
+  fontFamily: 'OpenSans',
+  fontWeight: FontWeight.w900,
+  fontSize: 15,
+);
+
 TextStyle myDrawerListStyle = const TextStyle(
   fontFamily: 'OpenSans',
   fontWeight: FontWeight.w900,

@@ -1,14 +1,11 @@
 class Administrador {
   String correo;
   String nombre;
-  bool habilitado;
 
-  Administrador(
-      {required this.correo, required this.nombre, required this.habilitado});
+  Administrador({required this.correo, required this.nombre});
 
   Map<String, dynamic> toJson() => {
         "nombre": nombre,
         "correo": correo,
-        "habilitado": habilitado,
       };
 }

@@ -21,7 +21,7 @@ class _AdminUserListState extends State<AdminUserList> {
       child: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('Administrador')
-            .where('habilitado', isEqualTo: true)
+            .orderBy('nombre')
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {

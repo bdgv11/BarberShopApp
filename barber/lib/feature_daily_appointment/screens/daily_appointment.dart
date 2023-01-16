@@ -291,12 +291,12 @@ class _DailyReportState extends State<DailyReport> {
     return CupertinoAlertDialog(
       title: Text(
         '¿Desea finalizar, liberar o poner la cita como agendada nuevamente?',
-        style: myTextH1,
+        style: myShowDialogStyle,
       ),
       // ignore: prefer_const_constructors
       content: Text(
         'Cliente: $cliente\nServicio: $servicio\nBarbero: $barbero\nHora: $hora\nPrecio: $precio\n',
-        style: mySmallStyle,
+        style: myShowDialogContentStyle,
       ),
       actions: [
         TextButton(
@@ -319,7 +319,7 @@ class _DailyReportState extends State<DailyReport> {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               'Liberar espacio',
-              style: mySmallStyle,
+              style: myShowDialogContentStyle,
             ),
           ),
         ),
@@ -336,7 +336,7 @@ class _DailyReportState extends State<DailyReport> {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               'Agendar nuevamente',
-              style: mySmallStyle,
+              style: myShowDialogContentStyle,
             ),
           ),
         ),
@@ -354,7 +354,7 @@ class _DailyReportState extends State<DailyReport> {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               'Finalizar Cita',
-              style: mySmallStyle,
+              style: myShowDialogContentStyle,
             ),
           ),
         ),
@@ -372,7 +372,7 @@ class _DailyReportState extends State<DailyReport> {
       // ignore: prefer_const_constructors
       content: Text(
         'Cliente: $cliente\nServicio: $servicio\nBarbero: $barbero\nHora: $hora\nPrecio: $precio\n',
-        style: mySmallStyle,
+        style: myShowDialogContentStyle,
       ),
       actions: [
         TextButton(
@@ -395,7 +395,7 @@ class _DailyReportState extends State<DailyReport> {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               'Liberar espacio',
-              style: mySmallStyle,
+              style: myShowDialogContentStyle,
             ),
           ),
         ),
@@ -412,7 +412,7 @@ class _DailyReportState extends State<DailyReport> {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               'Agendar nuevamente',
-              style: mySmallStyle,
+              style: myShowDialogContentStyle,
             ),
           ),
         ),
@@ -429,7 +429,7 @@ class _DailyReportState extends State<DailyReport> {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               'Finalizar Cita',
-              style: mySmallStyle,
+              style: myShowDialogContentStyle,
             ),
           ),
         ),
